@@ -1,13 +1,11 @@
-# Spring Boot and React starter app
+# MRT Web
 
-> Starter webapp using Spring Boot on the backend and React on the frontend, with 
-Maven and Webpack as build tools, hot reloading on both sides and without xml configuration.
 
 ## Quickstart
 To run the app you just need to:
 
-    git clone https://github.com/dlizarra/spring-boot-react-webpack-starter.git ./starter
-    cd starter
+    git clone https://github.com/LiuJiang682/mrt_web.git 
+    cd mrt_web
     mvn spring-boot:run
 
 To check everything is running you can:
@@ -16,10 +14,8 @@ To check everything is running you can:
     http://localhost:8080
     
     # Go to the sample REST endpoint
-    http://localhost:8080/api/users
+    http://localhost:8080/template/123
     
-    # Login to the H2 console (JDBC URL: 'jdbc:h2:mem:embedded', user = 'h2')
-    http://localhost:8080/h2-console
 
 ## Start developing
 The Java code is available at `src/main/java` as usual, and the frontend files are in 
@@ -74,19 +70,9 @@ The project includes three base data repositories:
 - [CustomJpaRepository](src/main/java/com/dlizarra/starter/support/jpa/CustomJpaRepository.java): Again, it's there to provide the same funcionality as the Spring `JpaRepository` but returning `Optional<T>`. We can extend this base repository if we want CRUD operations plus paging and sorting capabilities.
 
 ### Security
-All the boilerplate for the initial Spring Security configuration is already created. These are they key classes:
-
-- [User](src/main/java/com/dlizarra/starter/user/User.java), [Role](src/main/java/com/dlizarra/starter/role/Role.java) and  [RoleName](src/main/java/com/dlizarra/starter/role/RoleName.java) which are populated by [data.sql](src/main/resources/data.sql) file for the default profile only.
-- [CustomUserDetails](src/main/java/com/dlizarra/starter/support/security/CustomUserDetails.java)
-- [CustomUserDetailsService](src/main/java/com/dlizarra/starter/support/security/CustomUserDetailsService.java)
-- [SecurityConfig](src/main/java/com/dlizarra/starter/SecurityConfig.java) with just very basic security rules.
 
 ### DTO-Entity mapping
-The project includes Orika and it already has a class, [OrikaBeanMapper](src/main/java/com/dlizarra/starter/support/orika/OrikaBeanMapper.java), ready to be injected anywhere and be used to do any mapping. It will also scan the project on startup searching for custom mappers and components.
 
-You can see how to use it in [UserServiceImpl](src/main/java/com/dlizarra/starter/user/UserServiceImpl.java) or in this sample [project](https://github.com/dlizarra/orika-spring-integration).
-
-This, along with Lombok annotations for auto-generating getters, setters, toString methods and such, allows us to have much cleaner Entities and DTOs classes.
 
 ### Unit and integration testing
 For **unit testing** we included Spring Test, JUnit, Mockito and AssertJ as well as an [AbstractUnitTest](src/test/java/com/dlizarra/starter/support/AbstractUnitTest.java) class that we can extend to include the boilerplate annotations and configuration for every test. [UserServiceTest](src/test/java/com/dlizarra/starter/user/UserServiceTest.java) can serve as an example.
