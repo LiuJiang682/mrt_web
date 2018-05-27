@@ -3,7 +3,7 @@ const merge = require('webpack-merge');
 
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
-    source: path.join(__dirname, 'app'),
+    source: path.join(__dirname, 'src'),
     output: path.join(__dirname, '../../../target/classes/static')
 };
 
@@ -17,16 +17,16 @@ const common = {
         filename: 'bundle.js'
     },
     module: {
-        loaders: [{
+        rules: [{
             exclude: /node_modules/,
-            loader: 'babel'
+            loader: 'babel-loader'
         }, {
             test: /\.css$/,
             loader: 'style!css'
         }]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
     }
 };
 
@@ -51,4 +51,3 @@ if (TARGET === 'start' || !TARGET) {
 if (TARGET === 'build') {
     module.exports = merge(common, {});
 }
-
