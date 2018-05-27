@@ -1,4 +1,4 @@
-package com.dlizarra.starter;
+package au.gov.vic.ecodev.mrt;
 
 import javax.sql.DataSource;
 

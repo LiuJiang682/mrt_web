@@ -1,4 +1,4 @@
-package com.dlizarra.starter;
+package au.gov.vic.ecodev.mrt;
 
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

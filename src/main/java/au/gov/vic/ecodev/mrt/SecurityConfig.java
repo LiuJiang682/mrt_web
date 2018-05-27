@@ -1,4 +1,4 @@
-package com.dlizarra.starter;
+package au.gov.vic.ecodev.mrt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;

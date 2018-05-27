@@ -1,4 +1,4 @@
-package com.dlizarra.starter;
+package au.gov.vic.ecodev.mrt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.env.ConfigurableEnvironment;
