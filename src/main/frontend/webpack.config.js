@@ -26,11 +26,11 @@ const common = {
               }
         }, {
             test: /\.css$/,
-            loader: 'style!css'
+            loader: 'style-loader!css-loader'
         }]
     },
     resolve: {
-        extensions: ['.js', '.jsx']
+        extensions: ['.js', '.jsx', '.css']
     }
 };
 

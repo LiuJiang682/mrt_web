@@ -7,10 +7,12 @@ import {
 
 import Home from './pages/Home'
 import Books from './pages/Books'
+import Banner from './pages/common/Banner'
 
 const App = () =>
   <Router>
     <div>
+    <Banner />
     <Route exact path="/" component={Home}/>
     <Route path="/books" component={Books}/>
     
