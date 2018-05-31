@@ -5,22 +5,24 @@ import {
   Link
 } from 'react-router-dom'
 
-import Home from './pages/Home'
-import Books from './pages/Books'
 import Banner from './pages/common/Banner'
+import NavBar from './pages/common/NavBar'
+import SessionSummary from './pages/session/SessionSummary'
+import Map from './pages/Map';
+import Logs from './pages/Logs';
+import Errors from './pages/Errors';
+
+import style from './style.css';
 
 const App = () =>
   <Router>
     <div>
-    <Banner />
-    <Route exact path="/" component={Home}/>
-    <Route path="/books" component={Books}/>
-    
-    <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/books">Books</Link></li>
-      </ul>
-
+      <NavBar />
+      <Banner />    
+      <Route exact path="/" component={SessionSummary}/>
+      <Route path="/map" component={Map} />
+      <Route path="/logs" component={Logs} />
+      <Route path="/errors" component={Errors} />
     </div>
   </Router>
 

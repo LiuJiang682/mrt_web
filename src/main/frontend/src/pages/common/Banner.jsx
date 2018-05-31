@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import style from './style.css';
+import style from './styles.css';
 
 // const Banner = () => <div><h1>MRT Loader Report</h1></div>
 
@@ -7,6 +7,12 @@ import style from './style.css';
 
 export default class Banner extends Component {
     render() {
-        return <div className="h1_center"><h1>MRT Loader Report</h1></div>
+        return (
+            <div className="pos_center">
+                <h1>MRT Loader Report</h1>
+                <br/>
+                <br/>
+            </div>
+        )
     }
 }
