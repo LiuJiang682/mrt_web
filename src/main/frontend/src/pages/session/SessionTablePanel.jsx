@@ -16,17 +16,17 @@ export default class SessionTablePanel extends Component {
             <div>
                 <table width="100%">
                     <thead>
-                        <tr style={{paddingBottom: '50px'}}>
+                        <tr className="tr_height">
                             {/** TODO: Refactor this to a seperate class*/}
-                            <th>
+                            <th className="pos_center">
                                 <label>
                                     <input name="selectAll" type="checkbox" />
                                 </label>
                             </th>
-                            <th>Batch Id</th>
-                            <th>File Name</th>
-                            <th>Status</th>
-                            <th>Date Run</th>
+                            <th className="pos_left_middle">Batch Id</th>
+                            <th className="pos_left_middle">File Name</th>
+                            <th className="pos_left_middle">Status</th>
+                            <th className="pos_left_middle">Date Run</th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>

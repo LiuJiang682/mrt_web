@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import style from './styles.css';
 
 // const Banner = () => <div><h1>MRT Loader Report</h1></div>
 

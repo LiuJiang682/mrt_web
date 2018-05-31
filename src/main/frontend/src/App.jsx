@@ -12,7 +12,7 @@ import Map from './pages/Map';
 import Logs from './pages/Logs';
 import Errors from './pages/Errors';
 
-import style from './style.css';
+import style from '../style/style.css';
 
 const App = () =>
   <Router>
