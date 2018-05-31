@@ -19,6 +19,10 @@ describe('SessionTablePanel', () => {
             expect(wrapper.find('table').length).to.equal(1);
             expect(wrapper.find('tbody').length).to.equal(1);
         });
+        it('should render pagination panel', () => {
+            const wrapper = shallow(<SessionTablePanel sessions={SESSIONS} />);
+            expect(wrapper.find('SessionPaginationPanel').length).to.equal(1);
+        });
     });
 });
 

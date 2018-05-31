@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import SessionRow from './SessionRow'
+import SessionPaginationPanel from './SessionPaginationPanel'
 
 export default class SessionTablePanel extends Component {
     render() {
@@ -15,7 +16,7 @@ export default class SessionTablePanel extends Component {
             <div>
                 <table width="100%">
                     <thead>
-                        <tr>
+                        <tr style={{paddingBottom: '50px'}}>
                             {/** TODO: Refactor this to a seperate class*/}
                             <th>
                                 <label>
@@ -30,6 +31,7 @@ export default class SessionTablePanel extends Component {
                     </thead>
                     <tbody>{rows}</tbody>
                 </table>    
+                <SessionPaginationPanel totalPages={this.props.totalPages} pageNo={this.props.pageNo} /> 
             </div>
         );
     }
