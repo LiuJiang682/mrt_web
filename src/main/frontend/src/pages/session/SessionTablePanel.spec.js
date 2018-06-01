@@ -12,7 +12,7 @@ describe('SessionTablePanel', () => {
             const wrapper = shallow(<SessionTablePanel sessions={SESSIONS} />);
             expect(wrapper.find('table').length).to.equal(1);
             const tableHeader = wrapper.find('thead');
-            expect(tableHeader.html()).to.equal('<thead><tr><th><label><input type="checkbox" name="selectAll"/></label></th><th>Batch Id</th><th>File Name</th><th>Status</th><th>Date Run</th></tr></thead>');
+            expect(tableHeader.html()).to.equal('<thead><tr class="tr_height"><th class="pos_center"><label><input type="checkbox" name="selectAll"/></label></th><th class="pos_left_middle">Batch Id</th><th class="pos_left_middle">File Name</th><th class="pos_left_middle">Status</th><th class="pos_left_middle">Date Run</th></tr></thead>');
         });
         it('should render session table body', () => {
             const wrapper = shallow(<SessionTablePanel sessions={SESSIONS} />);
