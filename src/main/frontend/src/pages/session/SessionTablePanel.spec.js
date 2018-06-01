@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import * as Enzyme from 'enzyme';
 import ReactSixteenAdapter from 'enzyme-adapter-react-16';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import SessionTablePanel from './SessionTablePanel'
 

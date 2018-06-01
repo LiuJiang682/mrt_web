@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import SessionTableHeader from './SessionTableHeader'
 import SessionRow from './SessionRow'
 import SessionPaginationPanel from './SessionPaginationPanel'
 
@@ -16,18 +17,7 @@ export default class SessionTablePanel extends Component {
             <div>
                 <table width="100%">
                     <thead>
-                        <tr className="tr_height">
-                            {/** TODO: Refactor this to a seperate class*/}
-                            <th className="pos_center">
-                                <label>
-                                    <input name="selectAll" type="checkbox" />
-                                </label>
-                            </th>
-                            <th className="pos_left_middle">Batch Id</th>
-                            <th className="pos_left_middle">File Name</th>
-                            <th className="pos_left_middle">Status</th>
-                            <th className="pos_left_middle">Date Run</th>
-                        </tr>
+                       <SessionTableHeader selectAll={this.props.selectAll}/>
                     </thead>
                     <tbody>{rows}</tbody>
                 </table>    

@@ -24,5 +24,12 @@ describe('SearchBar', () => {
             expect(label.length).to.equal(1);
             expect(label.html()).to.equal('<input type="text" placeholder="Search Session ID..."/>');
         });
+        it('should contain passed in search text', () => {
+            const SEARCHTEXT = '123456';
+            const wrapper = shallow(<SearchBar searchText={SEARCHTEXT} />);
+            const inputField = wrapper.find('input');
+            expect(inputField.length).to.equal(1);
+            expect(inputField.html()).to.equal('<input type="text" placeholder="Search Session ID..." value="123456"/>');
+        });
     });
 });

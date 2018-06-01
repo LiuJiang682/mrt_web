@@ -9,11 +9,22 @@ import SearchBar from '../common/SearchBar'
 import SessionTable from './SessionTable'
 
 export default class SessionSummary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchText: '',
+            selectAll: false,
+            selectedBatch: null,
+            totalPageNo: null,
+            currentPage: null,
+        };
+    }
     render() {
         return (
             <div>
-                <SearchBar />
-                <SessionTable sessions={SESSIONS} />
+                <SearchBar searchText={this.state.searchText}/>
+                <SessionTable sessions={SESSIONS} searchText={this.state.searchText} selectAll={this.state.selectAll} 
+                    selectedBatch={this.state.selectedBatch} totalPageNo={this.state.totalPageNo} currentPage={this.state.currentPage} />
             </div>
         )
     }

@@ -7,7 +7,8 @@ export default class SessionTable extends Component {
     render() {
         return (
             <div>
-                <SessionTablePanel sessions={this.props.sessions}/>
+                <SessionTablePanel sessions={this.props.sessions} searchText={this.props.searchText} selectAll={this.props.selectAll} 
+                    selectedBatch={this.props.selectedBatch} totalPageNo={this.props.totalPageNo} currentPage={this.props.currentPage}/>
                 <SessionTableButtonPanel />
             </div>
         );
