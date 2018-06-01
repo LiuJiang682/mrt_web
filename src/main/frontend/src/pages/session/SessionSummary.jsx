@@ -14,7 +14,7 @@ export default class SessionSummary extends Component {
         this.state = {
             searchText: '',
             selectAll: false,
-            selectedBatch: null,
+            selectedBatch: [],
             totalPageNo: null,
             currentPage: null,
         };
