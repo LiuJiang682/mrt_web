@@ -18,7 +18,44 @@ export default class SessionSummary extends Component {
             totalPageNo: null,
             currentPage: null,
         };
+
+        this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+        this.handleSelectAllChange = this.handleSelectAllChange.bind(this);
+        this.handleSelectedBatchChange = this.handleSelectedBatchChange.bind(this);
+        this.handleTotalPageNoChange = this.handleTotalPageNoChange.bind(this);
+        this.handleCurrentPageChange = this.handleCurrentPageChange.bind(this);
     }
+
+    handleSearchTextChange(searchText) {
+        this.setState({
+            searchText: searchText
+        });
+    }
+
+    handleSelectAllChange(selectAll) {
+        this.setState({
+            selectAll: selectAll
+        });
+    }
+
+    handleSelectedBatchChange(selectedBatch) {
+        this.setState({
+            selectedBatch: selectedBatch
+        });
+    }
+
+    handleTotalPageNoChange(totalPageNo) {
+        this.setState({
+            totalPageNo: totalPageNo
+        });
+    }
+
+    handleCurrentPageChange(currentPage) {
+        this.setState({
+            currentPage: currentPage
+        });
+    }
+
     render() {
         return (
             <div>
