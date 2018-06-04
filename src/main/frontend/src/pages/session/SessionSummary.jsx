@@ -29,6 +29,13 @@ export default class SessionSummary extends Component {
     handleSearchTextChange(searchText) {
         this.setState({
             searchText: searchText
+        }, () => {
+            if ((this.state.searchText) && (1 < this.state.searchText.length)) {
+                console.log(this.state.searchText);
+                if (this.state.searchText.includes('\n')) {
+                    alert(this.state.searchText);
+                }
+            }
         });
     }
 
@@ -59,12 +66,22 @@ export default class SessionSummary extends Component {
     render() {
         return (
             <div>
-                <SearchBar searchText={this.state.searchText}/>
+                <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange}/>
                 <SessionTable sessions={SESSIONS} searchText={this.state.searchText} selectAll={this.state.selectAll} 
                     selectedBatch={this.state.selectedBatch} totalPageNo={this.state.totalPageNo} currentPage={this.state.currentPage} />
             </div>
         )
     }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     console.log(prevState.searchText);
+    //     console.log(this.state.searchText);
+    //     const newLineText = prevState.searchText + '\n';
+    //     if (newLineText === this.state.searchText) {
+    //         console.log('User hit the Enter key!');
+    //     }
+        
+    // }
 }
 
 const SESSIONS = [

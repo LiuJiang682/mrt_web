@@ -3,8 +3,10 @@ import ReactDom from 'react-dom';
 import * as Enzyme from 'enzyme';
 import ReactSixteenAdapter from 'enzyme-adapter-react-16';
 import { mount, shallow } from 'enzyme';
+import sinon from 'sinon';
 
 import SearchBar from './SearchBar';
+import SessionSummary from '../session/SessionSummary';
 
 describe('SearchBar', () => {
     describe('render', () => {
@@ -30,6 +32,17 @@ describe('SearchBar', () => {
             const inputField = wrapper.find('input');
             expect(inputField.length).to.equal(1);
             expect(inputField.html()).to.equal('<input type="text" placeholder="Search Session ID..." value="123456"/>');
+        });
+    });
+    describe('search text entered', () => {
+        it('should call handleSearchTextChange of the passing in parameter', () => {
+            const searchText = '';
+            const handleSearchTextChange = sinon.fake();
+            console.log((null === handleSearchTextChange));
+            const wrapper = shallow(<SearchBar searchText={searchText} onSearchTextChange={handleSearchTextChange} />);
+            wrapper.find('input').simulate('change', {target: {value: '12345'}});
+            console.log('Completed simulate');
+            expect(handleSearchTextChange.calledOnce).to.equal(true);
         });
     });
 });
