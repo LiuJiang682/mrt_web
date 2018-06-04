@@ -29,13 +29,6 @@ export default class SessionSummary extends Component {
     handleSearchTextChange(searchText) {
         this.setState({
             searchText: searchText
-        }, () => {
-            if ((this.state.searchText) && (1 < this.state.searchText.length)) {
-                console.log(this.state.searchText);
-                if (this.state.searchText.includes('\n')) {
-                    alert(this.state.searchText);
-                }
-            }
         });
     }
 
