@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import * as Enzyme from 'enzyme';
 import ReactSixteenAdapter from 'enzyme-adapter-react-16';
 import { shallow } from 'enzyme';
+import sinon from 'sinon';
 
 import SessionTablePanel from './SessionTablePanel'
 

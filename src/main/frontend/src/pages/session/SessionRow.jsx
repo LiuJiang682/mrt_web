@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
 
 export default class SessionRow extends Component {
+    constructor(props) {
+        super(props);
+        this.handleSelectBatchChang=this.handleSelectBatchChang.bind(this);
+    }
+
+    handleSelectBatchChang(e) {
+        // console.log(e.target.name);
+        this.props.onSelectedBatchChange(e.target.name);
+    }
+
     render() {
         const session = this.props.session; 
         const selectedBatch = this.props.selectedBatch; 
@@ -9,9 +19,9 @@ export default class SessionRow extends Component {
         if ((undefined !== selectedBatch)
             && (null !== selectedBatch)
             && (selectedBatch.includes(session.batchId))) {
-                checkBox = <input type="checkbox" name={session.batchId} checked/>; 
+                checkBox = <input type="checkbox" name={session.batchId} checked onChange={this.handleSelectBatchChang}/>; 
             } else {
-                checkBox = <input type="checkbox" name={session.batchId}/>; 
+                checkBox = <input type="checkbox" name={session.batchId} onChange={this.handleSelectBatchChang}/>; 
             }
         return (
             <tr className="tr_height">

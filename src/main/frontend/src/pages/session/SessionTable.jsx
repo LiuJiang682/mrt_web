@@ -8,7 +8,8 @@ export default class SessionTable extends Component {
         return (
             <div>
                 <SessionTablePanel sessions={this.props.sessions} searchText={this.props.searchText} selectAll={this.props.selectAll} 
-                    selectedBatch={this.props.selectedBatch} totalPageNo={this.props.totalPageNo} currentPage={this.props.currentPage}/>
+                    selectedBatch={this.props.selectedBatch} totalPageNo={this.props.totalPageNo} currentPage={this.props.currentPage}
+                    onSelectAllChange={this.props.onSelectAllChange} onSelectedBatchChange={this.props.onSelectedBatchChange}/>
                 <SessionTableButtonPanel />
             </div>
         );

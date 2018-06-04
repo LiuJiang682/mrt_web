@@ -38,7 +38,33 @@ describe('SessionSummary', () => {
         it('should update the selectedBatch field', () => {
             const wrapper = shallow(<SessionSummary />);
             expect(wrapper.instance().state.selectedBatch).to.be.an('array').that.is.empty;
-            wrapper.instance().handleSelectedBatchChange(['12345']);
+            wrapper.instance().handleSelectedBatchChange('12345');
+            expect(wrapper.instance().state.selectedBatch).to.deep.equal(['12345']);
+        });
+        it('should remove batch Id from the selectedBatch field when the field already contains the id', () => {
+            const wrapper = shallow(<SessionSummary />);
+            expect(wrapper.instance().state.selectedBatch).to.be.an('array').that.is.empty;
+            wrapper.instance().handleSelectedBatchChange('12345');
+            expect(wrapper.instance().state.selectedBatch).to.deep.equal(['12345']);
+            wrapper.instance().handleSelectedBatchChange('12345');
+            expect(wrapper.instance().state.selectedBatch).to.be.an('array').that.is.empty;
+        });
+        it('should append batch Id from the selectedBatch field when the field is not contains the id', () => {
+            const wrapper = shallow(<SessionSummary />);
+            expect(wrapper.instance().state.selectedBatch).to.be.an('array').that.is.empty;
+            wrapper.instance().handleSelectedBatchChange('12345');
+            expect(wrapper.instance().state.selectedBatch).to.deep.equal(['12345']);
+            wrapper.instance().handleSelectedBatchChange('67890');
+            expect(wrapper.instance().state.selectedBatch).to.deep.equal(['12345', '67890']);
+        });
+        it('should remove batch Id from the selectedBatch field when the field is contains the id but rest will not change', () => {
+            const wrapper = shallow(<SessionSummary />);
+            expect(wrapper.instance().state.selectedBatch).to.be.an('array').that.is.empty;
+            wrapper.instance().handleSelectedBatchChange('12345');
+            expect(wrapper.instance().state.selectedBatch).to.deep.equal(['12345']);
+            wrapper.instance().handleSelectedBatchChange('67890');
+            expect(wrapper.instance().state.selectedBatch).to.deep.equal(['12345', '67890']);
+            wrapper.instance().handleSelectedBatchChange('67890');
             expect(wrapper.instance().state.selectedBatch).to.deep.equal(['12345']);
         });
         it('should update the totalPageNo field', () => {

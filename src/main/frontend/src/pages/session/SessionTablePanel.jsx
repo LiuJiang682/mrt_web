@@ -10,14 +10,14 @@ export default class SessionTablePanel extends Component {
         
         this.props.sessions.forEach((session) => {
             rows.push(
-                <SessionRow session={session} key={session.batchId}  selectedBatch={this.props.selectedBatch}/>
+                <SessionRow session={session} key={session.batchId}  selectedBatch={this.props.selectedBatch} onSelectedBatchChange={this.props.onSelectedBatchChange}/>
             );
         });
         return (
             <div>
                 <table width="100%">
                     <thead>
-                       <SessionTableHeader selectAll={this.props.selectAll}/>
+                       <SessionTableHeader selectAll={this.props.selectAll} onSelectAllChange={this.props.onSelectAllChange}/>
                     </thead>
                     <tbody>{rows}</tbody>
                 </table>    
