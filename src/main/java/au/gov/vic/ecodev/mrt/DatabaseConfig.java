@@ -7,11 +7,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 //import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 public class DatabaseConfig {
+	@Configuration
+	static class OracleDatabaseConfig {
+		@Bean
+		public DataSource dataSource(final Environment env) {
+			DriverManagerDataSource datasource = new DriverManagerDataSource(); System.err.println("ds_props" + env.getRequiredProperty("spring.datasource.driver-class-name"));
+			datasource.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
+			datasource.setUrl(env.getRequiredProperty("spring.datasource.url"));
+			datasource.setUsername(env.getRequiredProperty("spring.datasource.username"));
+			datasource.setPassword(env.getRequiredProperty("spring.datasource.password"));
+			return datasource;
+		}
+	}
 //
 //	@Profile({ StarterProfiles.STANDALONE, StarterProfiles.TEST })
 //	@PropertySource("classpath:application-default.properties") // Not loaded by naming convention

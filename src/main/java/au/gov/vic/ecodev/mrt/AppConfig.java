@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class })
-@ComponentScan(basePackages = {"com.dlizarra.starter", "au.gov.vic.ecodev"})
+@ComponentScan(basePackages = {"au.gov.vic.ecodev"})
 public class AppConfig {
 	// servlets, view resolvers...
 }

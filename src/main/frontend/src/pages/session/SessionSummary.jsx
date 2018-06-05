@@ -12,6 +12,7 @@ export default class SessionSummary extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            sessions: [],
             searchText: '',
             selectAll: false,
             selectedBatch: [],
@@ -88,22 +89,19 @@ export default class SessionSummary extends Component {
         return (
             <div>
                 <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange}/>
-                <SessionTable sessions={SESSIONS} searchText={this.state.searchText} selectAll={this.state.selectAll} 
+                <SessionTable sessions={this.state.sessions} searchText={this.state.searchText} selectAll={this.state.selectAll} 
                     selectedBatch={this.state.selectedBatch} totalPageNo={this.state.totalPageNo} currentPage={this.state.currentPage}
                     onSelectAllChange={this.handleSelectAllChange} onSelectedBatchChange={this.handleSelectedBatchChange}/>
             </div>
         )
     }
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     console.log(prevState.searchText);
-    //     console.log(this.state.searchText);
-    //     const newLineText = prevState.searchText + '\n';
-    //     if (newLineText === this.state.searchText) {
-    //         console.log('User hit the Enter key!');
-    //     }
-        
-    // }
+     componentWillMount() {
+         console.log('insider componentWillMount');
+         this.setState({
+             sessions: SESSIONS
+         });
+     }   
 }
 
 const SESSIONS = [
