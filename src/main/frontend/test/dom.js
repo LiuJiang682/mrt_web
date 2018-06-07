@@ -1,5 +1,7 @@
 import { JSDOM } from 'jsdom';
 
+require('isomorphic-fetch')
+
 const { window } = new JSDOM('<!doctype html><html><body></body></html>');
 
 function copyProps(src, target) {

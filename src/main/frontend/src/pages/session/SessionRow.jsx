@@ -14,7 +14,7 @@ export default class SessionRow extends Component {
     render() {
         const session = this.props.session; 
         const selectedBatch = this.props.selectedBatch; 
-        const status = (session.status === 'Fail') ? <span style={{color:'red'}}>{session.status}</span> : session.status;
+        const status = ("FAILED" === session.status.toUpperCase()) ? <span style={{color:'red'}}>{session.status}</span> : session.status;
         let checkBox;
         if ((undefined !== selectedBatch)
             && (null !== selectedBatch)

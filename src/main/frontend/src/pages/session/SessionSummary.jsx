@@ -25,6 +25,8 @@ export default class SessionSummary extends Component {
         this.handleSelectedBatchChange = this.handleSelectedBatchChange.bind(this);
         this.handleTotalPageNoChange = this.handleTotalPageNoChange.bind(this);
         this.handleCurrentPageChange = this.handleCurrentPageChange.bind(this);
+        // this.extractBatchId = this.extractBatchId.bind(this);
+        // this.exttractTime = this.exttractTime.bind(this);
     }
 
     handleSearchTextChange(searchText) {
@@ -98,11 +100,55 @@ export default class SessionSummary extends Component {
 
      componentWillMount() {
          console.log('insider componentWillMount');
+         const newSessions =[];
+         fetch("http://localhost:8090/sessionHeader/search/display?page=0&size=20")
+            .then(results => {
+                return results.json();
+            })
+            .then(data => {
+                // console.log(data);
+                for (const session of data._embedded.sessionHeader) {
+                    // console.log(session._links.self.href);
+                    const batchId = this.extractBatchId(session._links.self.href);
+                    const fileName = session.fileName;
+                    const status = session.status;
+                    const dateRun = this.exttractTime(session.created);
+                    const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                    newSessions.push(sessionDto);
+                }
+                // console.log("newSessions", newSessions);    
+                this.setState({
+                    sessions: newSessions
+                });
+            });
+         
          this.setState({
-             sessions: SESSIONS
+             sessions: newSessions
          });
      }   
+
+     extractBatchId(url) {
+        //  console.log(url);
+        if ((undefined !== url) 
+            && (null !== url)) {
+                let index = url.lastIndexOf("/");
+                return url.substring(++index);
+            }
+        return '';
+    }
+
+    exttractTime(timeString) {
+        if ((undefined !== timeString) 
+            && (null !== timeString)) {
+                let index = timeString.lastIndexOf("+");
+                var newTimeString = timeString.slice(0, index);
+                return newTimeString.replace('T', ' ');
+            }
+        return '';    
+    }
 }
+
+
 
 const SESSIONS = [
     {batchId: '123456', fileName: 'MRT_EL99', status: 'Success', dateRun: '06/05/2018'},

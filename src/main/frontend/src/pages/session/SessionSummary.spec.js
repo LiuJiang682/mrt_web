@@ -3,6 +3,8 @@ import ReactDom from 'react-dom';
 import * as Enzyme from 'enzyme';
 import ReactSixteenAdapter from 'enzyme-adapter-react-16';
 import { mount, shallow } from 'enzyme';
+import sinon from 'sinon';
+// import fakeFatch from 'fake-fetch';
 
 import SessionSummary from './SessionSummary';
 import { Session } from 'inspector';
@@ -80,4 +82,79 @@ describe('SessionSummary', () => {
             expect(wrapper.instance().state.currentPage).to.equal(3);
         });
     });
+    describe('extractBatchId', () => {
+        // const promise = Promise.resolve(JSON_DATA);
+        // before(() => {
+        //     // sinon.stub(fetch).withArgs('http://localhost:8090/sessionHeader/search/display?page=0&size=20').return(promise);
+        //     fakeFatch.install;
+        // });
+        it('should return batch id when url provided', () => {
+            const wrapper = shallow(<SessionSummary />);
+            const batchId = wrapper.instance().extractBatchId('http://localhost:8090/sessionHeader/1234567');
+            expect(batchId).to.equal('1234567');
+        });
+        it('should return batch id when plain text provided', () => {
+            const wrapper = shallow(<SessionSummary />);
+            const batchId = wrapper.instance().extractBatchId('1234567');
+            expect(batchId).to.equal('1234567');
+        });
+        // after(() => {
+        //     fakeFatch.restore;
+        // });
+    });
+    describe('extractTime', () => {
+        it('should format the time to secon', () => {
+            const wrapper = shallow(<SessionSummary />);
+            const time = wrapper.instance().exttractTime('2018-06-06T02:30:01.000+0000');
+            expect(time).to.equal('2018-06-06 02:30:01.000');
+        });
+    });
 });
+
+const JSON_DATA = {
+    "_embedded" : {
+      "sessionHeader" : [ {
+        "fileName" : "mrt_sl4.zip",
+        "template" : "mrt",
+        "processDate" : "2018-06-05T14:00:00.000+0000",
+        "tenement" : "EL5478",
+        "tenementHolder" : "Stavely Minerals Ltd",
+        "reportingDate" : "2017-02-02T13:00:00.000+0000",
+        "projectName" : "Toora West",
+        "status" : "FAILED",
+        "comments" : null,
+        "emailSent" : "Y",
+        "approved" : 0,
+        "rejected" : 0,
+        "created" : "2018-06-06T02:30:01.000+0000",
+        "_links" : {
+          "self" : {
+            "href" : "http://localhost:8080/sessionHeader/180384216756204935"
+          },
+          "sessionHeader" : {
+            "href" : "http://localhost:8080/sessionHeader/180384216756204935"
+          }
+        }
+      } ]
+    },
+    "_links" : {
+      "first" : {
+        "href" : "http://localhost:8080/sessionHeader/search/display?page=0&size=1"
+      },
+      "self" : {
+        "href" : "http://localhost:8080/sessionHeader/search/display?page=0&size=1"
+      },
+      "next" : {
+        "href" : "http://localhost:8080/sessionHeader/search/display?page=1&size=1"
+      },
+      "last" : {
+        "href" : "http://localhost:8080/sessionHeader/search/display?page=1&size=1"
+      }
+    },
+    "page" : {
+      "size" : 1,
+      "totalElements" : 2,
+      "totalPages" : 2,
+      "number" : 0
+    }
+  };
