@@ -85,6 +85,10 @@ export default class SessionSummary extends Component {
         });
     }
 
+    handleMapRedirect(batchId) {
+        
+    }
+
     render() {
         console.log('this.state.totalPageNo', this.state.totalPageNo);
         return (
