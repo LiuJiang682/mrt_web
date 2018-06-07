@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 
 export default class SessionRow extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ export default class SessionRow extends Component {
         return (
             <tr className="tr_height">
                 <td className="pos_center">{checkBox}</td>
-                <td className="pos_left_middle">{session.batchId}</td>
+                <td className="pos_left_middle"><Link to={"/map/" + session.batchId}>{session.batchId}</Link></td>
                 <td className="pos_left_middle">{session.fileName}</td>
                 <td className="pos_left_middle">{status}</td>
                 <td className="pos_left_middle">{session.dateRun}</td>

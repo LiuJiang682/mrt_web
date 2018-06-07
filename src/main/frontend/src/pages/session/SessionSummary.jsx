@@ -16,8 +16,8 @@ export default class SessionSummary extends Component {
             searchText: '',
             selectAll: false,
             selectedBatch: [],
-            totalPageNo: null,
-            currentPage: null,
+            totalPageNo: 0,
+            currentPage: 0,
         };
 
         this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
@@ -25,8 +25,6 @@ export default class SessionSummary extends Component {
         this.handleSelectedBatchChange = this.handleSelectedBatchChange.bind(this);
         this.handleTotalPageNoChange = this.handleTotalPageNoChange.bind(this);
         this.handleCurrentPageChange = this.handleCurrentPageChange.bind(this);
-        // this.extractBatchId = this.extractBatchId.bind(this);
-        // this.exttractTime = this.exttractTime.bind(this);
     }
 
     handleSearchTextChange(searchText) {
@@ -88,6 +86,7 @@ export default class SessionSummary extends Component {
     }
 
     render() {
+        console.log('this.state.totalPageNo', this.state.totalPageNo);
         return (
             <div>
                 <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange}/>
@@ -118,7 +117,9 @@ export default class SessionSummary extends Component {
                 }
                 // console.log("newSessions", newSessions);    
                 this.setState({
-                    sessions: newSessions
+                    sessions: newSessions,
+                    totalPageNo: data.page.totalPages,
+                    currentPage: ++data.page.number,
                 });
             });
          

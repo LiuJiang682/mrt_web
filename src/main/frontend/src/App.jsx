@@ -21,6 +21,7 @@ const App = () =>
       <Banner />    
       <Route exact path="/" component={SessionSummary}/>
       <Route path="/map" component={Map} />
+      <Route path="/map/:id" component={Map} />
       <Route path="/logs" component={Logs} />
       <Route path="/errors" component={Errors} />
     </div>
