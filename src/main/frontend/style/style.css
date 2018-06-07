@@ -16,6 +16,9 @@
     text-align: center;
     vertical-align: middle;
     padding-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
  }
 
  .pagination_center {
@@ -37,6 +40,16 @@
      
  }
 
+ .green_button:hover {
+     background-color: darkgreen;
+ }
+
+ .green_button:active {
+     background-color: darkgreen;
+     box-shadow: 0 5px #666;
+     transform: translateY(4px);
+ }
+
  .red_button {
     background-color: red;
     border: none;
@@ -47,6 +60,16 @@
     display: inline-block;
     font-size: 16px;
     
+}
+
+.red_button:hover{
+    background-color: darkred;
+}
+
+.red_button:active {
+    background-color: darkred;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
 
 #page-numbers {

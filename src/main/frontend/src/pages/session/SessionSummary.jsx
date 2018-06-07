@@ -25,6 +25,7 @@ export default class SessionSummary extends Component {
         this.handleSelectedBatchChange = this.handleSelectedBatchChange.bind(this);
         this.handleTotalPageNoChange = this.handleTotalPageNoChange.bind(this);
         this.handleCurrentPageChange = this.handleCurrentPageChange.bind(this);
+        this.handleButtonClicked = this.handleButtonClicked.bind(this);
     }
 
     handleSearchTextChange(searchText) {
@@ -71,6 +72,7 @@ export default class SessionSummary extends Component {
         this.setState({
             selectedBatch: newSelectedBatch
         });
+        console.log(this.state.selectedBatch);
     }
 
     handleTotalPageNoChange(totalPageNo) {
@@ -85,18 +87,25 @@ export default class SessionSummary extends Component {
         });
     }
 
-    handleMapRedirect(batchId) {
-        
+    handleButtonClicked(command) {
+        console.log(command);
+        if (command.startsWith('Approve')) {
+            if (0 === this.state.selectedBatch.length) {
+                alert("Please select at least one file before you approve");
+            } else {
+                
+            }
+        }
     }
 
     render() {
-        console.log('this.state.totalPageNo', this.state.totalPageNo);
         return (
             <div>
                 <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange}/>
                 <SessionTable sessions={this.state.sessions} searchText={this.state.searchText} selectAll={this.state.selectAll} 
                     selectedBatch={this.state.selectedBatch} totalPageNo={this.state.totalPageNo} currentPage={this.state.currentPage}
-                    onSelectAllChange={this.handleSelectAllChange} onSelectedBatchChange={this.handleSelectedBatchChange}/>
+                    onSelectAllChange={this.handleSelectAllChange} onSelectedBatchChange={this.handleSelectedBatchChange} 
+                    onButtonClicked={this.handleButtonClicked}/>
             </div>
         )
     }

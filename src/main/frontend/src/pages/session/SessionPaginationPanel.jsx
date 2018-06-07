@@ -1,6 +1,15 @@
 import React, { Component } from 'react'
 
 export default class SessionPaginationPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.handlePageNoClicked = this.handlePageNoClicked.bind(this);
+    }
+
+    handlePageNoClicked(e) {
+        console.log(e.target.id);
+    }
+
     render() {
         let paginationPanel;
         if ((undefined !== this.props.totalPageNo)
@@ -15,7 +24,7 @@ export default class SessionPaginationPanel extends Component {
                     return(
                         <li
                             key={number}
-                            id={number}
+                            id={number} onClick={this.handlePageNoClicked}
                         >
                             {number}
                         </li>    

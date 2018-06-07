@@ -25,9 +25,9 @@ describe('App', function() {
 		// 	const wrapper = shallow(<App />);
 		// 	expect(wrapper.find('Router').length).to.equal(1);
 		// });
-		it('should contains 4 routes', () => {
+		it('should contains 5 routes', () => {
 			const wrapper = shallow(<App />);
-			expect(wrapper.find('Route').length).to.equal(4);
+			expect(wrapper.find('Route').length).to.equal(5);
 		});
 	});
 });
