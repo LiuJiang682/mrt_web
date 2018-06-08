@@ -45,7 +45,13 @@ export default class SessionSummary extends Component {
                 const fileName = data.fileName;
                 const status = data.status;
                 const dateRun = this.exttractTime(data.created);
-                const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                let actionStatus = '';
+                if (1 === data.approved) {
+                    actionStatus = 'APPROVED';
+                } else if (1 === data.rejected) {
+                    actionStatus = 'REJECTED';
+                }
+                const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun, actionStatus: actionStatus};
                 newSessions.push(sessionDto);
                    
                 this.setState({

@@ -24,11 +24,22 @@ export default class SessionRow extends Component {
             } else {
                 checkBox = <input type="checkbox" name={session.batchId} onChange={this.handleSelectBatchChang}/>; 
             }
+        let fileName;
+        if ((undefined === session.actionStatus) 
+            || (null === session.actionStatus)) {
+                fileName = session.fileName;
+            } else if ("APPROVED" === session.actionStatus.toUpperCase()) {
+                fileName = <span style={{color:'green'}}>{session.fileName}&ensp;--&ensp;<strong>Approved</strong></span> ;
+            } else if ("REJECTED" === session.actionStatus.toUpperCase()) {
+                fileName = <span style={{color:'red'}}>{session.fileName}&ensp;--&ensp;<strong>Rejected</strong></span> ;
+            } else {
+                fileName = session.fileName;
+            }   
         return (
             <tr className="tr_height">
                 <td className="pos_center">{checkBox}</td>
                 <td className="pos_left_middle"><Link to={"/map/" + session.batchId}>{session.batchId}</Link></td>
-                <td className="pos_left_middle">{session.fileName}</td>
+                <td className="pos_left_middle">{fileName}</td>
                 <td className="pos_left_middle">{status}</td>
                 <td className="pos_left_middle">{session.dateRun}</td>
             </tr>
