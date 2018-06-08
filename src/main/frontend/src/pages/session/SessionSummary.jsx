@@ -29,6 +29,33 @@ export default class SessionSummary extends Component {
         this.handleCurrentPageChange = this.handleCurrentPageChange.bind(this);
         this.handleButtonClicked = this.handleButtonClicked.bind(this);
         this.handlePageNoClicked = this.handlePageNoClicked.bind(this);
+        this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+    }
+
+    handleSearchSubmit(searchText) {
+        const url = "http://localhost:8090/sessionHeader/" + searchText;
+        const newSessions =[];
+        fetch(url)
+            .then(results => {
+                return results.json();
+            })
+            .then(data => {
+                console.log(data);
+                const batchId = this.extractBatchId(data._links.self.href);
+                const fileName = data.fileName;
+                const status = data.status;
+                const dateRun = this.exttractTime(data.created);
+                const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                newSessions.push(sessionDto);
+                   
+                this.setState({
+                    sessions: newSessions,
+                });
+            });
+        this.setState({
+            sessions: newSessions,
+            selectedBatch: []
+        });  
     }
 
     handleSearchTextChange(searchText) {
@@ -91,7 +118,7 @@ export default class SessionSummary extends Component {
     }
 
     handleButtonClicked(command) {
-        console.log(command);
+        // console.log(command);
         let commandString = '';
 
         if (command.startsWith('Approve')) {
@@ -110,7 +137,7 @@ export default class SessionSummary extends Component {
                 .then(
                     (response) => {
                         if (response.ok) {
-                            console.log("Updated");
+                            // console.log("Updated");
                             const newSessions =[];
                             const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
                             fetch(refreshUrl)
@@ -149,7 +176,7 @@ export default class SessionSummary extends Component {
     }
 
     handlePageNoClicked(pageNo) {
-        console.log(pageNo);
+        // console.log(pageNo);
         const newSessions =[];
         const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + pageNo + "&size=20";
         fetch(refreshUrl)
@@ -184,7 +211,7 @@ export default class SessionSummary extends Component {
     render() {
         return (
             <div>
-                <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange}/>
+                <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange} onSearchSubmit={this.handleSearchSubmit}/>
                 <SessionTable sessions={this.state.sessions} searchText={this.state.searchText} selectAll={this.state.selectAll} 
                     selectedBatch={this.state.selectedBatch} totalItemsCount={this.state.totalItemsCount} currentPage={this.state.currentPage}
                     onSelectAllChange={this.handleSelectAllChange} onSelectedBatchChange={this.handleSelectedBatchChange} 

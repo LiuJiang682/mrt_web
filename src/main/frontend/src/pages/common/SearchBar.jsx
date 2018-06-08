@@ -13,9 +13,10 @@ export default class SearchBar extends Component {
     }
 
     handleSubmit(e) {
-        // e.preventDefault();
         console.log('inside handle submit');
         console.log('ref', this.refs.searchText.value);
+        this.props.onSearchSubmit(this.refs.searchText.value);
+        e.preventDefault();
     }
 
     render() {

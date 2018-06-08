@@ -10,7 +10,7 @@ export default class SessionPaginationPanel extends Component {
     }
 
     handlePageNoClicked(pageNumber) {
-        console.log(pageNumber);
+        // console.log(pageNumber);
         this.props.onPageNoClicked(pageNumber);
     }
 
