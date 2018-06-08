@@ -52,10 +52,6 @@ export default class SessionSummary extends Component {
                     sessions: newSessions,
                 });
             });
-        this.setState({
-            sessions: newSessions,
-            selectedBatch: []
-        });  
     }
 
     handleSearchTextChange(searchText) {
@@ -65,6 +61,17 @@ export default class SessionSummary extends Component {
     }
 
     handleSelectAllChange(selectAll) {
+        console.log(selectAll);
+        if (selectAll) {
+            // console.log('About to selected all session');
+            const selectedSessions = [];
+            for (const session of this.state.sessions) {
+                selectedSessions.push(session.batchId);
+            }
+            this.setState({
+                selectedBatch: selectedSessions
+            });
+        }
         this.setState({
             selectAll: selectAll
         });
@@ -165,7 +172,9 @@ export default class SessionSummary extends Component {
          
                              this.setState({
                                 sessions: newSessions,
-                                selectedBatch: []
+                                selectedBatch: [],
+                                selectAll: false,
+                                searchText: ''
                             });
                         } else {
                             alert('Fail to Update the session!');
