@@ -71,9 +71,9 @@ describe('SessionSummary', () => {
         });
         it('should update the totalPageNo field', () => {
             const wrapper = shallow(<SessionSummary />);
-            expect(wrapper.instance().state.totalPageNo).to.equal(0);
+            expect(wrapper.instance().state.totalItemsCount).to.equal(0);
             wrapper.instance().handleTotalPageNoChange(20);
-            expect(wrapper.instance().state.totalPageNo).to.equal(20);
+            expect(wrapper.instance().state.totalItemsCount).to.equal(20);
         });
         it('should update the currentPage field', () => {
             const wrapper = shallow(<SessionSummary />);

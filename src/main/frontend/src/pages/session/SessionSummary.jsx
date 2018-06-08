@@ -18,7 +18,7 @@ export default class SessionSummary extends Component {
             searchText: '',
             selectAll: false,
             selectedBatch: [],
-            totalPageNo: 0,
+            totalItemsCount: 0,
             currentPage: 0,
         };
 
@@ -28,6 +28,7 @@ export default class SessionSummary extends Component {
         this.handleTotalPageNoChange = this.handleTotalPageNoChange.bind(this);
         this.handleCurrentPageChange = this.handleCurrentPageChange.bind(this);
         this.handleButtonClicked = this.handleButtonClicked.bind(this);
+        this.handlePageNoClicked = this.handlePageNoClicked.bind(this);
     }
 
     handleSearchTextChange(searchText) {
@@ -77,9 +78,9 @@ export default class SessionSummary extends Component {
         console.log(this.state.selectedBatch);
     }
 
-    handleTotalPageNoChange(totalPageNo) {
+    handleTotalPageNoChange(totalItemsCount) {
         this.setState({
-            totalPageNo: totalPageNo
+            totalItemsCount: totalItemsCount
         });
     }
 
@@ -130,7 +131,7 @@ export default class SessionSummary extends Component {
                                     // console.log("newSessions", newSessions);    
                                     this.setState({
                                         sessions: newSessions,
-                                        totalPageNo: data.page.totalPages,
+                                        totalItemsCount: data.page.totalElements,
                                         currentPage: ++data.page.number,
                                     });
                                 });
@@ -147,14 +148,47 @@ export default class SessionSummary extends Component {
         }
     }
 
+    handlePageNoClicked(pageNo) {
+        console.log(pageNo);
+        const newSessions =[];
+        const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + pageNo + "&size=20";
+        fetch(refreshUrl)
+            .then(results => {
+                return results.json();
+            })
+            .then(data => {
+                // console.log(data);
+                for (const session of data._embedded.sessionHeader) {
+                    // console.log(session._links.self.href);
+                    const batchId = this.extractBatchId(session._links.self.href);
+                    const fileName = session.fileName;
+                    const status = session.status;
+                    const dateRun = this.exttractTime(session.created);
+                    const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                    newSessions.push(sessionDto);
+                }
+                // console.log("newSessions", newSessions);    
+                this.setState({
+                    sessions: newSessions,
+                    totalItemsCount: data.page.totalElements,
+                    currentPage: pageNo
+                });
+            });
+         
+        this.setState({
+            sessions: newSessions,
+            selectedBatch: []
+        });
+    }
+
     render() {
         return (
             <div>
                 <SearchBar searchText={this.state.searchText} onSearchTextChange={this.handleSearchTextChange}/>
                 <SessionTable sessions={this.state.sessions} searchText={this.state.searchText} selectAll={this.state.selectAll} 
-                    selectedBatch={this.state.selectedBatch} totalPageNo={this.state.totalPageNo} currentPage={this.state.currentPage}
+                    selectedBatch={this.state.selectedBatch} totalItemsCount={this.state.totalItemsCount} currentPage={this.state.currentPage}
                     onSelectAllChange={this.handleSelectAllChange} onSelectedBatchChange={this.handleSelectedBatchChange} 
-                    onButtonClicked={this.handleButtonClicked}/>
+                    onButtonClicked={this.handleButtonClicked} onPageNoClicked={this.handlePageNoClicked}/>
             </div>
         )
     }
@@ -180,7 +214,7 @@ export default class SessionSummary extends Component {
                 // console.log("newSessions", newSessions);    
                 this.setState({
                     sessions: newSessions,
-                    totalPageNo: data.page.totalPages,
+                    totalItemsCount: data.page.totalElements,
                     currentPage: ++data.page.number,
                 });
             });

@@ -21,7 +21,7 @@ export default class SessionTablePanel extends Component {
                     </thead>
                     <tbody>{rows}</tbody>
                 </table>    
-                <SessionPaginationPanel totalPageNo={this.props.totalPageNo} pageNo={this.props.pageNo} /> 
+                <SessionPaginationPanel totalItemsCount={this.props.totalItemsCount} pageNo={this.props.pageNo} onPageNoClicked={this.props.onPageNoClicked}/> 
             </div>
         );
     }

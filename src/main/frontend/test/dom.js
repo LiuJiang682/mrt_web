@@ -21,3 +21,6 @@ global.navigator = {
 };
 
 copyProps(window, global);
+
+global.jQuery = require('jquery');
+require('bootstrap-less');
