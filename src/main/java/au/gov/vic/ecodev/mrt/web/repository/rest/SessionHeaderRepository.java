@@ -2,9 +2,7 @@ package au.gov.vic.ecodev.mrt.web.repository.rest;
 
 import java.util.List;
 
-
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.transaction.annotation.Transactional;
 
 import au.gov.vic.ecodev.mrt.model.SessionHeader;
 
@@ -29,6 +28,13 @@ public interface SessionHeaderRepository extends PagingAndSortingRepository<Sess
 	
 	@RestResource(path="approve")
 	@Modifying(clearAutomatically = true)
-	@Query("UPDATE SESSION_HEADER s set s.APPROVED = 1 WHERE s.ID = :sessionId ")
-	void approveSession(@Param("sessionId") long sessionId);
+	@Transactional
+	@Query("UPDATE SessionHeader s set s.approved = 1 WHERE s.sessionId in :sessionId ")
+	int approveSession(@Param("sessionId") List<Long> sessionId);
+	
+	@RestResource(path="reject")
+	@Modifying(clearAutomatically = true)
+	@Transactional
+	@Query("UPDATE SessionHeader s set s.rejected = 1 WHERE s.sessionId in :sessionId ")
+	int rejectSession(@Param("sessionId") List<Long> sessionId);
 }
