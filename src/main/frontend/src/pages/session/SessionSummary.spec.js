@@ -109,6 +109,32 @@ describe('SessionSummary', () => {
             expect(time).to.equal('2018-06-06 02:30:01.000');
         });
     });
+    describe('handleButtonClicked', () => {
+        it('should alert user unknown command', () => {
+            const wrapper = shallow(<SessionSummary />);
+            const alertStub = sinon.stub(global, 'alert');
+            alertStub.returns(true);
+            wrapper.instance().handleButtonClicked('abc');
+            expect(alertStub.calledOnce).to.equal(true);
+            alertStub.restore();
+        });
+        it('should alert user no selected file with approve command', () => {
+            const wrapper = shallow(<SessionSummary />);
+            const alertStub = sinon.stub(global, 'alert');
+            alertStub.returns(true);
+            wrapper.instance().handleButtonClicked('approve');
+            expect(alertStub.calledOnce).to.equal(true);
+            alertStub.restore();
+        });
+        it('should alert user no selected file with approve command', () => {
+            const wrapper = shallow(<SessionSummary />);
+            const alertStub = sinon.stub(global, 'alert');
+            alertStub.returns(true);
+            wrapper.instance().handleButtonClicked('reject');
+            expect(alertStub.calledOnce).to.equal(true);
+            alertStub.restore();
+        });
+    });
 });
 
 const JSON_DATA = {

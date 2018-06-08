@@ -8,6 +8,8 @@ import React, { Component } from 'react'
 import SearchBar from '../common/SearchBar'
 import SessionTable from './SessionTable'
 
+// import serverUrl from 'Config'
+
 export default class SessionSummary extends Component {
     constructor(props) {
         super(props);
@@ -89,12 +91,59 @@ export default class SessionSummary extends Component {
 
     handleButtonClicked(command) {
         console.log(command);
+        let commandString = '';
+
         if (command.startsWith('Approve')) {
-            if (0 === this.state.selectedBatch.length) {
-                alert("Please select at least one file before you approve");
-            } else {
-                
-            }
+            commandString = 'approve';
+        } else if (command.startsWith('Reject')) {
+            commandString = 'reject';
+        }
+        if ('' === commandString) {
+            alert("Unknown command: " + command);
+        } else if (0 === this.state.selectedBatch.length) {
+            alert("Please select at least one file before you " + commandString);
+        } else {
+            var url = "http://localhost:8090/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
+            console.log(url);
+            fetch(url)
+                .then(
+                    (response) => {
+                        if (response.ok) {
+                            console.log("Updated");
+                            const newSessions =[];
+                            const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
+                            fetch(refreshUrl)
+                                .then(results => {
+                                    return results.json();
+                                })
+                                .then(data => {
+                                    // console.log(data);
+                                    for (const session of data._embedded.sessionHeader) {
+                                        // console.log(session._links.self.href);
+                                        const batchId = this.extractBatchId(session._links.self.href);
+                                        const fileName = session.fileName;
+                                        const status = session.status;
+                                        const dateRun = this.exttractTime(session.created);
+                                        const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                                        newSessions.push(sessionDto);
+                                    }
+                                    // console.log("newSessions", newSessions);    
+                                    this.setState({
+                                        sessions: newSessions,
+                                        totalPageNo: data.page.totalPages,
+                                        currentPage: ++data.page.number,
+                                    });
+                                });
+         
+                             this.setState({
+                                sessions: newSessions,
+                                selectedBatch: []
+                            });
+                        } else {
+                            alert('Fail to Update the session!');
+                        }
+                    }
+                );
         }
     }
 

@@ -7,6 +7,14 @@ const PATHS = {
     output: path.join(__dirname, '../../../target/classes/static')
 };
 
+externals: {
+    Config: JSON.stringify('production' === process.env.NODE_ENV ? {
+        serverUrl : "http://52.65.91.200:8080"
+    } : {
+        serverUrl : "http://localhost:8090"
+    })
+};
+
 const common = {
     entry: [
         PATHS.source
