@@ -13,6 +13,7 @@ export default class SessionRow extends Component {
     }
 
     render() {
+        console.log("SessionRow render");
         const session = this.props.session; 
         const selectedBatch = this.props.selectedBatch; 
         const status = ("FAILED" === session.status.toUpperCase()) ? <span style={{color:'red'}}>{session.status}</span> : session.status;

@@ -7,7 +7,7 @@ export default class SessionTableHeader extends Component {
     }
 
     handleSelectAllChange(e) {
-        console.log(e.target.checked);
+        // console.log(e.target.checked);
         this.props.onSelectAllChange(e.target.checked);
     }
 

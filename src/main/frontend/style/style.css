@@ -50,6 +50,18 @@
      transform: translateY(4px);
  }
 
+ .green_button_disabled {
+    background-color: green;
+    color: #666666;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border: none;
+}
+
+
  .red_button {
     background-color: red;
     border: none;
@@ -70,6 +82,17 @@
     background-color: darkred;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
+}
+
+.red_button_disabled {
+    background-color: red;
+    color: #666666;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border: none;
 }
 
 #page-numbers {

@@ -20,6 +20,7 @@ export default class SessionSummary extends Component {
             selectedBatch: [],
             totalItemsCount: 0,
             currentPage: 0,
+            disableButton: false,
         };
 
         this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
@@ -33,6 +34,10 @@ export default class SessionSummary extends Component {
     }
 
     handleSearchSubmit(searchText) {
+        if (!this.isInteger(searchText)) {
+            alert("Search ID must integer only!");
+            return;
+        }
         const url = "http://localhost:8090/sessionHeader/" + searchText;
         const newSessions =[];
         fetch(url)
@@ -40,7 +45,7 @@ export default class SessionSummary extends Component {
                 return results.json();
             })
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 const batchId = this.extractBatchId(data._links.self.href);
                 const fileName = data.fileName;
                 const status = data.status;
@@ -56,6 +61,7 @@ export default class SessionSummary extends Component {
                    
                 this.setState({
                     sessions: newSessions,
+                    disableButton: true,
                 });
             });
     }
@@ -67,7 +73,7 @@ export default class SessionSummary extends Component {
     }
 
     handleSelectAllChange(selectAll) {
-        console.log(selectAll);
+        // console.log(selectAll);
         if (selectAll) {
             // console.log('About to selected all session');
             const selectedSessions = [];
@@ -115,7 +121,7 @@ export default class SessionSummary extends Component {
         this.setState({
             selectedBatch: newSelectedBatch
         });
-        console.log(this.state.selectedBatch);
+        // console.log(this.state.selectedBatch);
     }
 
     handleTotalPageNoChange(totalItemsCount) {
@@ -145,7 +151,7 @@ export default class SessionSummary extends Component {
             alert("Please select at least one file before you " + commandString);
         } else {
             var url = "http://localhost:8090/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
-            console.log(url);
+            // console.log(url);
             fetch(url)
                 .then(
                     (response) => {
@@ -213,7 +219,8 @@ export default class SessionSummary extends Component {
                 this.setState({
                     sessions: newSessions,
                     totalItemsCount: data.page.totalElements,
-                    currentPage: pageNo
+                    currentPage: pageNo,
+                    disableButton: false,
                 });
             });
          
@@ -230,13 +237,14 @@ export default class SessionSummary extends Component {
                 <SessionTable sessions={this.state.sessions} searchText={this.state.searchText} selectAll={this.state.selectAll} 
                     selectedBatch={this.state.selectedBatch} totalItemsCount={this.state.totalItemsCount} currentPage={this.state.currentPage}
                     onSelectAllChange={this.handleSelectAllChange} onSelectedBatchChange={this.handleSelectedBatchChange} 
-                    onButtonClicked={this.handleButtonClicked} onPageNoClicked={this.handlePageNoClicked}/>
+                    onButtonClicked={this.handleButtonClicked} onPageNoClicked={this.handlePageNoClicked} 
+                    buttonDisabled={this.state.disableButton}/>
             </div>
         )
     }
 
      componentWillMount() {
-         console.log('insider componentWillMount');
+        //  console.log('insider componentWillMount');
          const newSessions =[];
          fetch("http://localhost:8090/sessionHeader/search/display?page=0&size=20")
             .then(results => {
@@ -284,6 +292,10 @@ export default class SessionSummary extends Component {
                 return newTimeString.replace('T', ' ');
             }
         return '';    
+    }
+
+    isInteger(n) {
+        return /^[\d]+$/.test(n);
     }
 }
 

@@ -135,6 +135,24 @@ describe('SessionSummary', () => {
             alertStub.restore();
         });
     });
+    describe('isInteger', () => {
+        it('should return false', () => {
+            const wrapper = shallow(<SessionSummary />);
+            expect(wrapper.instance().isInteger(undefined)).to.equal(false);
+            expect(wrapper.instance().isInteger(null)).to.equal(false);
+            expect(wrapper.instance().isInteger('')).to.equal(false);
+            expect(wrapper.instance().isInteger(' ')).to.equal(false);
+            expect(wrapper.instance().isInteger(false)).to.equal(false);
+            expect(wrapper.instance().isInteger('q345')).to.equal(false);
+            expect(wrapper.instance().isInteger('123agb')).to.equal(false);
+            expect(wrapper.instance().isInteger('123.456')).to.equal(false);
+        });
+        it('should return true', () => {
+            const wrapper = shallow(<SessionSummary />);
+            expect(wrapper.instance().isInteger('123456')).to.equal(true);
+            expect(wrapper.instance().isInteger('0')).to.equal(true);
+        });
+    });
 });
 
 const JSON_DATA = {
