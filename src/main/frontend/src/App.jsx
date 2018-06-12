@@ -8,7 +8,7 @@ import {
 import Banner from './pages/common/Banner'
 import NavBar from './pages/common/NavBar'
 import SessionSummary from './pages/session/SessionSummary'
-import Map from './pages/Map';
+import Map from './pages/map/Map';
 import Logs from './pages/Logs';
 import Errors from './pages/Errors';
 
@@ -16,14 +16,16 @@ import style from '../style/style.css';
 
 const App = () =>
   <Router>
-    <div>
+    <div className="app">
       <NavBar />
       <Banner />    
-      <Route exact path="/" component={SessionSummary}/>
-      <Route path="/map" component={Map} />
-      <Route path="/map/:id" component={Map} />
+      
+      {/* <Route path="/map" component={Map} /> */}
+      <Route exact path="/map/:id" component={Map} />
+      
       <Route path="/logs" component={Logs} />
       <Route path="/errors" component={Errors} />
+      <Route exact path="/" component={SessionSummary}/>
     </div>
   </Router>
 

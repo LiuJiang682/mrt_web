@@ -11,7 +11,6 @@ export default class NavBar extends Component {
                         <ul className="nav navbar-nav">
                             {/* TODO: fix the activeClassName not working */}
                             <li><Link to="/" activeClassName="active">Session Summary</Link></li>
-                            <li><Link to="/map" activeClassName="active">Map</Link></li>
                             <li><Link to="/logs" activeClassName="active">Logs</Link></li>
                             <li><Link to="errors" activeClassName="active">Errors</Link></li>
                         </ul>
