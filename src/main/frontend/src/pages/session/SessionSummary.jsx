@@ -49,6 +49,7 @@ export default class SessionSummary extends Component {
                 const batchId = this.extractBatchId(data._links.self.href);
                 const fileName = data.fileName;
                 const status = data.status;
+                const tenement = data.tenement;
                 const dateRun = this.exttractTime(data.created);
                 let actionStatus = '';
                 if (1 === data.approved) {
@@ -56,7 +57,7 @@ export default class SessionSummary extends Component {
                 } else if (1 === data.rejected) {
                     actionStatus = 'REJECTED';
                 }
-                const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun, actionStatus: actionStatus};
+                const sessionDto = {batchId: batchId, fileName: fileName, status: status, tenement: tenement, dateRun: dateRun, actionStatus: actionStatus};
                 newSessions.push(sessionDto);
                    
                 this.setState({
@@ -170,8 +171,9 @@ export default class SessionSummary extends Component {
                                         const batchId = this.extractBatchId(session._links.self.href);
                                         const fileName = session.fileName;
                                         const status = session.status;
+                                        const tenement = session.tenement;
                                         const dateRun = this.exttractTime(session.created);
-                                        const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                                        const sessionDto = {batchId: batchId, fileName: fileName, status: status, tenement: tenement, dateRun: dateRun};
                                         newSessions.push(sessionDto);
                                     }
                                     // console.log("newSessions", newSessions);    
@@ -211,6 +213,7 @@ export default class SessionSummary extends Component {
                     const batchId = this.extractBatchId(session._links.self.href);
                     const fileName = session.fileName;
                     const status = session.status;
+                    const tenement = session.tenement;
                     const dateRun = this.exttractTime(session.created);
                     const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
                     newSessions.push(sessionDto);
@@ -257,8 +260,9 @@ export default class SessionSummary extends Component {
                     const batchId = this.extractBatchId(session._links.self.href);
                     const fileName = session.fileName;
                     const status = session.status;
+                    const tenement = session.tenement;
                     const dateRun = this.exttractTime(session.created);
-                    const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                    const sessionDto = {batchId: batchId, fileName: fileName, status: status, tenement: tenement, dateRun: dateRun};
                     newSessions.push(sessionDto);
                 }
                 // console.log("newSessions", newSessions);    

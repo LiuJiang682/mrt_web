@@ -35,10 +35,11 @@ export default class SessionRow extends Component {
             } else {
                 fileName = session.fileName;
             }   
+        let linkId = session.batchId + ':' + session.tenement;    
         return (
             <tr className="tr_height">
                 <td className="pos_center">{checkBox}</td>
-                <td className="pos_left_middle"><Link to={"/map/" + session.batchId}>{session.batchId}</Link></td>
+                <td className="pos_left_middle"><Link to={"/map/" + linkId}>{session.batchId}</Link></td>
                 <td className="pos_left_middle">{fileName}</td>
                 <td className="pos_left_middle">{status}</td>
                 <td className="pos_left_middle">{session.dateRun}</td>
