@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import ol from "openlayers";
+import Proj4 from "proj4";
 
 export default class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            map: null
+            map: null,
+            tenement: null,
+            batcthId: null,
+            center: null,
         }
     }
     render() {
@@ -91,8 +95,70 @@ export default class Map extends Component {
         return polygons;
     }
 
+    componentWillMount() {
+        console.log('componentWillMount');
+        const tenement = this.extractTenement(this.props.match.params.id);
+        this.setState({
+            batchId: tenement[0],
+            tenement: tenement[1],
+        });
+
+        Proj4.defs("EPSG:4283", "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");
+        Proj4.defs("EPSG:28354", "+proj=utm +zone=54 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+        Proj4.defs("EPSG:28355", "+proj=utm +zone=55 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+        ol.proj.setProj4(Proj4);
+        var melLonLat = ol.proj.toLonLat([320721.52, 5812855.79], 'EPSG:28355');
+        var mel = ol.proj.fromLonLat(melLonLat);
+        console.log('mel', mel);
+        console.log(ol.proj.transform([320721.52, 5812855.79], 'EPSG:28355', 'EPSG:3857'));
+        this.setState({
+            center: mel
+        });
+
+        const boreHoles = [];
+        const siteUrl = 'http://localhost:8090/site/search/get?loaderId=' + tenement[0];
+        fetch(siteUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                for (const site of data._embedded.site) {
+                    const amgZone = site.amgZone;
+                    const easting = parseFloat(site.easting);
+                    const northing = parseFloat(site.northing);
+                    const boreHoleDto = {amgZone: amgZone, easting: easting, northing: northing};
+                    boreHoles.push(boreHoleDto);
+                }
+                if (0 < boreHoles.length) {
+                    const boreHole = boreHoles[0];
+                    var zone = this.extractAmgZone(boreHole.amgZone);
+                    // if ('54' === boreHole.amgZone) {
+                    //     zone = 'EPSG:28354';
+                    // } else {
+                    //     zone = 'EPSG:28355';
+                    // }
+                    var center = ol.proj.transform([boreHole.easting, boreHole.northing], zone, 'EPSG:3857');
+                    console.log('center', center);
+                    this.setState({
+                        center: center
+                    });
+                }    
+            });
+        // const json = this.getBoreHoles(siteUrl);
+        
+    }
+
+    // async getBoreHoles(url) {
+    //     const response = await fetch(url);
+    //     const json = await response.json();
+    //     console.log(json);
+    //     return json;
+    // }
+
     componentDidMount() {
         console.log('componentDidMount');
+        console.log(this.props.match.params.id);
+        // const tenement = this.extractTenement(this.props.match.params.id);
+        const tenement = this.state.tenement;
 
         const lon = 142.152154758333;
         const lat = -35.6837831083333;
@@ -106,8 +172,9 @@ export default class Map extends Component {
             projection: 'epsg:3857',
             loader: function () {
                 var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-                var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27EL006759%27';
-                var xhr = new XMLHttpRequest();
+                var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27' + tenement + '%27';
+                // var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27EL006759%27';
+                // var xhr = new XMLHttpRequest();
                 var xml;
                 fetch(proxyUrl + url, {
                     headers: {
@@ -170,9 +237,33 @@ export default class Map extends Component {
             layers: layers,
             target: 'map',
             view: new ol.View({
-                center: center,
+                center: this.state.center,
                 zoom: 11
             })
         });
+    }
+
+    extractAmgZone(amgZone) {
+        let zone;
+        if ('54' === amgZone) {
+            zone = 'EPSG:28354';
+        } else {
+            zone = 'EPSG:28355';
+        }
+        return zone;
+    }
+
+    extractTenement(batchIdAndTenement) {
+        if ((undefined === batchIdAndTenement)
+            || (null == batchIdAndTenement)) {
+                alert("No batch ID and Tenement");
+            } else {
+                var strings = batchIdAndTenement.split(":");
+                if (2 === strings.length) {
+                    return strings;
+                } else {
+                    alert("Unknown format of batch ID and Tenement string, should be 123:xxx, but got: " + batchIdAndTenement);
+                }
+            }
     }
 }
