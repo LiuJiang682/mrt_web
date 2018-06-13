@@ -153,6 +153,21 @@ describe('SessionSummary', () => {
             expect(wrapper.instance().isInteger('0')).to.equal(true);
         });
     });
+    describe('buildSessionDTO', () => {
+        it('should return session DTO', () => {
+            const wrapper = shallow(<SessionSummary />);
+            const self = {href: 'http://localhost:8080/sessionHeader/123'};
+            const link = {self: self};
+            const session = {_links: link, fileName: 'mrt_el123.zip', status: 'FAILED', tenement: 'EL123', created: '2018-06-12T23:36:45.000+000'};
+            var sessionDTO = wrapper.instance().buildSessionDTO(session);
+            expect(sessionDTO).to.not.be.null;
+            expect(sessionDTO.batchId).to.be.equal('123');
+            expect(sessionDTO.fileName).to.be.equal('mrt_el123.zip');
+            expect(session.status).to.be.equal('FAILED');
+            expect(sessionDTO.tenement).to.be.equal('EL123');
+            expect(sessionDTO.dateRun).to.be.equal('2018-06-12 23:36:45.000');
+        });
+    });
 });
 
 const JSON_DATA = {

@@ -20,20 +20,20 @@ describe('SessionRow', () => {
         });
         it('should not render checked when batch ID not provided', () => {
             const wrapper = shallow(<MemoryRouter><SessionRow session={SESSIONS} /></MemoryRouter>);
-            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456"/></td><td class="pos_left_middle"><a href="/map/123456">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
+            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456"/></td><td class="pos_left_middle"><a href="/map/123456:undefined">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
         });
         it('should not render checked when batch ID is null', () => {
             const wrapper = shallow(<MemoryRouter><SessionRow session={SESSIONS} selectedBatch={null} /></MemoryRouter>);
-            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456"/></td><td class="pos_left_middle"><a href="/map/123456">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
+            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456"/></td><td class="pos_left_middle"><a href="/map/123456:undefined">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
         });
         it('should render checked when batch ID provided', () => {
             const wrapper = shallow(<MemoryRouter><SessionRow session={SESSIONS}  selectedBatch={SELECTEDBATCH} /></MemoryRouter>);
-            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456" checked=""/></td><td class="pos_left_middle"><a href="/map/123456">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
+            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456" checked=""/></td><td class="pos_left_middle"><a href="/map/123456:undefined">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
         });
         it('should not render checked when batch ID array is empty', () => {
             const emptyBatchIds = [];
             const wrapper = shallow(<MemoryRouter><SessionRow session={SESSIONS} selectedBatch={emptyBatchIds} /></MemoryRouter>);
-            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456"/></td><td class="pos_left_middle"><a href="/map/123456">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
+            expect(wrapper.html()).to.equal('<tr class="tr_height"><td class="pos_center"><input type="checkbox" name="123456"/></td><td class="pos_left_middle"><a href="/map/123456:undefined">123456</a></td><td class="pos_left_middle">MRT_EL99</td><td class="pos_left_middle">Success</td><td class="pos_left_middle">06/05/2018</td></tr>');
         });
     });
     describe('selected batch', () => {

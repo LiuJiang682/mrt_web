@@ -167,13 +167,7 @@ export default class SessionSummary extends Component {
                                 .then(data => {
                                     // console.log(data);
                                     for (const session of data._embedded.sessionHeader) {
-                                        // console.log(session._links.self.href);
-                                        const batchId = this.extractBatchId(session._links.self.href);
-                                        const fileName = session.fileName;
-                                        const status = session.status;
-                                        const tenement = session.tenement;
-                                        const dateRun = this.exttractTime(session.created);
-                                        const sessionDto = {batchId: batchId, fileName: fileName, status: status, tenement: tenement, dateRun: dateRun};
+                                        const sessionDto = this.buildSessionDTO(session);
                                         newSessions.push(sessionDto);
                                     }
                                     // console.log("newSessions", newSessions);    
@@ -209,13 +203,7 @@ export default class SessionSummary extends Component {
             .then(data => {
                 // console.log(data);
                 for (const session of data._embedded.sessionHeader) {
-                    // console.log(session._links.self.href);
-                    const batchId = this.extractBatchId(session._links.self.href);
-                    const fileName = session.fileName;
-                    const status = session.status;
-                    const tenement = session.tenement;
-                    const dateRun = this.exttractTime(session.created);
-                    const sessionDto = {batchId: batchId, fileName: fileName, status: status, dateRun: dateRun};
+                    const sessionDto = this.buildSessionDTO(session);
                     newSessions.push(sessionDto);
                 }
                 // console.log("newSessions", newSessions);    
@@ -256,13 +244,7 @@ export default class SessionSummary extends Component {
             .then(data => {
                 // console.log(data);
                 for (const session of data._embedded.sessionHeader) {
-                    // console.log(session._links.self.href);
-                    const batchId = this.extractBatchId(session._links.self.href);
-                    const fileName = session.fileName;
-                    const status = session.status;
-                    const tenement = session.tenement;
-                    const dateRun = this.exttractTime(session.created);
-                    const sessionDto = {batchId: batchId, fileName: fileName, status: status, tenement: tenement, dateRun: dateRun};
+                    const sessionDto = this.buildSessionDTO(session);
                     newSessions.push(sessionDto);
                 }
                 // console.log("newSessions", newSessions);    
@@ -277,6 +259,16 @@ export default class SessionSummary extends Component {
              sessions: newSessions
          });
      }   
+
+     buildSessionDTO(session) {
+        const batchId = this.extractBatchId(session._links.self.href);
+        const fileName = session.fileName;
+        const status = session.status;
+        const tenement = session.tenement;
+        const dateRun = this.exttractTime(session.created);
+        const sessionDto = {batchId: batchId, fileName: fileName, status: status, tenement: tenement, dateRun: dateRun};
+        return sessionDto;
+     }
 
      extractBatchId(url) {
         //  console.log(url);

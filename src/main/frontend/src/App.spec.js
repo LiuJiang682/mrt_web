@@ -27,7 +27,7 @@ describe('App', function() {
 		// });
 		it('should contains 5 routes', () => {
 			const wrapper = shallow(<App />);
-			expect(wrapper.find('Route').length).to.equal(5);
+			expect(wrapper.find('Route').length).to.equal(4);
 		});
 	});
 });
