@@ -164,7 +164,7 @@ export default class Map extends Component {
         // var lakeEntrance = ol.proj.fromLonLat([147.991605, -37.879584]);
         // var polygonVector = this.getTestPolygon();
 
-        var markerStyle = [
+        var boreHoleMarkerStyle = [
             new ol.style.Style({
                 image: new ol.style.Icon(({
                     scale: 1,
@@ -177,6 +177,31 @@ export default class Map extends Component {
                     anchorYUnits: 'fraction',
                     opacity: 1,
                     src: 'http://maps.google.com/mapfiles/ms/icons/red.png'
+                }))
+            }),
+            new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 5,
+                    fill: new ol.style.Fill({
+                        color: 'rgba(230,120,30,0.7)'
+                    })
+                })
+            })
+        ];
+
+        var sampleMarkerStyle = [
+            new ol.style.Style({
+                image: new ol.style.Icon(({
+                    scale: 1,
+                    // rotateWithView: (rnd < 0.9) ? true : false,
+                    // rotation: 360 * rnd * Math.PI / 180,
+                    rotateWithView: false,
+                    rotation: 0,
+                    anchor: [0.5, 1],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'fraction',
+                    opacity: 1,
+                    src: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
                 }))
             }),
             new ol.style.Style({
@@ -261,7 +286,7 @@ export default class Map extends Component {
                     var iconFeature = new ol.Feature({
                         geometry: new ol.geom.Point(point)
                     });
-                    iconFeature.setStyle(markerStyle);
+                    iconFeature.setStyle(boreHoleMarkerStyle);
                     markerSource.addFeature(iconFeature);
                 }    
             });
@@ -273,12 +298,21 @@ export default class Map extends Component {
             .then(data => {
                 console.log(data);
                 for (const surfaceGeochemistry of data._embedded.surfaceGeochemistry) {
-                    // const amgZone = surfaceGeochemistry.amgZone;
+                    const amgZone = surfaceGeochemistry.amgZone;
                     const easting = parseFloat(surfaceGeochemistry.easting);
                     const northing = parseFloat(surfaceGeochemistry.northing);
-                    // const sampleDto = {amgZone: amgZone, easting: easting, northing: northing};
-                    const sampleDto = { easting: easting, northing: northing};
+                    const sampleDto = {amgZone: amgZone, easting: easting, northing: northing};
                     samples.push(sampleDto);
+                }
+                for (const sample of samples) {
+                    var sampleZone = this.extractAmgZone(sample.amgZone);
+                    var samplePoint = ol.proj.transform([sample.easting, sample.northing], sampleZone, 'EPSG:3857');
+                    console.log('sample point', samplePoint);
+                    var sampleIconFeature = new ol.Feature({
+                        geometry: new ol.geom.Point(samplePoint)
+                    });
+                    sampleIconFeature.setStyle(sampleMarkerStyle);
+                    markerSource.addFeature(sampleIconFeature);
                 }
             });
 
