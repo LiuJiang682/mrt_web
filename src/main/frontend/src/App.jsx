@@ -9,7 +9,7 @@ import Banner from './pages/common/Banner'
 import NavBar from './pages/common/NavBar'
 import SessionSummary from './pages/session/SessionSummary'
 import Map from './pages/map/Map';
-import Logs from './pages/Logs';
+import Logs from './pages/logs/Logs';
 import Errors from './pages/Errors';
 
 import style from '../style/style.css';
