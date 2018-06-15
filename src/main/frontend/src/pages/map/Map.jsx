@@ -13,10 +13,10 @@ export default class Map extends Component {
         }
     }
     render() {
-        console.log(this.props.match.params.id);
+        // console.log(this.props.match.params.id);
         return (
             <div>
-                <h2>Map: {this.props.match.params.id}</h2>
+                <h2>Map for Batch: {this.state.batchId}&ensp;Tenement: {this.state.tenement}</h2>
                 <div id='map'>{this.state.map}</div>
                 <div id="popup" class="ol-popup">
                 	<a href="#" id="popup-closer" class="ol-popup-closer"></a>
@@ -101,6 +101,11 @@ export default class Map extends Component {
 
     componentWillMount() {
         console.log('componentWillMount');
+        const tenement = this.extractTenement(this.props.match.params.id);
+        this.setState({
+            batchId: tenement[0],
+            tenement: tenement[1],
+        });
         
         Proj4.defs("EPSG:4283", "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");
         Proj4.defs("EPSG:28354", "+proj=utm +zone=54 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
@@ -323,26 +328,25 @@ export default class Map extends Component {
 
         map.addOverlay(overlay);
 
-        map.on('singleclick', function (evt) {
+        map.on('pointermove', function (evt) {
             var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
                 return feature;
             });
 
             if (feature) {
-
                 var coord = feature.getGeometry().getCoordinates();
                 var props = feature.getProperties();
-                console.log('props', props);
                 var desc = props.properties.sampleId;
-                console.log(desc);
-                var info = "<h2>" + desc + "</h2>";
+                var info = "<a href=\"http://localhost:9090/logs:" + tenement[0] + "\">" + desc + "</a>";
                 content.innerHTML = info;
-
                 overlay.setPosition(coord);
-
             }
-
         });
+
+        map.getViewport().addEventListener('mouseout', function(evt) {
+            overlay.setPosition(undefined);
+            closer.blur();
+        }, false);
     }
 
     extractBoreHoleId(url) {

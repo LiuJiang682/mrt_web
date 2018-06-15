@@ -23,7 +23,7 @@ const App = () =>
       {/* <Route path="/map" component={Map} /> */}
       <Route exact path="/map/:id" component={Map} />
       
-      <Route path="/logs" component={Logs} />
+      <Route path="/logs:id" component={Logs} />
       <Route path="/errors" component={Errors} />
       <Route exact path="/" component={SessionSummary}/>
     </div>
