@@ -18,6 +18,10 @@ export default class Map extends Component {
             <div>
                 <h2>Map: {this.props.match.params.id}</h2>
                 <div id='map'>{this.state.map}</div>
+                <div id="popup" class="ol-popup">
+                	<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                	<div id="popup-content"></div>
+              </div>
             </div>
         )
     }
@@ -98,78 +102,35 @@ export default class Map extends Component {
     componentWillMount() {
         console.log('componentWillMount');
         
-
         Proj4.defs("EPSG:4283", "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");
         Proj4.defs("EPSG:28354", "+proj=utm +zone=54 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
         Proj4.defs("EPSG:28355", "+proj=utm +zone=55 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
         ol.proj.setProj4(Proj4);
-        // var melLonLat = ol.proj.toLonLat([320721.52, 5812855.79], 'EPSG:28355');
-        // var mel = ol.proj.fromLonLat(melLonLat);
         var mel = ol.proj.transform([320721.52, 5812855.79], 'EPSG:28355', 'EPSG:3857');
         console.log('mel', mel);
-        // console.log(ol.proj.transform([320721.52, 5812855.79], 'EPSG:28355', 'EPSG:3857'));
         this.setState({
             center: mel
         });
-
-        // const boreHoles = [];
-        // const siteUrl = 'http://localhost:8090/site/search/get?loaderId=' + tenement[0];
-        // fetch(siteUrl)
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data);
-        //         for (const site of data._embedded.site) {
-        //             const amgZone = site.amgZone;
-        //             const easting = parseFloat(site.easting);
-        //             const northing = parseFloat(site.northing);
-        //             const boreHoleDto = {amgZone: amgZone, easting: easting, northing: northing};
-        //             boreHoles.push(boreHoleDto);
-        //         }
-        //         if (0 < boreHoles.length) {
-        //             const boreHole = boreHoles[0];
-        //             var zone = this.extractAmgZone(boreHole.amgZone);
-        //             // if ('54' === boreHole.amgZone) {
-        //             //     zone = 'EPSG:28354';
-        //             // } else {
-        //             //     zone = 'EPSG:28355';
-        //             // }
-        //             var center = ol.proj.transform([boreHole.easting, boreHole.northing], zone, 'EPSG:3857');
-        //             console.log('center', center);
-        //             this.setState({
-        //                 center: center
-        //             });
-        //         }    
-        //     });
-        // const json = this.getBoreHoles(siteUrl);
-        
     }
-
-    // async getBoreHoles(url) {
-    //     const response = await fetch(url);
-    //     const json = await response.json();
-    //     console.log(json);
-    //     return json;
-    // }
 
     componentDidMount() {
         console.log('componentDidMount');
         console.log(this.props.match.params.id);
         const tenement = this.extractTenement(this.props.match.params.id);
-        // const tenement = this.state.tenement;
-
-        // const lon = 142.152154758333;
-        // const lat = -35.6837831083333;
-
-        // var center = ol.proj.fromLonLat([lon, lat]);
-        // var lakeEntrance = ol.proj.fromLonLat([147.991605, -37.879584]);
-        // var polygonVector = this.getTestPolygon();
+        
+        const circelStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 5,
+                fill: new ol.style.Fill({
+                    color: 'rgba(230,120,30,0.7)'
+                })
+            })
+        });
 
         var boreHoleMarkerStyle = [
             new ol.style.Style({
                 image: new ol.style.Icon(({
                     scale: 1,
-                    // rotateWithView: (rnd < 0.9) ? true : false,
-                    // rotation: 360 * rnd * Math.PI / 180,
                     rotateWithView: false,
                     rotation: 0,
                     anchor: [0.5, 1],
@@ -179,22 +140,13 @@ export default class Map extends Component {
                     src: 'http://maps.google.com/mapfiles/ms/icons/red.png'
                 }))
             }),
-            new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({
-                        color: 'rgba(230,120,30,0.7)'
-                    })
-                })
-            })
+            circelStyle
         ];
 
         var sampleMarkerStyle = [
             new ol.style.Style({
                 image: new ol.style.Icon(({
                     scale: 1,
-                    // rotateWithView: (rnd < 0.9) ? true : false,
-                    // rotation: 360 * rnd * Math.PI / 180,
                     rotateWithView: false,
                     rotation: 0,
                     anchor: [0.5, 1],
@@ -204,14 +156,7 @@ export default class Map extends Component {
                     src: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
                 }))
             }),
-            new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({
-                        color: 'rgba(230,120,30,0.7)'
-                    })
-                })
-            })
+            circelStyle
         ];
 
         var vectorSource = new ol.source.Vector({
@@ -221,7 +166,6 @@ export default class Map extends Component {
                 var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
                 var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27' + tenement[1] + '%27';
                 // var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27EL006759%27';
-                // var xhr = new XMLHttpRequest();
                 var xml;
                 fetch(proxyUrl + url, {
                     headers: {
@@ -273,10 +217,12 @@ export default class Map extends Component {
             .then(data => {
                 console.log(data);
                 for (const site of data._embedded.site) {
+                    const boreHoleId = this.extractBoreHoleId(site._links.self.href);
+                    console.log(boreHoleId);
                     const amgZone = site.amgZone;
                     const easting = parseFloat(site.easting);
                     const northing = parseFloat(site.northing);
-                    const boreHoleDto = {amgZone: amgZone, easting: easting, northing: northing};
+                    const boreHoleDto = {boreHoleId: boreHoleId, amgZone: amgZone, easting: easting, northing: northing};
                     boreHoles.push(boreHoleDto);
                 }
                 for (const boreHole of boreHoles) {
@@ -284,7 +230,8 @@ export default class Map extends Component {
                     var point = ol.proj.transform([boreHole.easting, boreHole.northing], zone, 'EPSG:3857');
                     console.log('point', point);
                     var iconFeature = new ol.Feature({
-                        geometry: new ol.geom.Point(point)
+                        geometry: new ol.geom.Point(point),
+                        properties: {'sampleId': boreHole.boreHoleId}
                     });
                     iconFeature.setStyle(boreHoleMarkerStyle);
                     markerSource.addFeature(iconFeature);
@@ -298,10 +245,11 @@ export default class Map extends Component {
             .then(data => {
                 console.log(data);
                 for (const surfaceGeochemistry of data._embedded.surfaceGeochemistry) {
+                    const sampleId =surfaceGeochemistry.sampleId;
                     const amgZone = surfaceGeochemistry.amgZone;
                     const easting = parseFloat(surfaceGeochemistry.easting);
                     const northing = parseFloat(surfaceGeochemistry.northing);
-                    const sampleDto = {amgZone: amgZone, easting: easting, northing: northing};
+                    const sampleDto = {sampleId: sampleId, amgZone: amgZone, easting: easting, northing: northing};
                     samples.push(sampleDto);
                 }
                 for (const sample of samples) {
@@ -309,7 +257,8 @@ export default class Map extends Component {
                     var samplePoint = ol.proj.transform([sample.easting, sample.northing], sampleZone, 'EPSG:3857');
                     console.log('sample point', samplePoint);
                     var sampleIconFeature = new ol.Feature({
-                        geometry: new ol.geom.Point(samplePoint)
+                        geometry: new ol.geom.Point(samplePoint),
+                        properties: {'sampleId': sample.sampleId}
                     });
                     sampleIconFeature.setStyle(sampleMarkerStyle);
                     markerSource.addFeature(sampleIconFeature);
@@ -346,11 +295,64 @@ export default class Map extends Component {
             })
         });
 
-        // var iconFeature = new ol.Feature({
-        //     geometry: new ol.geom.Point(lakeEntrance)
-        // });
-        // iconFeature.setStyle(markerStyle);
-        // markerSource.addFeature(iconFeature);
+        var container = document.getElementById('popup');
+        var content = document.getElementById('popup-content');
+        var closer = document.getElementById('popup-closer');
+        
+        /**
+         * Create an overlay to anchor the popup to the map.
+         */
+        var overlay = new ol.Overlay({
+          element: container,
+          autoPan: true,
+          autoPanAnimation: {
+            duration: 250
+          }
+        });
+
+
+        /**
+         * Add a click handler to hide the popup.
+         * @return {boolean} Don't follow the href.
+         */
+        closer.onclick = function() {
+          overlay.setPosition(undefined);
+          closer.blur();
+          return false;
+        };
+
+        map.addOverlay(overlay);
+
+        map.on('singleclick', function (evt) {
+            var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+                return feature;
+            });
+
+            if (feature) {
+
+                var coord = feature.getGeometry().getCoordinates();
+                var props = feature.getProperties();
+                console.log('props', props);
+                var desc = props.properties.sampleId;
+                console.log(desc);
+                var info = "<h2>" + desc + "</h2>";
+                content.innerHTML = info;
+
+                overlay.setPosition(coord);
+
+            }
+
+        });
+    }
+
+    extractBoreHoleId(url) {
+        //  console.log(url);
+        if ((undefined !== url) 
+            && (null !== url)) {
+                let index = url.lastIndexOf("/");
+                return url.substring(++index);
+            }
+        return '';
     }
 
     extractAmgZone(amgZone) {
