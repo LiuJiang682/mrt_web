@@ -216,6 +216,7 @@ export default class SessionSummary extends Component {
             });
          
         this.setState({
+            searchText: '',
             sessions: newSessions,
             selectedBatch: []
         });
