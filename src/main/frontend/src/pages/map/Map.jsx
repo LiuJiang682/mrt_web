@@ -100,7 +100,7 @@ export default class Map extends Component {
     }
 
     componentWillMount() {
-        console.log('componentWillMount');
+        // console.log('componentWillMount');
         const tenement = this.extractTenement(this.props.match.params.id);
         this.setState({
             batchId: tenement[0],
@@ -112,15 +112,15 @@ export default class Map extends Component {
         Proj4.defs("EPSG:28355", "+proj=utm +zone=55 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
         ol.proj.setProj4(Proj4);
         var mel = ol.proj.transform([320721.52, 5812855.79], 'EPSG:28355', 'EPSG:3857');
-        console.log('mel', mel);
+        // console.log('mel', mel);
         this.setState({
             center: mel
         });
     }
 
     componentDidMount() {
-        console.log('componentDidMount');
-        console.log(this.props.match.params.id);
+        // console.log('componentDidMount');
+        // console.log(this.props.match.params.id);
         const tenement = this.extractTenement(this.props.match.params.id);
         
         const circelStyle = new ol.style.Style({
@@ -181,10 +181,10 @@ export default class Map extends Component {
                     .then(response => response.text())
                     .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
                     .then(data => {
-                        console.log(data);
+                        // console.log(data);
                         var posList = [];
                         var shapeXml = data.getElementsByTagNameNS('http://www.opengis.net/gml', 'posList');
-                        console.log(shapeXml);
+                        // console.log(shapeXml);
                         for (const shape of shapeXml) {
                             posList.push(shape.firstChild.textContent);
                         }
@@ -220,10 +220,10 @@ export default class Map extends Component {
         fetch(siteUrl)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 for (const site of data._embedded.site) {
                     const boreHoleId = this.extractBoreHoleId(site._links.self.href);
-                    console.log(boreHoleId);
+                    // console.log(boreHoleId);
                     const amgZone = site.amgZone;
                     const easting = parseFloat(site.easting);
                     const northing = parseFloat(site.northing);
@@ -233,7 +233,7 @@ export default class Map extends Component {
                 for (const boreHole of boreHoles) {
                     var zone = this.extractAmgZone(boreHole.amgZone);
                     var point = ol.proj.transform([boreHole.easting, boreHole.northing], zone, 'EPSG:3857');
-                    console.log('point', point);
+                    // console.log('point', point);
                     var iconFeature = new ol.Feature({
                         geometry: new ol.geom.Point(point),
                         properties: {'sampleId': boreHole.boreHoleId}
@@ -248,7 +248,7 @@ export default class Map extends Component {
         fetch(sampleUrl)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 for (const surfaceGeochemistry of data._embedded.surfaceGeochemistry) {
                     const sampleId =surfaceGeochemistry.sampleId;
                     const amgZone = surfaceGeochemistry.amgZone;
@@ -260,7 +260,7 @@ export default class Map extends Component {
                 for (const sample of samples) {
                     var sampleZone = this.extractAmgZone(sample.amgZone);
                     var samplePoint = ol.proj.transform([sample.easting, sample.northing], sampleZone, 'EPSG:3857');
-                    console.log('sample point', samplePoint);
+                    // console.log('sample point', samplePoint);
                     var sampleIconFeature = new ol.Feature({
                         geometry: new ol.geom.Point(samplePoint),
                         properties: {'sampleId': sample.sampleId}
