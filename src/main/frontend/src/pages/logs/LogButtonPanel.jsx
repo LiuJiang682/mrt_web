@@ -21,11 +21,17 @@ export default class LogButtonPanel extends Component {
     }
 
     render() {
+        let approveButton;
+        if (this.props.disableApprove) {
+            approveButton = <button className="green_button_disabled" onClick={this.handleApprove} disabled>Approve</button>;
+        } else {
+            approveButton = <button className="green_button" onClick={this.handleApprove}>Approve</button>;
+        }
         return (
             <div>
                 <div className="bottom_center">
                     <div>
-                        <button className="green_button" onClick={this.handleApprove}>Approve</button>
+                        {approveButton}
                     </div>
                     <div>
                         <button className="red_button" onClick={this.handleReject}>Reject</button>

@@ -7,7 +7,7 @@ class Logs extends Component {
     constructor(props) {
         super(props);
         var batchId = this.props.match.params.id;
-        batchId = batchId.replace(":", "");
+        batchId = (batchId) ? batchId.replace(":", "") : '';
         this.state = {
             batchId: batchId,
             fileErrorLogDTOs: [],
@@ -22,16 +22,7 @@ class Logs extends Component {
     handleApprove() {
         console.log('handle approve');
         var url = "http://localhost:8090/sessionHeader/search/approve?sessionId=" + this.state.batchId;
-        fetch(url)
-            .then(response => {
-                if (response.ok) {
-                    //Session approved -- redirect back to first page.
-                    this.props.history.push("/");
-                } else {
-                    alert('Fail to Update the session!');
-                } 
-            });
-        
+        this.updateSession(url);
     }
 
     handleDisplay() {
@@ -40,6 +31,20 @@ class Logs extends Component {
 
     handelReject() {
         console.log('handle reject');
+        var url = "http://localhost:8090/sessionHeader/search/reject?sessionId=" + this.state.batchId;
+        this.updateSession(url);
+    }
+
+    updateSession(url) {
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    //Session reject -- redirect back to first page.
+                    this.props.history.push("/");
+                } else {
+                    alert('Fail to Update the session!');
+                } 
+            });
     }
 
     componentWillMount() {
@@ -64,17 +69,20 @@ class Logs extends Component {
                     }
                 }
                 fileInfoLogDTOs.push("Test");
+                
                 this.setState({
                     fileErrorLogDTOs: fileErrorLogDTOs,
                     fileWarningLogDTOs: fileWarningLogDTOs,
                     fileInfoLogDTOs: fileInfoLogDTOs,
                 });
             });
+            
     }
 
     render() {
         const rows = [];
         var key = 0;
+        const disableApprove = (0 === this.state.fileErrorLogDTOs.length) ? false : true;
         this.state.fileErrorLogDTOs.forEach((dto) => {
             const error = <tr className="tr_height" key={++key}><td className="log_error">ERROR: {dto}</td></tr>
             rows.push(error);
@@ -94,7 +102,7 @@ class Logs extends Component {
                     <table width="100%">
                         <tbody>{rows}</tbody>
                     </table>
-                    <LogButtonPanel onApprove={this.handleApprove} onReject={this.handelReject} onDisplay={this.handleDisplay}/>
+                    <LogButtonPanel disableApprove={disableApprove} onApprove={this.handleApprove} onReject={this.handelReject} onDisplay={this.handleDisplay}/>
                 </div>
             </div>
         )
