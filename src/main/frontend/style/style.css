@@ -167,3 +167,15 @@ html, body, .app {
 .ol-popup-closer:after {
 	content: "✖";
 }
+
+.log_error {
+    color: red;
+}
+
+.log_warning {
+    color: goldenrod;
+}
+
+.log_info {
+    color: green;
+}
