@@ -10,7 +10,7 @@ import NavBar from './pages/common/NavBar'
 import SessionSummary from './pages/session/SessionSummary'
 import Map from './pages/map/Map';
 import Logs from './pages/logs/Logs';
-import Errors from './pages/Errors';
+import Errors from './pages/errors/Errors';
 
 import style from '../style/style.css';
 
@@ -24,7 +24,7 @@ const App = () =>
       <Route exact path="/map/:id" component={Map} />
       
       <Route path="/logs:id" component={Logs} />
-      <Route path="/errors" component={Errors} />
+      <Route path="/errors:id" component={Errors} />
       <Route exact path="/" component={SessionSummary}/>
     </div>
   </Router>

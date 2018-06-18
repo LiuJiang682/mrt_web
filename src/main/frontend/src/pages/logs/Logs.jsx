@@ -27,6 +27,9 @@ class Logs extends Component {
 
     handleDisplay() {
         console.log('handle display');
+        //Redirect to display error page
+        var url = "/errors:" + this.state.batchId;
+        this.props.history.push(url);
     }
 
     handelReject() {

@@ -12,7 +12,7 @@ export default class NavBar extends Component {
                             {/* TODO: fix the activeClassName not working */}
                             <li><Link to="/" activeClassName="active">Session Summary</Link></li>
                             {/* <li><Link to="/logs" activeClassName="active">Logs</Link></li> */}
-                            <li><Link to="errors" activeClassName="active">Errors</Link></li>
+                            {/* <li><Link to="errors" activeClassName="active">Errors</Link></li> */}
                         </ul>
                     </div>
                 </div>
