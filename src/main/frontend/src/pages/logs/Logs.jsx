@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
-export default class Logs extends Component {
+import LogButtonPanel from './LogButtonPanel'
+
+class Logs extends Component {
     constructor(props) {
         super(props);
         var batchId = this.props.match.params.id;
@@ -11,6 +14,32 @@ export default class Logs extends Component {
             fileWarningLogDTOs: [],
             fileInfoLogDTOs: [],
         }
+        this.handleApprove = this.handleApprove.bind(this);
+        this.handleDisplay = this.handleDisplay.bind(this);
+        this.handelReject = this.handelReject.bind(this);
+    }
+
+    handleApprove() {
+        console.log('handle approve');
+        var url = "http://localhost:8090/sessionHeader/search/approve?sessionId=" + this.state.batchId;
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    //Session approved -- redirect back to first page.
+                    this.props.history.push("/");
+                } else {
+                    alert('Fail to Update the session!');
+                } 
+            });
+        
+    }
+
+    handleDisplay() {
+        console.log('handle display');
+    }
+
+    handelReject() {
+        console.log('handle reject');
     }
 
     componentWillMount() {
@@ -65,8 +94,11 @@ export default class Logs extends Component {
                     <table width="100%">
                         <tbody>{rows}</tbody>
                     </table>
+                    <LogButtonPanel onApprove={this.handleApprove} onReject={this.handelReject} onDisplay={this.handleDisplay}/>
                 </div>
             </div>
         )
     }
 }
+
+export default withRouter(Logs);
