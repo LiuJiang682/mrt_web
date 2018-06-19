@@ -71,7 +71,7 @@ class Logs extends Component {
                         fileInfoLogDTOs.push(message);
                     }
                 }
-                fileInfoLogDTOs.push("Test");
+                // fileInfoLogDTOs.push("Test");
                 
                 this.setState({
                     fileErrorLogDTOs: fileErrorLogDTOs,
