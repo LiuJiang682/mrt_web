@@ -1,6 +1,7 @@
 package au.gov.vic.ecodev.mrt.rest.service.template;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import au.gov.vic.ecodev.mrt.common.Constants;
 import au.gov.vic.ecodev.mrt.dao.SessionHeaderDao;
 import au.gov.vic.ecodev.mrt.model.SessionHeader;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateClassesListHelper;
@@ -36,15 +39,29 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 				.get(Long.parseLong(batchId));
 		Map<String, List<Map<String, Object>>> resultMap = new HashMap<>();
 		if (null != sessionHeader) {
-			String template = sessionHeader.getTemplate().toUpperCase();
-			Map<String, Object> templateFieldMap = templateDisplayPropertiesHelper
-					.getTemplateDisplayProperties(template);
-			List<String> classesList = templateClassesListHelper
-					.getTemplateClassesList(template);
-			templateDisplayPropertiesPopulator
-				.doPopulation(resultMap, classesList, templateFieldMap, Long.parseLong(batchId));
+			String templates = sessionHeader.getTemplate().toUpperCase();
+			List<String> templateList = extractUniqueTemplate(templates);
+			for(String template : templateList) {
+				Map<String, Object> templateFieldMap = templateDisplayPropertiesHelper
+						.getTemplateDisplayProperties(template);
+				List<String> classesList = templateClassesListHelper
+						.getTemplateClassesList(template);
+				templateDisplayPropertiesPopulator
+					.doPopulation(resultMap, classesList, templateFieldMap, Long.parseLong(batchId));
+			}
 		}
 		return resultMap;
+	}
+
+	protected final List<String> extractUniqueTemplate(String templates) {
+		if (StringUtils.isEmpty(templates)) {
+			throw new IllegalArgumentException("TemplateDataServicesImpl.extractUniqueTemplate -- templates parameter cannot be null!");
+		}
+		String[] templateArray = templates.split(Constants.Strings.COMMA);
+		String[] distinctTemplates = Arrays.stream(templateArray)
+				.distinct()
+				.toArray(String[]::new);
+		return Arrays.asList(distinctTemplates);
 	}
 
 	@Override

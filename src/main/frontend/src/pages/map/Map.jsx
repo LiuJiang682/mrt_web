@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom';
 import ol from "openlayers";
 import Proj4 from "proj4";
 
@@ -14,9 +15,10 @@ export default class Map extends Component {
     }
     render() {
         // console.log(this.props.match.params.id);
+        let linkId = this.state.batchId;
         return (
             <div>
-                <h2>Map for Batch: {this.state.batchId}&ensp;Tenement: {this.state.tenement}</h2>
+                <h2>Map for Batch: <Link to={"/logs/" + linkId}>{this.state.batchId}</Link>&ensp;Tenement: {this.state.tenement}</h2>
                 <div id='map'>{this.state.map}</div>
                 <div id="popup" class="ol-popup">
                 	<a href="#" id="popup-closer" class="ol-popup-closer"></a>
@@ -337,7 +339,7 @@ export default class Map extends Component {
                 var coord = feature.getGeometry().getCoordinates();
                 var props = feature.getProperties();
                 var desc = props.properties.sampleId;
-                var info = "<a href=\"http://localhost:9090/logs:" + tenement[0] + "\">" + desc + "</a>";
+                var info = "<a href=\"/logs/" + tenement[0] + "\">" + desc + "</a>";
                 content.innerHTML = info;
                 overlay.setPosition(coord);
             }

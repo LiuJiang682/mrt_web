@@ -28,7 +28,7 @@ public class TemplateHeaderRetriever {
 		String[] headersArray = headersString.split(Strings.COMMA);
 		Map<String, Object> headers = new HashMap<>(headersArray.length);
 		for (int i = Numeral.ZERO; i < headersArray.length; i++) {
-			String key = String.valueOf(i + Numeral.ONE);
+			String key = String.valueOf(++i);
 			headers.put(String.valueOf(key), headersArray[i]);
 		}
 		List<Map<String, Object>> list = new ArrayList<>(Numeral.ONE);
