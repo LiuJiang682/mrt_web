@@ -12,13 +12,19 @@ export default class ReportTemplate extends Component {
     }
     render() {
         const rows = [];
-        const headers = this.extractColumnHeaders(this.state.recordList[0]);
-        const headerRow = this.buildTableHeader(headers);
-        rows.push(headerRow);
-        const length = this.state.recordList.length;
-        for (var index = 1; index < length; index++) {
-            rows.push(<TemplateDataRecordList headers={headers} recordList={this.state.recordList[index]} />);
+        if ((null === this.state.recordList)) {
+            const headerRow = <tr className="tr_height"><td className="log_error"><strong>No Data</strong></td></tr>
+            rows.push(headerRow);
+        } else {
+            const headers = this.extractColumnHeaders(this.state.recordList[0]);
+            const headerRow = this.buildTableHeader(headers);
+            rows.push(headerRow);
+            const length = this.state.recordList.length;
+            for (var index = 1; index < length; index++) {
+                rows.push(<TemplateDataRecordList headers={headers} recordList={this.state.recordList[index]} />);
         }
+        }
+        
         
         return (
             <table width="100%">
@@ -36,6 +42,10 @@ export default class ReportTemplate extends Component {
 
     extractColumnHeaders(headers) {
         // console.log(headers);
+        if ((undefined === headers) 
+            || (null === headers)) {
+                return null;
+            }
         let columnHeaders = Object.keys(headers).map(function(keyName, keyIndex) {
             console.log('key: ' + keyName, 'value: ' + headers[keyName], 'index: ' + keyIndex);
             return headers[keyName];

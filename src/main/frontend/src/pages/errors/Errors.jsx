@@ -19,7 +19,7 @@ export default class Errors extends Component {
 		    'Content-Type': 'multipart/form-data'
         });
         //TODO: -- Replace with correct URL
-        var url = 'http://localhost:8080/template/' + this.state.batchId;
+        var url = 'http://localhost:8090/template/' + this.state.batchId;
         fetch(url, {
             headers: headers
         })
