@@ -4,25 +4,46 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 //import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 public class DatabaseConfig {
+	
 	@Configuration
 	static class OracleDatabaseConfig {
+		@Primary
 		@Bean
 		public DataSource dataSource(final Environment env) {
-			DriverManagerDataSource datasource = new DriverManagerDataSource(); System.err.println("ds_props" + env.getRequiredProperty("spring.datasource.driver-class-name"));
+			DriverManagerDataSource datasource = new DriverManagerDataSource(); 
 			datasource.setDriverClassName(env.getRequiredProperty("spring.datasource.driver-class-name"));
 			datasource.setUrl(env.getRequiredProperty("spring.datasource.url"));
 			datasource.setUsername(env.getRequiredProperty("spring.datasource.username"));
 			datasource.setPassword(env.getRequiredProperty("spring.datasource.password"));
 			return datasource;
+		}
+	}
+	
+	
+	@Configuration
+	static class H2DatabaseConfig {
+		@Bean
+		@Profile(StarterProfiles.TEST)
+		public DataSource dataSource_test() {
+			// no need shutdown, EmbeddedDatabaseFactoryBean will take care of this
+			EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+			EmbeddedDatabase db = builder.setType(EmbeddedDatabaseType.H2) // .H2 or .DERBY
+					.addScript("db/sql/create-db.sql")
+					.addScript("db/sql/insert-data.sql").build();
+			return db;
 		}
 	}
 //
