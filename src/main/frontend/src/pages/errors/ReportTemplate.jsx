@@ -18,10 +18,11 @@ export default class ReportTemplate extends Component {
         } else {
             const headers = this.extractColumnHeaders(this.state.recordList[0]);
             const headerRow = this.buildTableHeader(headers);
+            const headersUC = this.buildUCHeaders(headers);
             rows.push(headerRow);
             const length = this.state.recordList.length;
             for (var index = 1; index < length; index++) {
-                rows.push(<TemplateDataRecordList headers={headers} recordList={this.state.recordList[index]} />);
+                rows.push(<TemplateDataRecordList currentIndex={index} headers={headersUC} recordList={this.state.recordList[index]} />);
         }
         }
         
@@ -66,5 +67,15 @@ export default class ReportTemplate extends Component {
         const tr = <tr className="tr_height">{headerRows}</tr>
         // console.log('tr', tr);
         return tr;
+    }
+
+    buildUCHeaders(headers) {
+        const ucHeaders = [];
+        var index = 0;
+        headers.forEach((header) => {
+            const ucHeader = header.toUpperCase();
+            ucHeaders.push(ucHeader);
+        });
+        return ucHeaders;
     }
 }

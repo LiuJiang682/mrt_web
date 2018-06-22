@@ -15,6 +15,7 @@ public interface Constants {
 	interface Numeral {
 		static final int ZERO = 0;
 		static final int ONE = 1;
+		static final int TWO = 2;
 		static final int NEGATIVE_ONE = -1;
 	}
 }

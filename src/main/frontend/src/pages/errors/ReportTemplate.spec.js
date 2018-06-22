@@ -30,5 +30,16 @@ describe('ReportTemplate', () => {
             }
         });
     });
+    describe('buildUCHeaders', () => {
+        it('should build upper case header', () => {
+            const FIRST_ROW = [{1: 'holeId', 2: 'drillingCode', 3: 'easting', 4: 'northing'}];
+            const wrapper = shallow(<ReportTemplate recordList={FIRST_ROW}/>);
+            const headers = ['holeId', 'drillingCode', 'easting', 'northing'];
+            const ucHeaders = wrapper.instance().buildUCHeaders(headers);
+            for (const ucHeader of ucHeaders) {
+                expect(/[A-Z]/.test(ucHeader)).to.be.equal(true);
+            }
+        });
+    });
 });
 

@@ -25,7 +25,8 @@ public class TemplateOptionalFieldsRetriever {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public void extractOptionalFields(Map<String, List<Map<String, Object>>> resultMap, long batchId, String template) {
+	public void extractOptionalFields(Map<String, List<Map<String, Object>>> resultMap, 
+			long batchId, String template) {
 		List<Map<String, Object>> optionalFields = new TemplateOptionalFieldsJdbcTemplateRetriever(jdbcTemplate)
 				.getList(template, batchId);
 		optionalFields.stream()

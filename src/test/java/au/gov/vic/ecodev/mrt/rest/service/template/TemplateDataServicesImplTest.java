@@ -51,6 +51,16 @@ public class TemplateDataServicesImplTest {
 		assertThat(templateList.get(0), is(equalTo("MRT")));
 	}
 	
+	@Test
+	public void shouldGroupDataByTemplate() throws Exception {
+		//Given
+		Map<String, List<Map<String, Object>>> results = testInstance.retrieveDisplayData("100");
+		//When
+		Map<String, List<Map<String, Object>>> groupedMap = testInstance.groupRecordsByTemplate(results);
+		//Then
+		assertThat(groupedMap, is(notNullValue()));
+	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldRaiseExceptionWhenCalledExtractUniqueTemplateWithNullTemplates() {
 		//Given
