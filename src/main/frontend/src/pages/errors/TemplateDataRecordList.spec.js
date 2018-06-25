@@ -40,9 +40,26 @@ describe('TemplateDataRecordList', () => {
             const headers = ['hole_id', 'From', 'To', 'sample_id', 'easting', 'northing'];
             const wrapper = shallow(<TemplateDataRecordList headers={headers} recordList={headers}/>);
             const current = 'Sample_From';
-            console.log('about', current);
             const pos = wrapper.instance().findHeaderPoleAliasPos(current, headers);
             expect(pos).to.be.equal(1);
+        });
+    });
+    describe('findHeaderMiddelAliasPos', () => {
+        it('should match the title with middle variation', () => {
+            const headers = ['hole_id', 'Sample From', 'To', 'sample_id', 'easting', 'northing'];
+            const wrapper = shallow(<TemplateDataRecordList headers={headers} recordList={headers}/>);
+            const current = 'Sample_From';
+            const pos = wrapper.instance().findHeaderMiddelAliasPos(current, headers);
+            expect(pos).to.be.equal(1);
+        });
+    });
+    describe('buildRegexString', () => {
+        it('should build regex string', () => {
+            const array = ['Sample', 'depth'];
+            const delim = '_';
+            const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
+            const regexString = wrapper.instance().buildRegexString(array, delim);
+            expect(regexString).to.be.equal('Sample_depth');
         });
     });
 });
