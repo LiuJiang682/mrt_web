@@ -20,20 +20,20 @@ class Logs extends Component {
     }
 
     handleApprove() {
-        console.log('handle approve');
+        // console.log('handle approve');
         var url = "http://localhost:8090/sessionHeader/search/approve?sessionId=" + this.state.batchId;
         this.updateSession(url);
     }
 
     handleDisplay() {
-        console.log('handle display');
+        // console.log('handle display');
         //Redirect to display error page
         var url = "/errors/" + this.state.batchId;
         this.props.history.push(url);
     }
 
     handelReject() {
-        console.log('handle reject');
+        // console.log('handle reject');
         var url = "http://localhost:8090/sessionHeader/search/reject?sessionId=" + this.state.batchId;
         this.updateSession(url);
     }
@@ -51,7 +51,7 @@ class Logs extends Component {
     }
 
     componentWillMount() {
-        console.log('componentWillMount');
+        // console.log('componentWillMount');
         const fileErrorLogDTOs = [];
         const fileWarningLogDTOs = [];
         const fileInfoLogDTOs = [];
@@ -59,7 +59,7 @@ class Logs extends Component {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 for (const fileLog of data._embedded.fileLogs) {
                     const severity = fileLog.severity;
                     const message = fileLog.message;

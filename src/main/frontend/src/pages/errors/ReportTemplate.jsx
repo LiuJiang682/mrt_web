@@ -48,7 +48,7 @@ export default class ReportTemplate extends Component {
                 return null;
             }
         let columnHeaders = Object.keys(headers).map(function(keyName, keyIndex) {
-            console.log('key: ' + keyName, 'value: ' + headers[keyName], 'index: ' + keyIndex);
+            // console.log('key: ' + keyName, 'value: ' + headers[keyName], 'index: ' + keyIndex);
             return headers[keyName];
         });
         // console.log(columnHeaders);

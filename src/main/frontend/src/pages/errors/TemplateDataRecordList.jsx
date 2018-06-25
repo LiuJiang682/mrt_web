@@ -11,11 +11,7 @@ export default class TemplateDataRecordList extends Component {
 		}
 	}
 	componentWillMount() {
-		console.log(this.state.headers.length);
 		let records = new Array(this.state.headers.length).fill(' ');
-		console.log(this.state.headers);
-		console.log(this.state.recordList);
-		// records.fill(' ', 0, this.state.recordList.length);
 		Object.keys(this.state.recordList).map(
 			(key) => {
 				let value;
@@ -35,8 +31,10 @@ export default class TemplateDataRecordList extends Component {
 						}
 					} 
 					else {
+						//Check the header at the start or end position.
 						pos = this.findHeaderPoleAliasPos(key, this.state.headers);
 						if (-1 === pos) {
+							//Check the header's join variations.
 							pos = this.findHeaderMiddelAliasPos(key, this.state.headers);
 						}
 						if (-1 !== pos) {
@@ -86,26 +84,29 @@ export default class TemplateDataRecordList extends Component {
 	}
 
 	findHeaderPoleAliasPos(currentHeader, headers) {
-		console.log(arguments);
-		console.log(currentHeader, headers);
-		// const startAlias = '^' + key;
-		// const endAlias = key + '$';
-		headers.map((header, index) => {
-			console.log('header: ' + header + ', index: ' + index + ', currentHeader: ' + currentHeader);
-			const startAlias = '^' + header;
-			const endAlias = header + '$';
-			console.log(new RegExp(startAlias, 'gi').test(currentHeader));
-			console.log(new RegExp(endAlias, 'gi').test(currentHeader));
-			if (new RegExp(startAlias, 'gi').test(currentHeader) 
-				|| (new RegExp(endAlias, 'gi').test(currentHeader))) {
-					return index;
-				}	
-		});
-		return -1;
+		// console.log('currentHeader', currentHeader);
+		var position = -1;
+		if ((undefined !== headers) 
+			&& (null !== headers)) {
+				for(var index = 0; index < headers.length; index++) {
+					const header = headers[index];
+					// console.log('header: ' + header + ', index: ' + index + ', currentHeader: ' + currentHeader);
+					const startAlias = '^' + header;
+					const endAlias = header + '$';
+					// console.log(new RegExp(startAlias, 'gi').test(currentHeader));
+					// console.log(new RegExp(endAlias, 'gi').test(currentHeader));
+					if (new RegExp(startAlias, 'gi').test(currentHeader) 
+						|| (new RegExp(endAlias, 'gi').test(currentHeader))) {
+							// console.log(index);
+							position = index;
+							break;
+						}	
+				};
+			}
+		return position;
 	}
 
 	findHeaderMiddelAliasPos(currentHeader, headers) {
-		console.log('currentHeader', currentHeader);
 		var headerIndex = -1;
 		var spaceArray = currentHeader.split(' ');
 		var underLineArray = currentHeader.split('_');
@@ -120,7 +121,7 @@ export default class TemplateDataRecordList extends Component {
 		if (1 < underLineArray.length) {
 			for (var index = 0; index < underLineArray.length; index++) {
 				const str = underLineArray[index];
-				console.log(str)
+				// console.log(str)
 				lableArray[index] = str;
 			}
 		}
@@ -140,7 +141,7 @@ export default class TemplateDataRecordList extends Component {
 			for (var index = 0; index < headers.length; index++) {
 				const header = headers[index];
 				if (matcher.test(header)) {
-					console.log('returning: ' + index);
+					// console.log('returning: ' + index);
 					headerIndex = index;
 					break;
 				}

@@ -22,26 +22,27 @@ describe('TemplateDataRecordList', () => {
             // expect(/^\wSURVERYED\w |_|-\wDEPTH\w$/.test("HOLE_ID")).to.be.equal(false);
         });
     });
-    // describe('findHeaderAliasPos', () => {
-    //     it('should match the alias', () => {
-    //         const key = 'To'
-    //         const startAlias = '^' + key;
-    //         const endAlias =  key + '$';
-    //         // console.log(endAlias);
-    //         // console.log(/_To$/.test('Sample_To'));
-    //         // console.log(/endAlias/.test('Sample_To'));
-    //         // console.log(new RegExp(endAlias).test('Sample_To'));
-    //         expect(new RegExp(endAlias, 'gi').test('Sample_To')).to.be.equal(true);
-    //         expect(new RegExp(endAlias, 'gi').test('Sample_to')).to.be.equal(true);
-    //         expect(new RegExp(startAlias, 'gi').test('To_sample')).to.be.equal(true);
-    //         expect(new RegExp(startAlias, 'gi').test('to_sample')).to.be.equal(true);
-    //     });
-    //     it('should return position of header alias', () => {
-    //         const headers = ['hole_id', 'From', 'To', 'sample_id', 'easting', 'northing'];
-    //         const wrapper = shallow(<TemplateDataRecordList headers={headers} recordList={headers}/>);
-    //         const current = 'Sample_From';
-    //         const pos = wrapper.instance().findHeaderAliasPos(current, headers);
-    //         expect(pos).to.be.equal(1);
-    //     });
-    // });
+    describe('findHeaderAliasPos', () => {
+        it('should match the alias', () => {
+            const key = 'To'
+            const startAlias = '^' + key;
+            const endAlias =  key + '$';
+            // console.log(endAlias);
+            // console.log(/_To$/.test('Sample_To'));
+            // console.log(/endAlias/.test('Sample_To'));
+            // console.log(new RegExp(endAlias).test('Sample_To'));
+            expect(new RegExp(endAlias, 'gi').test('Sample_To')).to.be.equal(true);
+            expect(new RegExp(endAlias, 'gi').test('Sample_to')).to.be.equal(true);
+            expect(new RegExp(startAlias, 'gi').test('To_sample')).to.be.equal(true);
+            expect(new RegExp(startAlias, 'gi').test('to_sample')).to.be.equal(true);
+        });
+        it('should return position of header alias', () => {
+            const headers = ['hole_id', 'From', 'To', 'sample_id', 'easting', 'northing'];
+            const wrapper = shallow(<TemplateDataRecordList headers={headers} recordList={headers}/>);
+            const current = 'Sample_From';
+            console.log('about', current);
+            const pos = wrapper.instance().findHeaderPoleAliasPos(current, headers);
+            expect(pos).to.be.equal(1);
+        });
+    });
 });

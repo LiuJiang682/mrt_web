@@ -25,9 +25,9 @@ export default class Errors extends Component {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('data', data);
+                // console.log('data', data);
                 let records = Object.keys(data).map(function(keyName, keyIndex) {
-                    console.log('key: ' + keyName, 'value: ' + data[keyName]);
+                    // console.log('key: ' + keyName, 'value: ' + data[keyName]);
                     return (
                         <div key={keyIndex}>
                             <ReportTemplate templateName={keyName} recordList={data[keyName]} />
