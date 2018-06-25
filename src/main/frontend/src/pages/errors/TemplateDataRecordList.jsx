@@ -11,10 +11,11 @@ export default class TemplateDataRecordList extends Component {
 		}
 	}
 	componentWillMount() {
-		let records = [];
+		console.log(this.state.headers.length);
+		let records = new Array(this.state.headers.length).fill(' ');
 		console.log(this.state.headers);
 		console.log(this.state.recordList);
-		records.fill('', 0, this.state.recordList.length);
+		// records.fill(' ', 0, this.state.recordList.length);
 		Object.keys(this.state.recordList).map(
 			(key) => {
 				let value;
@@ -32,8 +33,17 @@ export default class TemplateDataRecordList extends Component {
 							title = title.substring(0, 1);
 							pos = parseInt(key.substring(1));
 						}
-					} else {
-						pos = this.findHeaderAliasPos(key, this.state.headers);
+					} 
+					else {
+						pos = this.findHeaderPoleAliasPos(key, this.state.headers);
+						if (-1 === pos) {
+							pos = this.findHeaderMiddelAliasPos(key, this.state.headers);
+						}
+						if (-1 !== pos) {
+							const recordValues = Object.values(this.state.recordList);
+							value = recordValues[pos];
+							index = pos;
+						}
 					}
 					if ((undefined !== title)
 						&& (null !== title)) {
@@ -65,7 +75,7 @@ export default class TemplateDataRecordList extends Component {
 		// console.log('records', this.state.records);
 		const tds = [];
 		this.state.records.map((record, index) => {
-			const td = <td key={index}>{record}</td>
+			const td = <td key={index} className="data_table_td">{record}</td>
 			tds.push(td);
 		});
 		return (
@@ -75,7 +85,7 @@ export default class TemplateDataRecordList extends Component {
 		);
 	}
 
-	findHeaderAliasPos(currentHeader, headers) {
+	findHeaderPoleAliasPos(currentHeader, headers) {
 		console.log(arguments);
 		console.log(currentHeader, headers);
 		// const startAlias = '^' + key;
@@ -84,12 +94,70 @@ export default class TemplateDataRecordList extends Component {
 			console.log('header: ' + header + ', index: ' + index + ', currentHeader: ' + currentHeader);
 			const startAlias = '^' + header;
 			const endAlias = header + '$';
-			console(new RegExp(startAlias, 'gi').test(currentHeader));
-			console(new RegExp(endAlias, 'gi').test(currentHeader));
+			console.log(new RegExp(startAlias, 'gi').test(currentHeader));
+			console.log(new RegExp(endAlias, 'gi').test(currentHeader));
 			if (new RegExp(startAlias, 'gi').test(currentHeader) 
 				|| (new RegExp(endAlias, 'gi').test(currentHeader))) {
 					return index;
-				}
+				}	
 		});
+		return -1;
+	}
+
+	findHeaderMiddelAliasPos(currentHeader, headers) {
+		console.log('currentHeader', currentHeader);
+		var headerIndex = -1;
+		var spaceArray = currentHeader.split(' ');
+		var underLineArray = currentHeader.split('_');
+		var hypenArray = currentHeader.split('-');
+		const lableArray = new Array();
+
+		if (1 < spaceArray.length) {
+			for (var index = 0; index < spaceArray.length; index++) {
+				lableArray.push[spaceArray[index]];
+			}
+		}
+		if (1 < underLineArray.length) {
+			for (var index = 0; index < underLineArray.length; index++) {
+				const str = underLineArray[index];
+				console.log(str)
+				lableArray[index] = str;
+			}
+		}
+		if (1 < hypenArray.length) {
+			for (var index = 0; index < hypenArray.length; index++) {
+				lableArray.push[hypenArray[index]];
+			}
+		}
+		if (0 < lableArray.length) {
+			var regexString = this.buildRegexString(lableArray, ' ');
+			regexString += "|";
+			regexString += this.buildRegexString(lableArray, '_');
+			regexString += "|";
+			regexString += this.buildRegexString(lableArray, '_');
+
+			var matcher = new RegExp(regexString, 'i');
+			for (var index = 0; index < headers.length; index++) {
+				const header = headers[index];
+				if (matcher.test(header)) {
+					console.log('returning: ' + index);
+					headerIndex = index;
+					break;
+				}
+			}
+		}
+		
+		
+		return headerIndex;
+	}
+
+	buildRegexString(array, delim) {
+		var subRegexString = '';
+		for (const str of array) {
+			subRegexString += str;
+			subRegexString += delim;
+		}
+		subRegexString = subRegexString.substring(0, subRegexString.length - 1);
+		return subRegexString;
 	}
 }

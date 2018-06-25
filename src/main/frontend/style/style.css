@@ -181,3 +181,11 @@ html, body, .app {
 .log_info {
     color: green;
 }
+
+.data_table {
+    border-collapse: collapse;
+}
+
+.data_table_td {
+    border: 1px solid black;
+}

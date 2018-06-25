@@ -28,7 +28,7 @@ export default class ReportTemplate extends Component {
         
         
         return (
-            <table width="100%">
+            <table width="100%" className="data_table">
                 <thead>
                     <tr>
                         <th>{this.state.templateName}</th>
@@ -60,7 +60,7 @@ export default class ReportTemplate extends Component {
         const headerRows = [];
         var index = 0;
         headers.forEach((header) => {
-            const td = <td key={index}>{header}</td>
+            const td = <td key={index} className="data_table_td">{header}</td>
             headerRows.push(td);
             ++index;
         });
