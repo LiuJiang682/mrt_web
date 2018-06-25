@@ -1,10 +1,6 @@
 package au.gov.vic.ecodev.mrt.rest.service.template.helper;
 
-import static au.gov.vic.ecodev.mrt.common.Constants.Numeral;
-import static au.gov.vic.ecodev.mrt.common.Constants.Strings;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import au.gov.vic.ecodev.mrt.common.Constants.Numeral;
+import au.gov.vic.ecodev.mrt.common.Constants.Strings;
 
 @Component
 public class TemplateDisplayPropertiesPopulator {

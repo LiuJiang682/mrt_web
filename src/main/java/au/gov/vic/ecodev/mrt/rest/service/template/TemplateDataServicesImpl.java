@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropert
 public class TemplateDataServicesImpl implements TemplateDataServices {
 
 	private static final Logger LOGGER = Logger.getLogger(TemplateDataServicesImpl.class);
+	
+	private static final Pattern DATA_RECORD_HEADER_PATTERN = Pattern.compile("^D\\d{1,}$");
 	
 	@Autowired
 	private SessionHeaderDao sessionHeaderDao;
@@ -73,15 +76,19 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 			List<Map<String, Object>> dataList = new ArrayList<>();
 			Map<String, Object> headers = new HashMap<>();
 			TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
+			TreeMap<String, Map<String, Object>> headersMap = new TreeMap<>();
 			v.forEach((vk, vv) -> {
-				if ("Headers".equalsIgnoreCase(vk)) {
+				if (Strings.HEADERS.equalsIgnoreCase(vk)) {
 					headers.putAll(vv);
-				} else {
+				} else if (DATA_RECORD_HEADER_PATTERN.matcher(vk).matches()) {
 					dataMap.put(vk, vv);
+				} else {
+					headersMap.put(vk, vv);
 				}
 			});
 			LOGGER.info(dataMap);
 			dataList.add(headers);
+			dataList.addAll(headersMap.values());
 			dataList.addAll(dataMap.values());
 			groupedMap.put(k, dataList);
 		});
