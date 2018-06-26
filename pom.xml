@@ -30,6 +30,7 @@
 		<frontend-plugin.version>0.0.27</frontend-plugin.version>
 		<node.version>v8.11.1</node.version>
 		<npm.version>6.1.0</npm.version>
+		<powermock.version>1.7.3</powermock.version>
 	</properties>
 
 	<dependencies>
@@ -117,6 +118,18 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<!-- <scope>test</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
