@@ -10,6 +10,7 @@ public interface Constants {
 		static final String KEY_H1000 = "H1000";
 		static final String UNDER_LINE = "_";
 		static final String UNDER_LINE_DATA_KEY = "_D";
+		static final String HEADERS = "Headers";
 	}
 	
 	interface Numeral {

@@ -44,35 +44,34 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 		return groupRecordsByTemplate(resultMap);
 	}
 
+	/**
+	 * This method formats the records by grouping the records into template and sorting
+	 * the records in the headers, optional headers and data order.
+	 * 
+	 * @param resultMap the data records from database
+	 * @return grouped and sorted data records.
+	 */
 	protected final Map<String, List<Map<String, Object>>> groupRecordsByTemplate(
 			Map<String, List<Map<String, Object>>> resultMap) {
 		Map<String, List<Map<String, Object>>> groupedMap = new HashMap<>();
 		List<String> templates = new ArrayList<>();
 		Map<String, Map<String, Map<String, Object>>> cache = new HashMap<>();
-		LOGGER.info(resultMap);
-		resultMap.forEach((k, v) -> {
-			LOGGER.info("k: " + k);
-			String[] templateAndRows = k.split(Strings.UNDER_LINE);
-			String template = templateAndRows[Numeral.ZERO];
-			if (Numeral.ONE == templateAndRows.length) {
-				groupedMap.put(k, v);
-			} else {
-				String rowLabel = templateAndRows[Numeral.ONE];
-				Map<String, Map<String, Object>> rows;
-				if (templates.contains(template)) {
-					rows = cache.get(template);
-				} else {
-					rows = new HashMap<>();
-					templates.add(template);
-					cache.put(template, rows);
-				}
-				LOGGER.info(v);
-				rows.put(rowLabel, v.get(Numeral.ZERO));
-			}
-		});
+		doDataGroupping(resultMap, groupedMap, templates, cache);
 		
+		doTemplateRecordOrderSorting(groupedMap, cache);
+		LOGGER.info(groupedMap);
+		return groupedMap;
+	}
+
+	/**
+	 * This method sorts the records in headers, optional headers and data record order.
+	 * @param groupedMap the final data map
+	 * @param cache the grouped data map
+	 */
+	protected final void doTemplateRecordOrderSorting(Map<String, List<Map<String, Object>>> groupedMap,
+			Map<String, Map<String, Map<String, Object>>> cache) {
 		cache.forEach((k, v) -> {
-			LOGGER.info(k + " " + v);
+			// LOGGER.info(k + " " + v);
 			List<Map<String, Object>> dataList = new ArrayList<>();
 			Map<String, Object> headers = new HashMap<>();
 			TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
@@ -86,14 +85,47 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 					headersMap.put(vk, vv);
 				}
 			});
-			LOGGER.info(dataMap);
+			// LOGGER.info(dataMap);
 			dataList.add(headers);
 			dataList.addAll(headersMap.values());
 			dataList.addAll(dataMap.values());
 			groupedMap.put(k, dataList);
 		});
-		LOGGER.info(groupedMap);
-		return groupedMap;
+	}
+
+	/**
+	 * This method groups the data from database into the cache map by the template whose records belong.
+	 * 
+	 * @param resultMap the map from database.
+	 * @param groupedMap the map contains data groups by template they belong.
+	 * @param templates the template list associated with the result Map.
+	 * @param cache the map for grouped data.
+	 */
+	protected final void doDataGroupping(Map<String, List<Map<String, Object>>> resultMap,
+			Map<String, List<Map<String, Object>>> groupedMap, List<String> templates,
+			Map<String, Map<String, Map<String, Object>>> cache) {
+		// LOGGER.info(resultMap);
+		resultMap.forEach((k, v) -> {
+			// LOGGER.info("k: " + k);
+			String[] templateAndRows = k.split(Strings.UNDER_LINE);
+			String template = templateAndRows[Numeral.ZERO];
+			if (Numeral.ONE == templateAndRows.length) {
+				//No data case
+				groupedMap.put(k, v);
+			} else {
+				String rowLabel = templateAndRows[Numeral.ONE];
+				Map<String, Map<String, Object>> rows;
+				if (templates.contains(template)) {
+					rows = cache.get(template);
+				} else {
+					rows = new HashMap<>();
+					templates.add(template);
+					cache.put(template, rows);
+				}
+				// LOGGER.info(v);
+				rows.put(rowLabel, v.get(Numeral.ZERO));
+			}
+		});
 	}
 	
 	protected final Map<String, List<Map<String, Object>>> retrieveDisplayData(String batchId) throws Exception {
