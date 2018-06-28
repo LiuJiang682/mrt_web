@@ -13,20 +13,22 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class InvalidSessionIdFilter extends GenericFilterBean {
 
+	private static final String SESSION_ID = "sessionId";
+
 	@Override
-	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) arg0;
-		Object sessionId = req.getParameter("sessionId");
+		HttpServletRequest req = (HttpServletRequest) servletRequest;
+		Object sessionId = req.getParameter(SESSION_ID);
 		try {
 			Long.parseLong((String) sessionId);
 		} catch (Exception e) {
-			HttpServletResponse httpResponse = (HttpServletResponse) arg1;
+			HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
             httpResponse.setContentType("application/json");
             httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
             return;
 		}
-		arg2.doFilter(arg0, arg1);
+		filterChain.doFilter(servletRequest, servletResponse);
 	}
 
 }

@@ -8,17 +8,25 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import au.gov.vic.ecodev.mrt.config.TemplateWebPropertiesConfig;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.InvalidSessionIdFilter;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class })
 @ComponentScan(basePackages = {"au.gov.vic.ecodev"})
 public class AppConfig {
+	
+	@Bean
+	public TemplateWebPropertiesConfig templateWebPropertiesConfig() {
+		return new TemplateWebPropertiesConfig();
+	}
+	
 	@Bean
 	public FilterRegistrationBean invalidFileLogSessionIdFilter() {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
 		registration.setFilter(new InvalidSessionIdFilter());
-		registration.addUrlPatterns("/fileLogs/search/get");
+		registration.addUrlPatterns(templateWebPropertiesConfig().getSessionIdFilterUrls());
 		return registration;
 	}
+	
 }
