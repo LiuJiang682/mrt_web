@@ -14,6 +14,6 @@ import au.gov.vic.ecodev.mrt.model.FileLog;
 public interface FileErrorLogRepository extends PagingAndSortingRepository<FileLog, Long> {
 
 	@RestResource(path="get")
-	@Query("SELECT f FROM FileLog f WHERE f.batchId = :loaderId ORDER BY f.createdTime DESC")
-	List<FileLog> findByLoaderId(@Param("loaderId") long loaderId);
+	@Query("SELECT f FROM FileLog f WHERE f.batchId = :sessionId ORDER BY f.createdTime DESC")
+	List<FileLog> findByLoaderId(@Param("sessionId") long sessionId);
 }

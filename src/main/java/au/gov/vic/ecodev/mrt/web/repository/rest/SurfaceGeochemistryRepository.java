@@ -14,6 +14,6 @@ import au.gov.vic.ecodev.mrt.model.sg4.SurfaceGeochemistry;
 public interface SurfaceGeochemistryRepository extends PagingAndSortingRepository<SurfaceGeochemistry, Long> {
 
 	@RestResource(path="get")
-	@Query("SELECT s FROM SurfaceGeochemistry s WHERE s.loaderId = :loaderId")
-	List<SurfaceGeochemistry> findByLoaderId(@Param("loaderId") long loaderId);
+	@Query("SELECT s FROM SurfaceGeochemistry s WHERE s.loaderId = :sessionId")
+	List<SurfaceGeochemistry> findByLoaderId(@Param("sessionId") long sessionId);
 }

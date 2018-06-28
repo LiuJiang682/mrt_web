@@ -14,6 +14,6 @@ import au.gov.vic.ecodev.mrt.model.sl4.Site;
 public interface SiteRepository extends PagingAndSortingRepository<Site, Long> {
 
 	@RestResource(path="get")
-	@Query("SELECT s FROM Site s WHERE s.loaderId = :loaderId")
-	List<Site> findByLoaderId(@Param("loaderId") long loaderId);
+	@Query("SELECT s FROM Site s WHERE s.loaderId = :sessionId")
+	List<Site> findByLoaderId(@Param("sessionId") long sessionId);
 }
