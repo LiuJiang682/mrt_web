@@ -12,14 +12,17 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class XFrameOptionsFilter extends GenericFilterBean {
 
+	private static final String X_FRAME_OPTION_DENY = "DENY";
+	private static final String X_FRAME_OPTIONS = "X-Frame-Options";
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletResponse resp = (HttpServletResponse) response;
-		Object xFrameOption = resp.getHeader("X-Frame-Options");
+		Object xFrameOption = resp.getHeader(X_FRAME_OPTIONS);
 		if ((null == xFrameOption) 
-				|| (!"DENY".equals(xFrameOption))) {
-			resp.setHeader("X-Frame-Options", "DENY"); 
+				|| (!X_FRAME_OPTION_DENY.equals(xFrameOption))) {
+			resp.setHeader(X_FRAME_OPTIONS, X_FRAME_OPTION_DENY); 
 		}
 		chain.doFilter(request, response);
 	}

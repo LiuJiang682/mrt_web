@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import au.gov.vic.ecodev.mrt.config.TemplateWebPropertiesConfig;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.InvalidSessionIdFilter;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XFrameOptionsFilter;
-import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XcontentTypeOptionFilter;
+import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XContentTypeOptionFilter;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XssProtectionHeaderFilter;
 
 @SpringBootApplication
@@ -49,7 +49,7 @@ public class AppConfig {
 	@Bean
 	public FilterRegistrationBean xcontentTypeOptionFilter() {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
-		registration.setFilter(new XcontentTypeOptionFilter());
+		registration.setFilter(new XContentTypeOptionFilter());
 		return registration;
 	}
 }

@@ -12,14 +12,17 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class XssProtectionHeaderFilter extends GenericFilterBean {
 
+	private static final String XSS_PROTECTION_MODE_BLOCK = "1; mode=block";
+	private static final String X_XSS_PROTECTION = "X-XSS-Protection";
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletResponse resp = (HttpServletResponse) response;
-		Object xssProtection = resp.getHeader("X-XSS-Protection");
+		Object xssProtection = resp.getHeader(X_XSS_PROTECTION);
 		if ((null == xssProtection) 
-				|| (!"1; mode=block".equals(xssProtection))) {
-			resp.setHeader("X-XSS-Protection", "1; mode=block"); 
+				|| (!XSS_PROTECTION_MODE_BLOCK.equals(xssProtection))) {
+			resp.setHeader(X_XSS_PROTECTION, XSS_PROTECTION_MODE_BLOCK); 
 		}
 		chain.doFilter(request, response);
 
