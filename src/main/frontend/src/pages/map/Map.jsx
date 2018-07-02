@@ -218,7 +218,7 @@ export default class Map extends Component {
 
         const markerSource = new ol.source.Vector();
         const boreHoles = [];
-        const siteUrl = 'http://localhost:8090/site/search/get?loaderId=' + tenement[0];
+        const siteUrl = 'http://localhost:8090/site/search/get?sessionId=' + tenement[0];
         fetch(siteUrl)
             .then(response => response.json())
             .then(data => {
@@ -246,7 +246,7 @@ export default class Map extends Component {
             });
 
         const samples = [];
-        const sampleUrl = 'http://localhost:8090/surfaceGeochemistry/search/get?loaderId=' + tenement[0];    
+        const sampleUrl = 'http://localhost:8090/surfaceGeochemistry/search/get?sessionId=' + tenement[0];    
         fetch(sampleUrl)
             .then(response => response.json())
             .then(data => {

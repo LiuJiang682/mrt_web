@@ -55,7 +55,7 @@ class Logs extends Component {
         const fileErrorLogDTOs = [];
         const fileWarningLogDTOs = [];
         const fileInfoLogDTOs = [];
-        const url = "http://localhost:8090/fileLogs/search/get?loaderId=" + this.state.batchId;
+        const url = "http://localhost:8090/fileLogs/search/get?sessionId=" + this.state.batchId;
         fetch(url)
             .then(response => response.json())
             .then(data => {
