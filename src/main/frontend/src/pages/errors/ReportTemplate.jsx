@@ -17,13 +17,14 @@ export default class ReportTemplate extends Component {
             rows.push(headerRow);
         } else {
             const headers = this.extractColumnHeaders(this.state.recordList[0]);
-            const headerRow = this.buildTableHeader(headers);
+            const dataHeaders = this.extractDataHeaders(this.state.recordList[1]);
+            const headerRow = this.buildTableHeader(headers, dataHeaders);
             const headersUC = this.buildUCHeaders(headers);
             rows.push(headerRow);
             const length = this.state.recordList.length;
             for (var index = 1; index < length; index++) {
                 rows.push(<TemplateDataRecordList currentIndex={index} headers={headersUC} recordList={this.state.recordList[index]} />);
-        }
+            }
         }
         
         
@@ -41,6 +42,16 @@ export default class ReportTemplate extends Component {
         );
     }
 
+    extractDataHeaders(dataRow) {
+        // console.log(dataRow);
+        let dataHeaders = Object.keys(dataRow).map(function(keyName, keyIndex) {
+            // console.log(keyName + ' ' + keyIndex);
+            return keyName;
+        });
+        // console.log(dataHeaders);
+        return dataHeaders;
+    }
+
     extractColumnHeaders(headers) {
         // console.log(headers);
         if ((undefined === headers) 
@@ -55,12 +66,14 @@ export default class ReportTemplate extends Component {
         return columnHeaders;
     }
 
-    buildTableHeader(headers) {
+    buildTableHeader(headers, dataHeaders) {
         // console.log('headers', headers);
         const headerRows = [];
         var index = 0;
         headers.forEach((header) => {
-            const td = <td key={index} className="data_table_td">{header}</td>
+            const dataHeaderPos = dataHeaders.indexOf(header);
+            const className = (-1 < dataHeaderPos) ? "data_table_td" : "data_table_td_warn";
+            const td = <td key={index} className={className}>{header}</td>
             headerRows.push(td);
             ++index;
         });
