@@ -52,6 +52,29 @@ describe('TemplateDataRecordList', () => {
             const pos = wrapper.instance().findHeaderMiddelAliasPos(current, headers);
             expect(pos).to.be.equal(1);
         });
+        it('should match the title with reverse middle variation', () => {
+            console.log('start');
+            const headers = ['hole_id', 'Sample From', 'To', 'sample_id', 'easting', 'northing'];
+            console.log(headers);
+            const wrapper = shallow(<TemplateDataRecordList headers={headers} recordList={headers}/>);
+            console.log(wrapper);
+            const current = 'From Sample';
+            console.log(current);
+            const pos = wrapper.instance().findHeaderMiddelAliasPos(current, headers);
+            expect(pos).to.be.equal(1);
+        });
+
+        it('should match the title with reverse middle variation hype', () => {
+            console.log('start');
+            const headers = ['hole_id', 'Sample From', 'To', 'sample_id', 'easting', 'northing'];
+            console.log(headers);
+            const wrapper = shallow(<TemplateDataRecordList headers={headers} recordList={headers}/>);
+            console.log(wrapper);
+            const current = 'From-Sample';
+            console.log(current);
+            const pos = wrapper.instance().findHeaderMiddelAliasPos(current, headers);
+            expect(pos).to.be.equal(1);
+        });
     });
     describe('buildRegexString', () => {
         it('should build regex string', () => {
@@ -60,6 +83,15 @@ describe('TemplateDataRecordList', () => {
             const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
             const regexString = wrapper.instance().buildRegexString(array, delim);
             expect(regexString).to.be.equal('Sample_depth');
+        });
+    });
+    describe('buildReverseRegexString', () => {
+        it('should build reverse regex string', () => {
+            const array = ['Sample', 'depth'];
+            const delim = '_';
+            const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
+            const reverseRegexString = wrapper.instance().buildReverseRegexString(array, delim);
+            expect(reverseRegexString).to.be.equal('depth_Sample');
         });
     });
 });

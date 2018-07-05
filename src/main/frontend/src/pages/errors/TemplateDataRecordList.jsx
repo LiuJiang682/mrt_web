@@ -115,33 +115,37 @@ export default class TemplateDataRecordList extends Component {
 
 		if (1 < spaceArray.length) {
 			for (var index = 0; index < spaceArray.length; index++) {
-				lableArray.push[spaceArray[index]];
+				lableArray.push(spaceArray[index]);
 			}
 		}
 		if (1 < underLineArray.length) {
 			for (var index = 0; index < underLineArray.length; index++) {
-				const str = underLineArray[index];
-				// console.log(str)
-				lableArray[index] = str;
+				lableArray.push(underLineArray[index]);
 			}
 		}
 		if (1 < hypenArray.length) {
 			for (var index = 0; index < hypenArray.length; index++) {
-				lableArray.push[hypenArray[index]];
+				lableArray.push(hypenArray[index]);
 			}
 		}
+		
 		if (0 < lableArray.length) {
 			var regexString = this.buildRegexString(lableArray, ' ');
 			regexString += "|";
 			regexString += this.buildRegexString(lableArray, '_');
 			regexString += "|";
-			regexString += this.buildRegexString(lableArray, '_');
+			regexString += this.buildRegexString(lableArray, '-');
+			regexString += "|";
+			regexString += this.buildReverseRegexString(lableArray, ' ');
+			regexString += "|";
+			regexString += this.buildReverseRegexString(lableArray, '_');
+			regexString += "|";
+			regexString += this.buildReverseRegexString(lableArray, '-');
 
 			var matcher = new RegExp(regexString, 'i');
 			for (var index = 0; index < headers.length; index++) {
 				const header = headers[index];
 				if (matcher.test(header)) {
-					// console.log('returning: ' + index);
 					headerIndex = index;
 					break;
 				}
@@ -160,5 +164,10 @@ export default class TemplateDataRecordList extends Component {
 		}
 		subRegexString = subRegexString.substring(0, subRegexString.length - 1);
 		return subRegexString;
+	}
+
+	buildReverseRegexString(array, delim) {
+		const reverseArray = array.reverse();
+		return this.buildRegexString(reverseArray, delim);
 	}
 }
