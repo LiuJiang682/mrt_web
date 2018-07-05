@@ -13,7 +13,7 @@ export default class ReportTemplate extends Component {
     render() {
         const rows = [];
         if ((null === this.state.recordList)) {
-            const headerRow = <tr className="tr_height"><td className="log_error"><strong>No Data</strong></td></tr>
+            const headerRow = <tr key={0} className="tr_height"><td className="log_error"><strong>No Data</strong></td></tr>
             rows.push(headerRow);
         } else {
             const headers = this.extractColumnHeaders(this.state.recordList[0]);
@@ -23,10 +23,9 @@ export default class ReportTemplate extends Component {
             rows.push(headerRow);
             const length = this.state.recordList.length;
             for (var index = 1; index < length; index++) {
-                rows.push(<TemplateDataRecordList currentIndex={index} headers={headersUC} recordList={this.state.recordList[index]} />);
+                rows.push(<TemplateDataRecordList key={index} currentIndex={index} headers={headersUC} recordList={this.state.recordList[index]} />);
             }
         }
-        
         
         return (
             <table width="100%" className="data_table">
@@ -77,7 +76,8 @@ export default class ReportTemplate extends Component {
             headerRows.push(td);
             ++index;
         });
-        const tr = <tr className="tr_height">{headerRows}</tr>
+
+        const tr = <tr key={0} className="tr_height">{headerRows}</tr>
         // console.log('tr', tr);
         return tr;
     }
