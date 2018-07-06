@@ -38,7 +38,6 @@ describe('SearchBar', () => {
         it('should call handleSearchTextChange of the passing in parameter', () => {
             const searchText = '';
             const handleSearchTextChange = sinon.fake();
-            console.log((null === handleSearchTextChange));
             const wrapper = shallow(<SearchBar searchText={searchText} onSearchTextChange={handleSearchTextChange} />);
             wrapper.find('input').simulate('change', {target: {value: '12345'}});
             expect(handleSearchTextChange.calledOnce).to.equal(true);

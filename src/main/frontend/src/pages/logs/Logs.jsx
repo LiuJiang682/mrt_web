@@ -39,13 +39,19 @@ class Logs extends Component {
     }
 
     updateSession(url) {
+        // console.log('updateSession ' + url);
         fetch(url)
             .then(response => {
+                // console.log(response);
                 if (response.ok) {
                     //Session reject -- redirect back to first page.
                     this.props.history.push("/");
-                } else {
-                    alert('Fail to Update the session!');
+                } else { 
+                    // console.log('about to alert');
+                    // alert('Fail to Update the session!');
+                    // console.log('just complated alert');
+                    const errorMessage = response.status + ' ' + response.statusText + ' ' + response.body;
+                    throw new Error(errorMessage);
                 } 
             });
     }
@@ -57,27 +63,41 @@ class Logs extends Component {
         const fileInfoLogDTOs = [];
         const url = "http://localhost:8090/fileLogs/search/get?sessionId=" + this.state.batchId;
         fetch(url)
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    const errorMessage = response.status + ' ' + response.statusText + ' ' + response.body;
+                    throw new Error(errorMessage);
+                }
+            })
             .then(data => {
                 // console.log(data);
-                for (const fileLog of data._embedded.fileLogs) {
-                    const severity = fileLog.severity;
-                    const message = fileLog.message;
-                    if ('ERROR' === severity.toUpperCase()) {
-                        fileErrorLogDTOs.push(message);
-                    } else if ('WARNING' === severity.toUpperCase()) {
-                        fileWarningLogDTOs.push(message);
-                    } else {
-                        fileInfoLogDTOs.push(message);
+                if ((data._embedded) 
+                    && (data._embedded.fileLogs)) {
+                    for (const fileLog of data._embedded.fileLogs) {
+                        const severity = fileLog.severity;
+                        const message = fileLog.message;
+                        if ('ERROR' === severity.toUpperCase()) {
+                            fileErrorLogDTOs.push(message);
+                        } else if ('WARNING' === severity.toUpperCase()) {
+                            fileWarningLogDTOs.push(message);
+                        } else {
+                            fileInfoLogDTOs.push(message);
+                        }
                     }
+                    // fileInfoLogDTOs.push("Test");
+                    
+                    this.setState({
+                        fileErrorLogDTOs: fileErrorLogDTOs,
+                        fileWarningLogDTOs: fileWarningLogDTOs,
+                        fileInfoLogDTOs: fileInfoLogDTOs,
+                    });
+                } else {
+                    console.log('No fileLogs!');
                 }
-                // fileInfoLogDTOs.push("Test");
-                
-                this.setState({
-                    fileErrorLogDTOs: fileErrorLogDTOs,
-                    fileWarningLogDTOs: fileWarningLogDTOs,
-                    fileInfoLogDTOs: fileInfoLogDTOs,
-                });
+            }).catch(function(error) {
+                console.log(error);
             });
             
     }

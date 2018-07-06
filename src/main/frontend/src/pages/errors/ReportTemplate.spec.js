@@ -27,7 +27,7 @@ describe('ReportTemplate', () => {
             expect(headerHtml.props.className).to.be.equal('tr_height');
             expect(headerHtml.props.children.length).to.be.equal(6);
             for (const child of headerHtml.props.children) {
-                console.log(child);
+                // console.log(child);
                 expect(child.type).to.be.equal('td');
                 if ('Depth From' === child.props.children) {
                     expect(child.props.className).to.be.equal('data_table_td_warn');

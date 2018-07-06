@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
 
-// import Mrt from './Mrt'
-
-// const Home = () => <div>Hello World! <Mrt /></div>
-
-// export default Home
 import SearchBar from '../common/SearchBar'
 import SessionTable from './SessionTable'
 
