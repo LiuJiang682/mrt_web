@@ -65,13 +65,9 @@ describe('TemplateDataRecordList', () => {
         });
 
         it('should match the title with reverse middle variation hype', () => {
-            console.log('start');
             const headers = ['hole_id', 'Sample From', 'To', 'sample_id', 'easting', 'northing'];
-            console.log(headers);
             const wrapper = shallow(<TemplateDataRecordList headers={headers} recordList={headers}/>);
-            console.log(wrapper);
             const current = 'From-Sample';
-            console.log(current);
             const pos = wrapper.instance().findHeaderMiddelAliasPos(current, headers);
             expect(pos).to.be.equal(1);
         });
@@ -92,6 +88,38 @@ describe('TemplateDataRecordList', () => {
             const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
             const reverseRegexString = wrapper.instance().buildReverseRegexString(array, delim);
             expect(reverseRegexString).to.be.equal('depth_Sample');
+        });
+    });
+    describe('handleIssueIndex', () => {
+        it('should update the issueIndex state', () => {
+            const array = ['Sample', 'depth'];
+            const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
+            wrapper.instance().handleIssueIndex('3', 5);
+            expect(wrapper.instance().state.issueIndex).to.be.equal(3);
+        });
+        it('should NOT update the issueIndex state when null provided', () => {
+            const array = ['Sample', 'depth'];
+            const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
+            wrapper.instance().handleIssueIndex(null);
+            expect(wrapper.instance().state.issueIndex).to.be.equal(0);
+        });
+        it('should NOT update the issueIndex state when invalid number string provided', () => {
+            const array = ['Sample', 'depth'];
+            const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
+            wrapper.instance().handleIssueIndex('abc');
+            expect(wrapper.instance().state.issueIndex).to.be.equal(0);
+        });
+        it('should NOT update the issueIndex state when invalid number string combine provided', () => {
+            const array = ['Sample', 'depth'];
+            const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
+            wrapper.instance().handleIssueIndex('6abc');
+            expect(wrapper.instance().state.issueIndex).to.be.equal(0);
+        });
+        it('should NOT update the issueIndex state when index is greater then total header provided', () => {
+            const array = ['Sample', 'depth'];
+            const wrapper = shallow(<TemplateDataRecordList headers={array} recordList={array} />);
+            wrapper.instance().handleIssueIndex('6', 5);
+            expect(wrapper.instance().state.issueIndex).to.be.equal(0);
         });
     });
 });

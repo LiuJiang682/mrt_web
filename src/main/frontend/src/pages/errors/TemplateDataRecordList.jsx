@@ -8,6 +8,7 @@ export default class TemplateDataRecordList extends Component {
 			records: [],
 			recordList: this.props.recordList,
 			headers: this.props.headers,
+			issueIndex: -1,
 		}
 	}
 	componentWillMount() {
@@ -15,7 +16,8 @@ export default class TemplateDataRecordList extends Component {
 		Object.keys(this.state.recordList).map(
 			(key) => {
 				let value;
-				var index = this.state.headers.indexOf(key.toUpperCase());
+				const keyUC = key.toUpperCase();
+				var index = this.state.headers.indexOf(keyUC);
 				if (-1 === index) {
 					let title;
 					let pos;
@@ -37,7 +39,12 @@ export default class TemplateDataRecordList extends Component {
 							//Check the header's join variations.
 							pos = this.findHeaderMiddelAliasPos(key, this.state.headers);
 						}
-						if (-1 !== pos) {
+						if (-1 === pos) {
+							//Still cannot find any match? Try issue index
+							if ('ISSUE_INDEX' === keyUC) {
+								this.handleIssueIndex(this.state.recordList[key], this.state.headers.length);
+							}
+						} else {
 							const recordValues = Object.values(this.state.recordList);
 							value = recordValues[pos];
 							index = pos;
@@ -73,14 +80,32 @@ export default class TemplateDataRecordList extends Component {
 		// console.log('records', this.state.records);
 		const tds = [];
 		this.state.records.map((record, index) => {
-			const td = <td key={index} className="data_table_td">{record}</td>
+			let className;
+			if (this.state.issueIndex === index) {
+				className = 'data_table_td_warn';
+			} else {
+				className = 'data_table_td';
+			}
+			const td = <td key={index} className={className}>{record}</td>;
 			tds.push(td);
 		});
+
 		return (
 			<tr key={this.state.currentIndex} className="tr_height">
 				{tds}
 			</tr>	
 		);
+	}
+
+	handleIssueIndex(issueIndexString, headerCount) {
+		if (/^\d+$/.test(issueIndexString)) {
+			const issueIndex = parseInt(issueIndexString);
+			if (issueIndex < headerCount) {
+				this.setState({
+					issueIndex: issueIndex,
+				});
+			}
+		}
 	}
 
 	findHeaderPoleAliasPos(currentHeader, headers) {
