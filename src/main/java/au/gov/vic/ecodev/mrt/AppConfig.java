@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import au.gov.vic.ecodev.mrt.config.TemplateWebPropertiesConfig;
+import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.HeaderMappingHelper;
+import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.PropertyHeaderMappingHelper;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.InvalidSessionIdFilter;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XFrameOptionsFilter;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XContentTypeOptionFilter;
@@ -51,5 +53,11 @@ public class AppConfig {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
 		registration.setFilter(new XContentTypeOptionFilter());
 		return registration;
+	}
+	
+	@Bean
+	public HeaderMappingHelper propertyHeaderMappingHelper() throws Exception {
+		String propertyString = templateWebPropertiesConfig().getTemplateHeaderMappingString();
+		return new PropertyHeaderMappingHelper(propertyString);
 	}
 }

@@ -12,6 +12,13 @@ public class TemplateWebPropertiesConfig implements TemplateProperties {
 	@Value("${session.id.filters.urls}")
 	private String sessionIDFilterUrls;
 	
+	@Value("${template.header.mapping}")
+	private String templateHeaderMappingString;
+
+	public String getTemplateHeaderMappingString() {
+		return templateHeaderMappingString;
+	}
+
 	public String[] getSessionIdFilterUrls() {
 		return sessionIDFilterUrls.split(Strings.COMMA);
 	}

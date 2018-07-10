@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -20,6 +22,7 @@ import au.gov.vic.ecodev.mrt.model.SessionHeader;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateClassesListHelper;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropertiesHelper;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropertiesPopulator;
+import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.HeaderMappingHelper;
 
 @Service
 public class TemplateDataServicesImpl implements TemplateDataServices {
@@ -36,6 +39,8 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	private TemplateClassesListHelper templateClassesListHelper;
 	@Autowired
 	private TemplateDisplayPropertiesPopulator templateDisplayPropertiesPopulator;
+	@Autowired
+	private HeaderMappingHelper headerMappingHeader;
 			
 	@Override
 	public Map<String, List<Map<String, Object>>> getAllTemplateData(String batchId) throws Exception {
@@ -71,7 +76,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	protected final void doTemplateRecordOrderSorting(Map<String, List<Map<String, Object>>> groupedMap,
 			Map<String, Map<String, Map<String, Object>>> cache) {
 		cache.forEach((k, v) -> {
-			// LOGGER.info(k + " " + v);
+			LOGGER.info(k + " " + v);
 			List<Map<String, Object>> dataList = new ArrayList<>();
 			Map<String, Object> headers = new HashMap<>();
 			TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
@@ -85,12 +90,83 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 					headersMap.put(vk, vv);
 				}
 			});
+			
+			TreeMap<String, Map<String, Object>> correctTitleMap = doDataMapHeaderMatching(k, headers, dataMap);
 			// LOGGER.info(dataMap);
 			dataList.add(headers);
 			dataList.addAll(headersMap.values());
-			dataList.addAll(dataMap.values());
+			dataList.addAll(correctTitleMap.values());
 			groupedMap.put(k, dataList);
 		});
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected final TreeMap<String, Map<String, Object>> doDataMapHeaderMatching(String templateName, 
+			Map<String, Object> headers, 
+			TreeMap<String, Map<String, Object>> dataMap) {
+		TreeMap<String, Map<String, Object>> displayMap = new TreeMap<>();
+		
+		List<String> displayHeaders = new ArrayList(headers.values());
+		
+		BiConsumer<? super String, ? super Map<String, Object>> titleConsumer = (dataKey, dataValue) -> {
+			Map<String, Object> correctTitleMap = new HashMap<>();
+			BiConsumer<? super String, ? super Object> dataTitleConsumer = (title, value) -> {
+				if (!displayHeaders.contains(title)) {
+					String newTitle = headerMappingHeader.lookUp(templateName, title);
+					if (!StringUtils.isEmpty(newTitle)) {
+						if (newTitle.contains("|")) {
+							String[] titles = newTitle.split("\\|");
+							for (String myTitle : titles) {
+								if (displayHeaders.contains(myTitle)) {
+									title = myTitle;
+									break;
+								}
+							}
+						} else {
+							if (displayHeaders.contains(newTitle)) {
+								title = newTitle;
+							}
+						}
+					}
+				}
+				correctTitleMap.put(title, value);
+			};
+			dataValue.forEach(dataTitleConsumer);
+			displayMap.put(dataKey, correctTitleMap);
+		};
+		dataMap.forEach(titleConsumer);
+//		List<Map<String, Object>> dataValue = new ArrayList(dataMap.values());
+//		dataValue.stream()
+//			.forEach(map -> {
+//				Set<String> keys = map.keySet();
+//				keys.stream()
+//					.forEach(key -> {
+//						Map<String, Object> correctTitleMap = new HashMap<>();
+//						String title = key;
+//						Object value = map.get(key);
+//						if (!displayHeaders.contains(key)) {
+//							String newTitle = headerMappingHeader.lookUp(templateName, key);
+//							if (!StringUtils.isEmpty(newTitle)) {
+//								if (newTitle.contains("|")) {
+//									String[] titles = newTitle.split("\\|");
+//									for (String myTitle : titles) {
+//										if (displayHeaders.contains(myTitle)) {
+//											title = myTitle;
+//											break;
+//										}
+//									}
+//								} else {
+//									if (displayHeaders.contains(newTitle)) {
+//										title = newTitle;
+//									}
+//								}
+//							}
+//						}
+//						correctTitleMap.put(title, value);
+//					});
+//				
+//			});
+		return displayMap;
 	}
 
 	/**

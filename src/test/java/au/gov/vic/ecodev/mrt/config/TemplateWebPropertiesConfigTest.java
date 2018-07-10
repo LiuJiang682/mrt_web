@@ -34,4 +34,14 @@ public class TemplateWebPropertiesConfigTest {
 		assertThat(urls, is(notNullValue()));
 		assertThat(urls.length, is(equalTo(4)));
 	}
+	
+	@Test
+	public void shouldReturnSl4TemplateHeaderMapString() {
+		//Given
+		//When
+		String templateHeaderMappingString = testInstance.getTemplateHeaderMappingString();
+		//Then
+		assertThat(templateHeaderMappingString, is(notNullValue()));
+//		assertThat(templateHeaderMappingString, is(equalTo("sl4-site_id:Hole_id")));
+	}
 }
