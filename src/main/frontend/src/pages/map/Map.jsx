@@ -363,9 +363,11 @@ export default class Map extends Component {
 
     extractAmgZone(amgZone) {
         let zone;
-        if ('54' === amgZone) {
+        if (('54' === amgZone)
+            ||(54 === amgZone)) {
             zone = 'EPSG:28354';
-        } else {
+        } else if (('55' === amgZone)
+            ||(55 === amgZone)){
             zone = 'EPSG:28355';
         }
         return zone;
