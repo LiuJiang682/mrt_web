@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
@@ -135,37 +134,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 			displayMap.put(dataKey, correctTitleMap);
 		};
 		dataMap.forEach(titleConsumer);
-//		List<Map<String, Object>> dataValue = new ArrayList(dataMap.values());
-//		dataValue.stream()
-//			.forEach(map -> {
-//				Set<String> keys = map.keySet();
-//				keys.stream()
-//					.forEach(key -> {
-//						Map<String, Object> correctTitleMap = new HashMap<>();
-//						String title = key;
-//						Object value = map.get(key);
-//						if (!displayHeaders.contains(key)) {
-//							String newTitle = headerMappingHeader.lookUp(templateName, key);
-//							if (!StringUtils.isEmpty(newTitle)) {
-//								if (newTitle.contains("|")) {
-//									String[] titles = newTitle.split("\\|");
-//									for (String myTitle : titles) {
-//										if (displayHeaders.contains(myTitle)) {
-//											title = myTitle;
-//											break;
-//										}
-//									}
-//								} else {
-//									if (displayHeaders.contains(newTitle)) {
-//										title = newTitle;
-//									}
-//								}
-//							}
-//						}
-//						correctTitleMap.put(title, value);
-//					});
-//				
-//			});
+
 		return displayMap;
 	}
 

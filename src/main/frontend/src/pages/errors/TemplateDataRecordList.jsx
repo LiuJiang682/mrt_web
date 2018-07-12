@@ -41,7 +41,7 @@ export default class TemplateDataRecordList extends Component {
 						}
 						if (-1 === pos) {
 							//Still cannot find any match? Try issue index
-							if ('ISSUE_INDEX' === keyUC) {
+							if ('ISSUE_COLUMN_INDEX' === keyUC) {
 								this.handleIssueIndex(this.state.recordList[key], this.state.headers.length);
 							}
 						} else {
