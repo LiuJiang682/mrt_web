@@ -9,7 +9,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+
+import au.gov.vic.ecodev.mrt.common.Constants.Strings;
 
 public class InvalidSessionIdFilter extends GenericFilterBean {
 
@@ -20,14 +23,26 @@ public class InvalidSessionIdFilter extends GenericFilterBean {
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		Object sessionId = req.getParameter(SESSION_ID);
-		try {
-			Long.parseLong((String) sessionId);
-		} catch (Exception e) {
+		
+		if (StringUtils.isBlank((CharSequence) sessionId)) {
 			HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
             httpResponse.setContentType("application/json");
             httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
             return;
-		}
+		} else {
+			String[] sessionIds = ((String)sessionId).split(Strings.COMMA);
+			try {
+				for (String id : sessionIds) {
+					Long.parseLong(id);
+				}
+			} catch (Exception e) {
+				HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+	            httpResponse.setContentType("application/json");
+	            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
+	            return;
+			}
+		} 
+		
 		filterChain.doFilter(servletRequest, servletResponse);
 	}
 

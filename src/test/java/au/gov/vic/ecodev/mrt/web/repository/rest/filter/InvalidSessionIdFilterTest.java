@@ -38,6 +38,20 @@ public class InvalidSessionIdFilterTest {
 	}
 	
 	@Test
+	public void shouldAcceptTheRequestWhenSessionIdIsMultiplyNumber() throws Exception {
+		//Given
+		givenTestInstance();
+		when(mockRequest.getParameter(eq("sessionId"))).thenReturn("1,2");
+		//When
+		testInstance.doFilter(mockRequest, mockResponse, mockFilterChain);
+		//Then
+		verify(mockResponse, times(0)).sendError(Matchers.anyInt(), 
+				Matchers.anyString());
+		verify(mockFilterChain, times(1)).doFilter(eq(mockRequest), 
+				eq(mockResponse));
+	}
+	
+	@Test
 	public void shouldRejectTheRequestWhenSessionIdIsNull() throws Exception {
 		//Given
 		givenTestInstance();
