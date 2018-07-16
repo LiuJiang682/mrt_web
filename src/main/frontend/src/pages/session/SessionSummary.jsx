@@ -16,6 +16,9 @@ export default class SessionSummary extends Component {
             totalItemsCount: 0,
             currentPage: 0,
             disableButton: false,
+            host: '',
+            port: -1,
+            headers: null,
         };
 
         this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
@@ -33,9 +36,13 @@ export default class SessionSummary extends Component {
             alert("Search ID must integer only!");
             return;
         }
-        const url = "http://localhost:8090/sessionHeader/" + searchText;
+
+        // const url = "http://localhost:8090/sessionHeader/" + searchText;
+        const url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/" + searchText;
         const newSessions =[];
-        fetch(url)
+        fetch(url, {
+			headers: this.state.headers
+		})
             .then(results => {
                 return results.json();
             })
@@ -146,16 +153,20 @@ export default class SessionSummary extends Component {
         } else if (0 === this.state.selectedBatch.length) {
             alert("Please select at least one file before you " + commandString);
         } else {
-            var url = "http://localhost:8090/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
-            // console.log(url);
+            // var url = "http://localhost:8090/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
+            const url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
+            console.log(url);
             fetch(url)
                 .then(
                     (response) => {
                         if (response.ok) {
                             // console.log("Updated");
                             const newSessions =[];
-                            const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
-                            fetch(refreshUrl)
+                            // const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
+                            const refreshUrl = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
+                            fetch(refreshUrl, {
+                                headers: this.state.headers
+                            })
                                 .then(results => {
                                     return results.json();
                                 })
@@ -190,8 +201,11 @@ export default class SessionSummary extends Component {
     handlePageNoClicked(pageNo) {
         // console.log(pageNo);
         const newSessions =[];
-        const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + pageNo + "&size=20";
-        fetch(refreshUrl)
+        // const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + pageNo + "&size=20";
+        const refreshUrl = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/display?page=" + pageNo + "&size=20";
+        fetch(refreshUrl, {
+			headers: this.state.headers
+		})
             .then(results => {
                 return results.json();
             })
@@ -232,8 +246,28 @@ export default class SessionSummary extends Component {
 
      componentWillMount() {
         //  console.log('insider componentWillMount');
-         const newSessions =[];
-         fetch("http://localhost:8090/sessionHeader/search/display?page=0&size=20")
+        const host = process.env.host;
+        console.log('Host:', host);
+        const port = process.env.port;
+        console.log('Port:', port);
+        const newSessions =[];
+        let headers = new Headers({
+			'Access-Control-Allow-Origin':'*',
+			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+		    'Content-Type': 'multipart/form-data'
+        });
+        this.setState({
+            host: host,
+            port: port,
+            headers: headers,
+        });
+
+        // const url = "http://localhost:8090/sessionHeader/search/display?page=0&size=20";
+        const url = "http://" + host + ":" + port + "/sessionHeader/search/display?page=0&size=20";
+        fetch(url, {
+			headers: headers
+		})
             .then(results => {
                 return results.json();
             })

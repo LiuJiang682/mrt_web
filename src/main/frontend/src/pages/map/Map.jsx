@@ -11,6 +11,9 @@ export default class Map extends Component {
             batchId: null,
             tenement: null,
             center: null,
+            host: null,
+            port: -1,
+            headers: null,
         }
     }
     render() {
@@ -103,10 +106,23 @@ export default class Map extends Component {
 
     componentWillMount() {
         // console.log('componentWillMount');
+        const host = process.env.host;
+        console.log('Host:', host);
+        const port = process.env.port;
+        console.log('Port:', port);
+        let headers = new Headers({
+			'Access-Control-Allow-Origin':'*',
+			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+		    'Content-Type': 'multipart/form-data'
+        });
         const tenement = this.extractTenement(this.props.match.params.id);
         this.setState({
             batchId: tenement[0],
             tenement: tenement[1],
+            host: host,
+            port: port,
+            headers: headers,
         });
         
         Proj4.defs("EPSG:4283", "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");

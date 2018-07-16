@@ -5,7 +5,13 @@ const webpack = require('webpack')
 const app = express()
 
 const webpackMiddleware = require("webpack-dev-middleware")
-const webpackConfig = require('./webpack.config.js')
+// const webpackConfig = require('./webpack.config.js')
+let webpackConfig;
+if (process.env.NODE_ENV === 'production') {
+  webpackConfig = require('./webpack.config.production')
+} else {
+  webpackConfig = require('./webpack.config.development')
+}
 
 app.use(webpackMiddleware(
   webpack(webpackConfig),

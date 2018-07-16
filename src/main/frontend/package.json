@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:unit": "mocha --require babel-core/register --require ./test/helpers.js --require ./test/dom.js --require ignore-styles --recursive \"./src/**/*.spec.js\"",
     "test:unit:watch": "npm run test:unit -- --watch",
-    "start": "node server.js",
-    "build": "webpack --display-error-details",
+    "start": "set NODE_ENV=development && node server.js --config webpack.config.development.js",
+    "build": "cross-env NODE_ENV=production webpack -p --config webpack.config.production.js --display-error-details",
     "clean": "rimraf dist"
   },
   "author": "",
@@ -38,12 +38,16 @@
     "webpack": "^2.3.3",
     "webpack-dev-middleware": "^1.10.1",
     "webpack-dev-server": "^3.1.4",
-    "webpack-merge": "^4.1.2"
+    "webpack-merge": "^4.1.2",
+    "xmlserializer": "^0.6.1"
   },
   "dependencies": {
     "babel-preset-stage-1": "^6.24.1",
     "bootstrap-less": "^3.3.8",
+    "canvas": "^1.6.11",
     "closure-util": "^1.26.0",
+    "cross-env": "^5.2.0",
+    "fetch-mock": "^6.5.0",
     "jquery": "^3.3.1",
     "npm": "^6.1.0",
     "openlayers": "^4.6.5",
