@@ -12,6 +12,9 @@ export default class Errors extends Component {
     }
 
     componentWillMount() {
+        const host = process.env.host;
+        const port = process.env.port;
+        
         let headers = new Headers({
 			'Access-Control-Allow-Origin':'*',
 			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
@@ -19,7 +22,7 @@ export default class Errors extends Component {
 		    'Content-Type': 'multipart/form-data'
         });
         //TODO: -- Replace with correct URL
-        var url = 'http://localhost:8090/template/' + this.state.batchId;
+        var url = 'http://' + host + ':' + port + '/template/' + this.state.batchId;
         fetch(url, {
             headers: headers
         })

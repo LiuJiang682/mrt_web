@@ -247,9 +247,8 @@ export default class SessionSummary extends Component {
      componentWillMount() {
         //  console.log('insider componentWillMount');
         const host = process.env.host;
-        console.log('Host:', host);
         const port = process.env.port;
-        console.log('Port:', port);
+    
         const newSessions =[];
         let headers = new Headers({
 			'Access-Control-Allow-Origin':'*',

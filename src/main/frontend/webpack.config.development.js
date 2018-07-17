@@ -11,14 +11,6 @@ const PATHS = {
     output: path.join(__dirname, '../../../target/classes/static')
 };
 
-externals: {
-    Config: JSON.stringify('production' === process.env.NODE_ENV ? {
-        serverUrl : "http://52.65.91.200:8080"
-    } : {
-        serverUrl : "http://localhost:8090"
-    })
-};
-
 const common = {
     entry: [
         PATHS.source
@@ -66,12 +58,12 @@ if (TARGET === 'start' || !TARGET) {
             port: 9090,
             proxy: {
                 '/': {
-                    target: 'http://localhost:8080',
+                    target: 'http://' + HOST + ':' + PORT,
                     secure: false,
                     prependPath: false
                 }
             },
-            publicPath: 'http://localhost:9090/',
+            publicPath: 'http://' + HOST + ':' + PORT,
             historyApiFallback: true
         },
         devtool: 'source-map'

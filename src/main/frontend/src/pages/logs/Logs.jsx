@@ -13,6 +13,9 @@ class Logs extends Component {
             fileErrorLogDTOs: [],
             fileWarningLogDTOs: [],
             fileInfoLogDTOs: [],
+            host: null,
+            port: -1,
+            headers: null,
         }
         this.handleApprove = this.handleApprove.bind(this);
         this.handleDisplay = this.handleDisplay.bind(this);
@@ -21,7 +24,7 @@ class Logs extends Component {
 
     handleApprove() {
         // console.log('handle approve');
-        var url = "http://localhost:8090/sessionHeader/search/approve?sessionId=" + this.state.batchId;
+        var url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/approve?sessionId=" + this.state.batchId;
         this.updateSession(url);
     }
 
@@ -34,7 +37,7 @@ class Logs extends Component {
 
     handelReject() {
         // console.log('handle reject');
-        var url = "http://localhost:8090/sessionHeader/search/reject?sessionId=" + this.state.batchId;
+        var url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/reject?sessionId=" + this.state.batchId;
         this.updateSession(url);
     }
 
@@ -58,10 +61,24 @@ class Logs extends Component {
 
     componentWillMount() {
         // console.log('componentWillMount');
+        const host = process.env.host;
+        const port = process.env.port;
+       
+        let headers = new Headers({
+			'Access-Control-Allow-Origin':'*',
+			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+		    'Content-Type': 'multipart/form-data'
+        });
+        this.setState({
+            host: host,
+            port: port,
+            headers: headers,
+        });
         const fileErrorLogDTOs = [];
         const fileWarningLogDTOs = [];
         const fileInfoLogDTOs = [];
-        const url = "http://localhost:8090/fileLogs/search/get?sessionId=" + this.state.batchId;
+        const url = "http://" + host + ":" + port + "/fileLogs/search/get?sessionId=" + this.state.batchId;
         fetch(url)
             .then(response => {
                 if (response.ok) {
