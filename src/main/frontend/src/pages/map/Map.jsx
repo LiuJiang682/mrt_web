@@ -300,7 +300,8 @@ export default class Map extends Component {
                 var coord = feature.getGeometry().getCoordinates();
                 var props = feature.getProperties();
                 var desc = props.properties.sampleId;
-                var info = "<a href=\"/logs/" + tenement[0] + "\">" + desc + "</a>";
+                // var info = "<a href=\"/logs/" + tenement[0] + "\">" + desc + "</a>";
+                var info = desc;
                 content.innerHTML = info;
                 overlay.setPosition(coord);
             }
