@@ -1,11 +1,26 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-console.log(process.env.HOST);
-const HOST = process.env.HOST || 'WDAUD7210FGY.internal.vic.gov.au';
-const PORT = process.env.PORT || 8090;
-console.log(process.env.HOST);
-console.log(HOST);
+
+let hostParam;
+let portParam;
+for(const arg of process.argv) {
+    if (/^process.env.HOST/.test(arg)) {
+        console.log(arg);
+        const envHostArray = arg.split("=");
+        hostParam = envHostArray[1];
+        console.log(hostParam);
+    } else if (/^process.env.PORT/.test(arg)) {
+        console.log(arg);
+        const envPortArray = arg.split("=");
+        portParam = envPortArray[1];
+        console.log(portParam);
+    }
+}
+
+const HOST = process.env.HOST || hostParam || 'WDAUD7210FGY.internal.vic.gov.au';
+const PORT = process.env.PORT || portParam || 8090;
+
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
     source: path.join(__dirname, 'src'),
@@ -43,7 +58,6 @@ const common = {
           }),
           new webpack.EnvironmentPlugin({
             NODE_ENV: 'production',
-            DEBUG: true,
             host: HOST,
             port: PORT
           })             
