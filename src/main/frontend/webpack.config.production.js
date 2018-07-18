@@ -6,15 +6,11 @@ let hostParam;
 let portParam;
 for(const arg of process.argv) {
     if (/^process.env.HOST/.test(arg)) {
-        console.log(arg);
         const envHostArray = arg.split("=");
         hostParam = envHostArray[1];
-        console.log(hostParam);
     } else if (/^process.env.PORT/.test(arg)) {
-        console.log(arg);
         const envPortArray = arg.split("=");
         portParam = envPortArray[1];
-        console.log(portParam);
     }
 }
 
