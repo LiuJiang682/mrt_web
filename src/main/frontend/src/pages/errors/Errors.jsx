@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import ReportTemplate from './ReportTemplate';
 
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
+
 export default class Errors extends Component {
     constructor(props) {
         super(props);
@@ -12,19 +14,9 @@ export default class Errors extends Component {
     }
 
     componentWillMount() {
-        const host = process.env.host;
-        const port = process.env.port;
-        
-        let headers = new Headers({
-			'Access-Control-Allow-Origin':'*',
-			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-		    'Content-Type': 'multipart/form-data'
-        });
-        //TODO: -- Replace with correct URL
-        var url = 'http://' + host + ':' + port + '/template/' + this.state.batchId;
+        var url = 'http://' + SERVER_HOST + ':' + SERVER_PORT + '/template/' + this.state.batchId;
         fetch(url, {
-            headers: headers
+            headers: CORS_HEADERS
         })
             .then(response => response.json())
             .then(data => {

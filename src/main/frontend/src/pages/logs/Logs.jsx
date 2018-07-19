@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
-import LogButtonPanel from './LogButtonPanel'
+import LogButtonPanel from './LogButtonPanel';
+
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
 
 class Logs extends Component {
     constructor(props) {
@@ -43,7 +45,9 @@ class Logs extends Component {
 
     updateSession(url) {
         // console.log('updateSession ' + url);
-        fetch(url)
+        fetch(url, {
+            headers: this.state.headers
+        })
             .then(response => {
                 // console.log(response);
                 if (response.ok) {
@@ -61,25 +65,18 @@ class Logs extends Component {
 
     componentWillMount() {
         // console.log('componentWillMount');
-        const host = process.env.host;
-        const port = process.env.port;
-       
-        let headers = new Headers({
-			'Access-Control-Allow-Origin':'*',
-			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-		    'Content-Type': 'multipart/form-data'
-        });
         this.setState({
-            host: host,
-            port: port,
-            headers: headers,
+            host: SERVER_HOST,
+            port: SERVER_PORT,
+            headers: CORS_HEADERS,
         });
         const fileErrorLogDTOs = [];
         const fileWarningLogDTOs = [];
         const fileInfoLogDTOs = [];
-        const url = "http://" + host + ":" + port + "/fileLogs/search/get?sessionId=" + this.state.batchId;
-        fetch(url)
+        const url = "http://" + SERVER_HOST + ":" + SERVER_PORT + "/fileLogs/search/get?sessionId=" + this.state.batchId;
+        fetch(url, {
+            headers: CORS_HEADERS
+        })
             .then(response => {
                 if (response.ok) {
                     return response.json()

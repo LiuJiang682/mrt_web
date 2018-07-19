@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import ol from "openlayers";
 import Proj4 from "proj4";
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
 
 export default class Map extends Component {
     constructor(props) {
@@ -52,22 +53,13 @@ export default class Map extends Component {
 
     componentWillMount() {
         // console.log('componentWillMount');
-        const host = process.env.host;
-        const port = process.env.port;
-
-        let headers = new Headers({
-			'Access-Control-Allow-Origin':'*',
-			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-		    'Content-Type': 'multipart/form-data'
-        });
         const tenement = this.extractTenement(this.props.match.params.id);
         this.setState({
             batchId: tenement[0],
             tenement: tenement[1],
-            host: host,
-            port: port,
-            headers: headers,
+            host: SERVER_HOST,
+            port: SERVER_PORT,
+            headers: CORS_HEADERS,
         });
         
         Proj4.defs("EPSG:4283", "+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs");
@@ -180,7 +172,9 @@ export default class Map extends Component {
         const markerSource = new ol.source.Vector();
         const boreHoles = [];
         const siteUrl = 'http://' + this.state.host + ':' + this.state.port + '/site/search/get?sessionId=' + tenement[0];
-        fetch(siteUrl)
+        fetch(siteUrl, {
+            headers: this.state.headers
+        })
             .then(response => response.json())
             .then(data => {
                 // console.log(data);
@@ -208,7 +202,9 @@ export default class Map extends Component {
 
         const samples = [];
         const sampleUrl = 'http://' + this.state.host + ':' + this.state.port + '/surfaceGeochemistry/search/get?sessionId=' + tenement[0];    
-        fetch(sampleUrl)
+        fetch(sampleUrl, {
+            headers: this.state.headers
+        })
             .then(response => response.json())
             .then(data => {
                 // console.log(data);
