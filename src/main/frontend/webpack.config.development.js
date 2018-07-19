@@ -2,7 +2,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
 
-const HOST = process.env.HOST || 'WDAUD7210FGY.internal.vic.gov.au';
+const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8090;
 
 const TARGET = process.env.npm_lifecycle_event;

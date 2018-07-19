@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import SearchBar from '../common/SearchBar'
 import SessionTable from './SessionTable'
 
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants'
+
 // import serverUrl from 'Config'
 
 export default class SessionSummary extends Component {
@@ -246,26 +248,18 @@ export default class SessionSummary extends Component {
 
      componentWillMount() {
         //  console.log('insider componentWillMount');
-        const host = process.env.host;
-        const port = process.env.port;
-    
+
         const newSessions =[];
-        let headers = new Headers({
-			'Access-Control-Allow-Origin':'*',
-			'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-			'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-		    'Content-Type': 'multipart/form-data'
-        });
         this.setState({
-            host: host,
-            port: port,
-            headers: headers,
+            host: SERVER_HOST,
+            port: SERVER_PORT,
+            headers: CORS_HEADERS,
         });
 
         // const url = "http://localhost:8090/sessionHeader/search/display?page=0&size=20";
-        const url = "http://" + host + ":" + port + "/sessionHeader/search/display?page=0&size=20";
+        const url = "http://" + SERVER_HOST + ":" + SERVER_PORT + "/sessionHeader/search/display?page=0&size=20";
         fetch(url, {
-			headers: headers
+			headers: CORS_HEADERS
 		})
             .then(results => {
                 return results.json();
