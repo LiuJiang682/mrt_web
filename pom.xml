@@ -30,7 +30,7 @@
 		<frontend-plugin.version>0.0.27</frontend-plugin.version>
 		<node.version>v8.11.1</node.version>
 		<npm.version>6.1.0</npm.version> 
-		<env.HOST>localhost</env.HOST>
+		<env.HOST>WDAUD7210FGY.internal.vic.gov.au</env.HOST>
 		<env.PORT>8090</env.PORT>
 		<powermock.version>1.7.3</powermock.version>
 	</properties>
