@@ -33,7 +33,7 @@ public class TemplateDataServicesImplTest {
 		//Given
 		String batchId = "100";
 		//When
-		Map<String, List<Map<String, Object>>> results = testInstance.getAllTemplateData(batchId);
+		Map<String, Map<String, List<Map<String, Object>>>> results = testInstance.getAllTemplateData(batchId);
 		//Then
 		assertThat(results, is(notNullValue()));
 		assertThat(results.isEmpty(), is(false));
@@ -56,7 +56,7 @@ public class TemplateDataServicesImplTest {
 		//Given
 		Map<String, List<Map<String, Object>>> results = testInstance.retrieveDisplayData("100");
 		//When
-		Map<String, List<Map<String, Object>>> groupedMap = testInstance.groupRecordsByTemplate(results);
+		Map<String, Map<String, List<Map<String, Object>>>> groupedMap = testInstance.groupRecordsByTemplate(results);
 		//Then
 		assertThat(groupedMap, is(notNullValue()));
 	}

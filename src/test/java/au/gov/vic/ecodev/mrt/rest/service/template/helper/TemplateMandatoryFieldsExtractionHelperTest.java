@@ -45,6 +45,7 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		Map<String, Object> locMap = new HashMap<>();
 		locMap.put("LOADER_ID", "123456");
 		locMap.put("SITE_ID", "ARD001");
+		locMap.put("FILE_NAME", "myTest.txt");
 		locSites.add(locMap);
 		TemplateDisplayPropertiesJdbcTemplateHelper mockTemplateDisplayPropertiesJdbcTemplateHelper = 
 				Mockito.mock(TemplateDisplayPropertiesJdbcTemplateHelper.class);
@@ -57,8 +58,8 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		//Then
 		assertThat(MapUtils.isNotEmpty(resultMap), is(true));
 		assertThat(resultMap.size(), is(equalTo(1)));
-		assertThat(resultMap.keySet().iterator().next(), is(equalTo("SL4_D1")));
-		List<Map<String, Object>> dataRecord = resultMap.get("SL4_D1");
+		assertThat(resultMap.keySet().iterator().next(), is(equalTo("SL4_myTest.txt_D1")));
+		List<Map<String, Object>> dataRecord = resultMap.get("SL4_myTest.txt_D1");
 		assertThat(dataRecord, is(notNullValue()));
 		assertThat(dataRecord.size(), is(equalTo(1)));
 		Map<String, Object> record1 = dataRecord.get(0);
@@ -81,11 +82,12 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		Map<String, Object> result = new HashMap<>();
 		result.put("LOADER_ID", "123456");
 		result.put("SITE_ID", "ARD001");
+		result.put("FILE_NAME", "myTest.txt");
 		//When
 		testInstance.doValuePopulation(resultMap, cls, counter, result);
 		//Then
 		assertThat(resultMap.size(), is(equalTo(1)));
-		List<Map<String, Object>> dataList = resultMap.get("SL4_D1");
+		List<Map<String, Object>> dataList = resultMap.get("SL4_myTest.txt_D1");
 		Map<String, Object> dataMap = dataList.get(0);
 		assertThat(dataMap.size(), is(equalTo(2)));
 	}

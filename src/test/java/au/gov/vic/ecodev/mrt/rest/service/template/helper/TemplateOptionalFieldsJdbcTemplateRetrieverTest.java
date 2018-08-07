@@ -47,7 +47,7 @@ public class TemplateOptionalFieldsJdbcTemplateRetrieverTest {
 		String template = "SL4";
 		long batchId = 100L;
 		//When
-		String headers = testInstance.getHeaders(template, batchId);
+		List<Map<String, Object>> headers = testInstance.getHeaders(template, batchId);
 		//Then
 		assertThat(StringUtils.isEmpty(headers), is(false));
 	}

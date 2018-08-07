@@ -44,7 +44,7 @@ public class TemplateHeaderRetrieverTest {
 		//Then
 		assertThat(MapUtils.isNotEmpty(resultMap), is(true));
 		assertThat(resultMap.size(), is(equalTo(1)));
-		List<Map<String, Object>> headerList = resultMap.get(template + "_Headers");
+		List<Map<String, Object>> headerList = resultMap.get("SL4_myTest.txt_Headers");
 		assertThat(CollectionUtils.isEmpty(headerList), is(false));
 		assertThat(headerList.size(), is(equalTo(1)));
 		Map<String, Object> headers = headerList.get(Numeral.ZERO);

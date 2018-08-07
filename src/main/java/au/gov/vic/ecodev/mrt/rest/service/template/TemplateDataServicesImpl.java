@@ -42,7 +42,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	private HeaderMappingHelper headerMappingHeader;
 			
 	@Override
-	public Map<String, List<Map<String, Object>>> getAllTemplateData(String batchId) throws Exception {
+	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(String batchId) throws Exception {
 		LOGGER.info("TemplateDataServicesImpl.getAllTemplateData -- batchId: " + batchId);
 		Map<String, List<Map<String, Object>>> resultMap = this.retrieveDisplayData(batchId);
 		return groupRecordsByTemplate(resultMap);
@@ -55,11 +55,11 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	 * @param resultMap the data records from database
 	 * @return grouped and sorted data records.
 	 */
-	protected final Map<String, List<Map<String, Object>>> groupRecordsByTemplate(
+	protected final Map<String, Map<String, List<Map<String, Object>>>> groupRecordsByTemplate(
 			Map<String, List<Map<String, Object>>> resultMap) {
-		Map<String, List<Map<String, Object>>> groupedMap = new HashMap<>();
+		Map<String, Map<String, List<Map<String, Object>>>> groupedMap = new HashMap<>();
 		List<String> templates = new ArrayList<>();
-		Map<String, Map<String, Map<String, Object>>> cache = new HashMap<>();
+		Map<String, Map<String, Map<String, Map<String, Object>>>> cache = new HashMap<>();
 		doDataGroupping(resultMap, groupedMap, templates, cache);
 		
 		doTemplateRecordOrderSorting(groupedMap, cache);
@@ -72,30 +72,58 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	 * @param groupedMap the final data map
 	 * @param cache the grouped data map
 	 */
-	protected final void doTemplateRecordOrderSorting(Map<String, List<Map<String, Object>>> groupedMap,
-			Map<String, Map<String, Map<String, Object>>> cache) {
+	protected final void doTemplateRecordOrderSorting(Map<String, Map<String, List<Map<String, Object>>>> groupedMap,
+			Map<String, Map<String, Map<String, Map<String, Object>>>> cache) {
 		cache.forEach((k, v) -> {
 			LOGGER.info(k + " " + v);
-			List<Map<String, Object>> dataList = new ArrayList<>();
-			Map<String, Object> headers = new HashMap<>();
-			TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
-			TreeMap<String, Map<String, Object>> headersMap = new TreeMap<>();
+			Map<String, List<Map<String, Object>>> templateFiles = new HashMap<>();
 			v.forEach((vk, vv) -> {
-				if (Strings.HEADERS.equalsIgnoreCase(vk)) {
-					headers.putAll(vv);
-				} else if (DATA_RECORD_HEADER_PATTERN.matcher(vk).matches()) {
-					dataMap.put(vk, vv);
-				} else {
-					headersMap.put(vk, vv);
+				LOGGER.info(vk + " " + vv);
+				List<Map<String, Object>> dataList = templateFiles.get(vk);
+				if (null == dataList) {
+					dataList = new ArrayList<>();
+					templateFiles.put(vk, dataList);
 				}
+				Map<String, Object> headers = new HashMap<>();
+				TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
+				TreeMap<String, Map<String, Object>> headersMap = new TreeMap<>();
+				vv.forEach((vvk, vvv) -> {
+					LOGGER.info(vvk + " " + vvv);
+					if (Strings.HEADERS.equalsIgnoreCase(vvk)) {
+						headers.putAll(vvv);
+					} else if (DATA_RECORD_HEADER_PATTERN.matcher(vvk).matches()) {
+						dataMap.put(vvk, vvv);
+					} else {
+						headersMap.put(vvk, vvv);
+					}
+				});
+				TreeMap<String, Map<String, Object>> correctTitleMap = 
+						doDataMapHeaderMatching(k, headers, dataMap);
+				dataList.add(headers);
+				dataList.addAll(headersMap.values());
+				dataList.addAll(correctTitleMap.values());
 			});
-			
-			TreeMap<String, Map<String, Object>> correctTitleMap = doDataMapHeaderMatching(k, headers, dataMap);
-			// LOGGER.info(dataMap);
-			dataList.add(headers);
-			dataList.addAll(headersMap.values());
-			dataList.addAll(correctTitleMap.values());
-			groupedMap.put(k, dataList);
+			groupedMap.put(k, templateFiles);
+//			List<Map<String, Object>> dataList = new ArrayList<>();
+//			Map<String, Object> headers = new HashMap<>();
+//			TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
+//			TreeMap<String, Map<String, Object>> headersMap = new TreeMap<>();
+//			v.forEach((vk, vv) -> {
+//				if (Strings.HEADERS.equalsIgnoreCase(vk)) {
+//					headers.putAll(vv);
+//				} else if (DATA_RECORD_HEADER_PATTERN.matcher(vk).matches()) {
+//					dataMap.put(vk, vv);
+//				} else {
+//					headersMap.put(vk, vv);
+//				}
+//			});
+//			
+//			TreeMap<String, Map<String, Object>> correctTitleMap = doDataMapHeaderMatching(k, headers, dataMap);
+//			// LOGGER.info(dataMap);
+//			dataList.add(headers);
+//			dataList.addAll(headersMap.values());
+//			dataList.addAll(correctTitleMap.values());
+//			groupedMap.put(k, dataList);
 		});
 	}
 
@@ -147,27 +175,38 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	 * @param cache the map for grouped data.
 	 */
 	protected final void doDataGroupping(Map<String, List<Map<String, Object>>> resultMap,
-			Map<String, List<Map<String, Object>>> groupedMap, List<String> templates,
-			Map<String, Map<String, Map<String, Object>>> cache) {
+			Map<String, Map<String, List<Map<String, Object>>>> groupedMap, 
+			List<String> templates,
+			Map<String, Map<String, Map<String, Map<String, Object>>>> cache) {
 		// LOGGER.info(resultMap);
 		resultMap.forEach((k, v) -> {
-			// LOGGER.info("k: " + k);
+			 LOGGER.info("k: " + k);
+			 LOGGER.info("v:" + v);
 			String[] templateAndRows = k.split(Strings.UNDER_LINE);
 			String template = templateAndRows[Numeral.ZERO];
 			if (Numeral.ONE == templateAndRows.length) {
 				//No data case
-				groupedMap.put(k, v);
+//				groupedMap.put(k, v);
 			} else {
-				String rowLabel = templateAndRows[Numeral.ONE];
+				String fileName = templateAndRows[Numeral.ONE];
+				String rowLabel = templateAndRows[Numeral.TWO];
+//				String rowLabel = templateAndRows[Numeral.ONE];
+				Map<String, Map<String, Map<String, Object>>> files;
 				Map<String, Map<String, Object>> rows;
 				if (templates.contains(template)) {
-					rows = cache.get(template);
+					files = cache.get(template);
 				} else {
-					rows = new HashMap<>();
+//					rows = new HashMap<>();
+					files = new HashMap<>();
 					templates.add(template);
-					cache.put(template, rows);
+					cache.put(template, files);
 				}
 				// LOGGER.info(v);
+				rows = files.get(fileName);
+				if (null == rows) {
+					rows = new HashMap<>();
+					files.put(fileName, rows);
+				}
 				rows.put(rowLabel, v.get(Numeral.ZERO));
 			}
 		});
