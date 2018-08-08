@@ -66,8 +66,10 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		Iterator<String> iterator = record1.keySet().iterator();
 		assertThat(iterator.next(), is(equalTo("SITE_ID")));
 		assertThat(iterator.next(), is(equalTo("LOADER_ID")));
+		assertThat(iterator.next(), is(equalTo("FILE_NAME")));
 		assertThat(record1.get("LOADER_ID"), is(equalTo("123456")));
 		assertThat(record1.get("SITE_ID"), is(equalTo("ARD001")));
+		assertThat(record1.get("FILE_NAME"), is(equalTo("myTest.txt")));
 		assertThat(iterator.hasNext(), is(false));
 	}
 	
@@ -89,7 +91,7 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		assertThat(resultMap.size(), is(equalTo(1)));
 		List<Map<String, Object>> dataList = resultMap.get("SL4_myTest.txt_D1");
 		Map<String, Object> dataMap = dataList.get(0);
-		assertThat(dataMap.size(), is(equalTo(2)));
+		assertThat(dataMap.size(), is(equalTo(3)));
 	}
 	
 	@Test 
@@ -105,18 +107,19 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		result.put("SITE_ID", "ARD001");
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		dataList.add(result);
-		resultMap.put("SL4_D1", dataList);
+		resultMap.put("SL4_myTest.txt_D1", dataList);
 		assertThat(resultMap.size(), is(equalTo(1)));
 		Map<String, Object> result1 = new HashMap<>();
 		result1.put("EASTING", "123456");
 		result1.put("NORTHING", "789012");
+		result1.put("FILE_NAME", "myTest.txt");
 		//When
 		testInstance.doValuePopulation(resultMap, cls, counter, result1);
 		//Then
 		assertThat(resultMap.size(), is(equalTo(1)));
-		List<Map<String, Object>> retrievedDataList = resultMap.get("SL4_D1");
+		List<Map<String, Object>> retrievedDataList = resultMap.get("SL4_myTest.txt_D1");
 		Map<String, Object> dataMap = retrievedDataList.get(0);
-		assertThat(dataMap.size(), is(equalTo(4)));
+		assertThat(dataMap.size(), is(equalTo(5)));
 	}
 	
 	@Test

@@ -42,7 +42,7 @@ public class TemplateOptionalFieldsRetrieverTest {
 		//Then
 		assertThat(MapUtils.isNotEmpty(resultMap), is(true));
 		assertThat(resultMap.size(), is(equalTo(1)));
-		List<Map<String, Object>> list = resultMap.get(template + "_D1");
+		List<Map<String, Object>> list = resultMap.get(template + "_myTest.txt_D1");
 		assertThat(CollectionUtils.isEmpty(list), is(false));
 		assertThat(list.size(), is(equalTo(1)));
 		Map<String, Object> optionalFields = list.get(0);

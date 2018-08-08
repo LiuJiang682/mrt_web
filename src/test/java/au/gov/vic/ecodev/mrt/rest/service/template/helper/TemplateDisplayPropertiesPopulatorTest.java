@@ -46,7 +46,7 @@ public class TemplateDisplayPropertiesPopulatorTest {
 		//Then
 		assertThat(resultMap.isEmpty(), is(false));
 		assertThat(resultMap.size(), is(equalTo(2)));
-		assertData(resultMap, "SL4_D1");
+		assertData(resultMap, "SL4_myTest.txt_D1");
 	}
 	
 	@Test
@@ -60,8 +60,8 @@ public class TemplateDisplayPropertiesPopulatorTest {
 		//Then
 		assertThat(resultMap.isEmpty(), is(false));
 		assertThat(resultMap.size(), is(equalTo(3)));
-		assertData(resultMap, "SL4_D1");
-		assertData(resultMap, "SL4_D2");
+		assertData(resultMap, "SL4_myTest.txt_D1");
+		assertData(resultMap, "SL4_myTest.txt_D2");
 	}
 	
 //	@Ignore
@@ -111,6 +111,6 @@ public class TemplateDisplayPropertiesPopulatorTest {
 		assertThat(data.size(), is(equalTo(1)));
 		Map<String, Object> dataMap = data.get(0);
 		assertThat(MapUtils.isEmpty(dataMap), is(false));
-		assertThat(dataMap.size(), is(equalTo(10)));
+		assertThat(dataMap.size(), is(equalTo(12)));
 	}
 }

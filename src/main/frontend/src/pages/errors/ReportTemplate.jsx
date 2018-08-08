@@ -5,33 +5,38 @@ import TemplateDataRecordList from './TemplateDataRecordList';
 export default class ReportTemplate extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props.recordList);
         this.state = {
             templateName: this.props.templateName,
             recordList: this.props.recordList,
+            fileName: this.props.fileName,
         }
     }
     render() {
         const rows = [];
+        var len = 0;
         if ((null === this.state.recordList)) {
             const headerRow = <tr key={0} className="tr_height"><td className="log_error"><strong>No Data</strong></td></tr>
             rows.push(headerRow);
         } else {
             const headers = this.extractColumnHeaders(this.state.recordList[0]);
+            len = headers.length;
             const dataHeaders = this.extractDataHeaders(this.state.recordList[1]);
             const headerRow = this.buildTableHeader(headers, dataHeaders);
             const headersUC = this.buildUCHeaders(headers);
             rows.push(headerRow);
             const length = this.state.recordList.length;
             for (var index = 1; index < length; index++) {
+                console.log(this.state.recordList[index]);
                 rows.push(<TemplateDataRecordList key={index} currentIndex={index} headers={headersUC} recordList={this.state.recordList[index]} />);
             }
         }
-        
+        const templateFileHeader = this.state.templateName + " -- " + this.state.fileName;
         return (
             <table width="100%" className="data_table">
                 <thead>
                     <tr>
-                        <th>{this.state.templateName}</th>
+                        <th colSpan={len}>{templateFileHeader}</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -182,7 +182,8 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 		resultMap.forEach((k, v) -> {
 			 LOGGER.info("k: " + k);
 			 LOGGER.info("v:" + v);
-			String[] templateAndRows = k.split(Strings.UNDER_LINE);
+//			String[] templateAndRows = k.split(Strings.UNDER_LINE);
+			String[] templateAndRows = getTemplateAndRows(k); 
 			String template = templateAndRows[Numeral.ZERO];
 			if (Numeral.ONE == templateAndRows.length) {
 				//No data case
@@ -212,6 +213,22 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 		});
 	}
 	
+	protected final String[] getTemplateAndRows(String k) {
+		String[] templateAndRows = k.split(Strings.UNDER_LINE);
+		if (3 < templateAndRows.length) {
+			String template = templateAndRows[Numeral.ZERO];
+			String header = templateAndRows[templateAndRows.length - Numeral.ONE];
+			int len = templateAndRows.length - Numeral.ONE;
+			String[] newDatas = Arrays.copyOfRange(templateAndRows, Numeral.ONE, len);
+			String fileName = String.join(Strings.UNDER_LINE, newDatas);
+			templateAndRows = new String[3];
+			templateAndRows[Numeral.ZERO] = template;
+			templateAndRows[Numeral.ONE] = fileName;
+			templateAndRows[Numeral.TWO] = header;
+		}
+		return templateAndRows;
+	}
+
 	protected final Map<String, List<Map<String, Object>>> retrieveDisplayData(String batchId) throws Exception {
 		SessionHeader sessionHeader = (SessionHeader) sessionHeaderDao
 				.get(Long.parseLong(batchId));
