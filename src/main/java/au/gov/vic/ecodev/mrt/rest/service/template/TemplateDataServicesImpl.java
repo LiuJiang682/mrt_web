@@ -28,6 +28,10 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 
 	private static final Logger LOGGER = Logger.getLogger(TemplateDataServicesImpl.class);
 	
+	private static final String REGEX_VERTICAL_DELIM = "\\|";
+
+	private static final String VERTICAL_DELIM = "|";
+
 	private static final Pattern DATA_RECORD_HEADER_PATTERN = Pattern.compile("^D\\d{1,}$");
 	
 	@Autowired
@@ -63,7 +67,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 		doDataGroupping(resultMap, groupedMap, templates, cache);
 		
 		doTemplateRecordOrderSorting(groupedMap, cache);
-		LOGGER.info(groupedMap);
+		// LOGGER.info(groupedMap);
 		return groupedMap;
 	}
 
@@ -74,36 +78,38 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	 */
 	protected final void doTemplateRecordOrderSorting(Map<String, Map<String, List<Map<String, Object>>>> groupedMap,
 			Map<String, Map<String, Map<String, Map<String, Object>>>> cache) {
-		cache.forEach((k, v) -> {
-			LOGGER.info(k + " " + v);
+		cache.forEach((template, templateFileValue) -> {
+			// LOGGER.info(template + " " + templateFileValue);
 			Map<String, List<Map<String, Object>>> templateFiles = new HashMap<>();
-			v.forEach((vk, vv) -> {
-				LOGGER.info(vk + " " + vv);
-				List<Map<String, Object>> dataList = templateFiles.get(vk);
+			templateFileValue.forEach((templateFile, templateFileValues) -> {
+				// LOGGER.info(templateFile + " " + templateFileValues);
+				List<Map<String, Object>> dataList = templateFiles.get(templateFile);
 				if (null == dataList) {
 					dataList = new ArrayList<>();
-					templateFiles.put(vk, dataList);
+					templateFiles.put(templateFile, dataList);
 				}
 				Map<String, Object> headers = new HashMap<>();
 				TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
 				TreeMap<String, Map<String, Object>> headersMap = new TreeMap<>();
-				vv.forEach((vvk, vvv) -> {
-					LOGGER.info(vvk + " " + vvv);
-					if (Strings.HEADERS.equalsIgnoreCase(vvk)) {
-						headers.putAll(vvv);
-					} else if (DATA_RECORD_HEADER_PATTERN.matcher(vvk).matches()) {
-						dataMap.put(vvk, vvv);
+				templateFileValues.forEach((templateFileEntryKey, 
+						templateFielEntryValue) -> {
+					// LOGGER.info(templateFileEntryKey + " " + templateFielEntryValue);
+					if (Strings.HEADERS.equalsIgnoreCase(templateFileEntryKey)) {
+						headers.putAll(templateFielEntryValue);
+					} else if (DATA_RECORD_HEADER_PATTERN.matcher(templateFileEntryKey)
+							.matches()) {
+						dataMap.put(templateFileEntryKey, templateFielEntryValue);
 					} else {
-						headersMap.put(vvk, vvv);
+						headersMap.put(templateFileEntryKey, templateFielEntryValue);
 					}
 				});
 				TreeMap<String, Map<String, Object>> correctTitleMap = 
-						doDataMapHeaderMatching(k, headers, dataMap);
+						doDataMapHeaderMatching(template, headers, dataMap);
 				dataList.add(headers);
 				dataList.addAll(headersMap.values());
 				dataList.addAll(correctTitleMap.values());
 			});
-			groupedMap.put(k, templateFiles);
+			groupedMap.put(template, templateFiles);
 		});
 	}
 
@@ -121,8 +127,8 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 				if (!displayHeaders.contains(title)) {
 					String newTitle = headerMappingHeader.lookUp(templateName, title);
 					if (!StringUtils.isEmpty(newTitle)) {
-						if (newTitle.contains("|")) {
-							String[] titles = newTitle.split("\\|");
+						if (newTitle.contains(VERTICAL_DELIM)) {
+							String[] titles = newTitle.split(REGEX_VERTICAL_DELIM);
 							for (String myTitle : titles) {
 								if (displayHeaders.contains(myTitle)) {
 									title = myTitle;
@@ -159,37 +165,35 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 			List<String> templates,
 			Map<String, Map<String, Map<String, Map<String, Object>>>> cache) {
 		// LOGGER.info(resultMap);
-		resultMap.forEach((k, v) -> {
-			 LOGGER.info("k: " + k);
-			 LOGGER.info("v:" + v);
-//			String[] templateAndRows = k.split(Strings.UNDER_LINE);
-			String[] templateAndRows = getTemplateAndRows(k); 
+		resultMap.forEach((key, value) -> {
+			 // LOGGER.info("k: " + key);
+			 // LOGGER.info("v:" + value);
+			String[] templateAndRows = getTemplateAndRows(key); 
 			String template = templateAndRows[Numeral.ZERO];
 			if (Numeral.ONE == templateAndRows.length) {
 				//No data case
-//				groupedMap.put(k, v);
+				LOGGER.error("Got WRONG templateAndRow: " + templateAndRows);
+				//groupedMap.put(k, v);
 			} else {
 				String fileName = templateAndRows[Numeral.ONE];
 				String rowLabel = templateAndRows[Numeral.TWO];
-//				String rowLabel = templateAndRows[Numeral.ONE];
 				Map<String, Map<String, Map<String, Object>>> files;
 				Map<String, Map<String, Object>> rows;
 				if (templates.contains(template)) {
 					files = cache.get(template);
 				} else {
-//					rows = new HashMap<>();
 					files = new HashMap<>();
 					templates.add(template);
 					cache.put(template, files);
 				}
-				// LOGGER.info(v);
+				// LOGGER.info(value);
 				rows = files.get(fileName);
 				if (null == rows) {
 					rows = new HashMap<>();
 					files.put(fileName, rows);
 				}
-				rows.put(rowLabel, v.get(Numeral.ZERO));
-				LOGGER.warn(rows);
+				rows.put(rowLabel, value.get(Numeral.ZERO));
+				// LOGGER.warn(rows);
 			}
 		});
 	}

@@ -9,6 +9,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public class TemplateDisplayPropertiesJdbcTemplateHelper {
 
+	private static final String SQL_WHERE_CAUSE = " WHERE LOADER_ID = ?";
+	private static final String SQL_FROM = " FROM ";
+	private static final String SQL_SELECT = "SELECT ";
 	private final JdbcTemplate jdbcTemplate;
 	
 	public TemplateDisplayPropertiesJdbcTemplateHelper(final JdbcTemplate jdbcTemplate) {
@@ -25,11 +28,11 @@ public class TemplateDisplayPropertiesJdbcTemplateHelper {
 			sql = fields.substring(fields.lastIndexOf(Strings.JSON_SQL_TAG) + Strings.JSON_SQL_TAG.length(), 
 					fields.length());
 		} else {
-			sql = new StringBuilder("SELECT ")
+			sql = new StringBuilder(SQL_SELECT)
 				.append(fields)
-				.append(" FROM ")
+				.append(SQL_FROM)
 				.append(template)
-				.append(" WHERE LOADER_ID = ?")
+				.append(SQL_WHERE_CAUSE)
 				.toString();
 		}
 		List<Map<String, Object>> results = jdbcTemplate.queryForList(sql, 

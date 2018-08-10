@@ -14,7 +14,6 @@ public class TemplateHeaderRetriever {
 
 	private static final String HEADERS_SUFFIX = "_Headers";
 	private static final String FIELD_VALUE = "FIELD_VALUE";
-	private static final String FILE_NAME = "FILE_NAME";
 	
 	private final JdbcTemplate jdbcTemplate;
 	
@@ -30,10 +29,10 @@ public class TemplateHeaderRetriever {
 		List<Map<String, Object>> headers = new TemplateOptionalFieldsJdbcTemplateRetriever(jdbcTemplate)
 				.getHeaders(template, batchId);
 		headers.stream()
-			.forEach(e -> {
-//				System.out.println(e);
-				String fileName = (String) e.get(FILE_NAME);
-				String headersString = (String) e.get(FIELD_VALUE);
+			.forEach(header -> {
+				// System.out.println(header);
+				String fileName = (String) header.get(Strings.FILE_NAME);
+				String headersString = (String) header.get(FIELD_VALUE);
 				String[] headersArray = headersString.split(Strings.COMMA);
 				Map<String, Object> newHeaders = new HashMap<>(headersArray.length);
 				for (int i = Numeral.ZERO; i < headersArray.length; i++) {

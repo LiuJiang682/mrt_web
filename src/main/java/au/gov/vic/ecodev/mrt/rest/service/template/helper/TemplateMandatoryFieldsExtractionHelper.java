@@ -14,6 +14,8 @@ import au.gov.vic.ecodev.mrt.common.Constants.Strings;
 
 public class TemplateMandatoryFieldsExtractionHelper {
 	
+	private static final String COLUMN_ROW_NUMBER = "ROW_NUMBER";
+	
 	private final JdbcTemplate jdbcTemplate;
 	
 	public TemplateMandatoryFieldsExtractionHelper(JdbcTemplate jdbcTemplate) {
@@ -57,13 +59,12 @@ public class TemplateMandatoryFieldsExtractionHelper {
 
 	protected final void doValuePopulation(Map<String, List<Map<String, Object>>> resultMap, String cls,
 			AtomicInteger counter, Map<String, Object> result) {
-		String fileName = (String) result.get("FILE_NAME");
-		String rowNumber = (String) result.get("ROW_NUMBER");
+		String fileName = (String) result.get(Strings.FILE_NAME);
+		String rowNumber = (String) result.get(COLUMN_ROW_NUMBER);
 		String currentKey = new StringBuilder(cls)
 				.append(Strings.UNDER_LINE)
 				.append(fileName)
 				.append(Strings.UNDER_LINE_DATA_KEY)
-//				.append(counter.incrementAndGet()).toString();
 				.append(rowNumber)
 				.toString();
 		List<Map<String, Object>> dataRecord = resultMap.get(currentKey);

@@ -35,7 +35,7 @@ public class TemplateOptionalFieldsRetriever {
 				if (!Strings.KEY_H1000.equalsIgnoreCase(rowNumber)) {
 					String header = (String) optionalField.get(TEMPLATE_HEADER);
 					String value = (String) optionalField.get(FIELD_VALUE);
-					String fileName = (String) optionalField.get("FILE_NAME");
+					String fileName = (String) optionalField.get(Strings.FILE_NAME);
 					String key = new StringBuilder(template)
 							.append(Strings.UNDER_LINE)
 							.append(fileName)
