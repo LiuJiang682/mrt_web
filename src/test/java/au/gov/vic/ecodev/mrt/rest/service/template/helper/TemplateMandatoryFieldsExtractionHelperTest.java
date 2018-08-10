@@ -46,6 +46,7 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		locMap.put("LOADER_ID", "123456");
 		locMap.put("SITE_ID", "ARD001");
 		locMap.put("FILE_NAME", "myTest.txt");
+		locMap.put("ROW_NUMBER", "1");
 		locSites.add(locMap);
 		TemplateDisplayPropertiesJdbcTemplateHelper mockTemplateDisplayPropertiesJdbcTemplateHelper = 
 				Mockito.mock(TemplateDisplayPropertiesJdbcTemplateHelper.class);
@@ -64,13 +65,18 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		assertThat(dataRecord.size(), is(equalTo(1)));
 		Map<String, Object> record1 = dataRecord.get(0);
 		Iterator<String> iterator = record1.keySet().iterator();
-		assertThat(iterator.next(), is(equalTo("SITE_ID")));
-		assertThat(iterator.next(), is(equalTo("LOADER_ID")));
-		assertThat(iterator.next(), is(equalTo("FILE_NAME")));
+		List<String> resultList = new ArrayList<>();
+		while(iterator.hasNext()) {
+			resultList.add(iterator.next());
+		}
+		assertThat(resultList.contains("SITE_ID"), is(true));
+		assertThat(resultList.contains("LOADER_ID"), is(true));
+		assertThat(resultList.contains("FILE_NAME"), is(true));
+		assertThat(resultList.contains("ROW_NUMBER"), is(true));
 		assertThat(record1.get("LOADER_ID"), is(equalTo("123456")));
 		assertThat(record1.get("SITE_ID"), is(equalTo("ARD001")));
 		assertThat(record1.get("FILE_NAME"), is(equalTo("myTest.txt")));
-		assertThat(iterator.hasNext(), is(false));
+		assertThat(record1.get("ROW_NUMBER"), is(equalTo("1")));
 	}
 	
 	@Test 
@@ -85,13 +91,14 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		result.put("LOADER_ID", "123456");
 		result.put("SITE_ID", "ARD001");
 		result.put("FILE_NAME", "myTest.txt");
+		result.put("ROW_NUMBER", "1");
 		//When
 		testInstance.doValuePopulation(resultMap, cls, counter, result);
 		//Then
 		assertThat(resultMap.size(), is(equalTo(1)));
 		List<Map<String, Object>> dataList = resultMap.get("SL4_myTest.txt_D1");
 		Map<String, Object> dataMap = dataList.get(0);
-		assertThat(dataMap.size(), is(equalTo(3)));
+		assertThat(dataMap.size(), is(equalTo(4)));
 	}
 	
 	@Test 
@@ -113,13 +120,14 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		result1.put("EASTING", "123456");
 		result1.put("NORTHING", "789012");
 		result1.put("FILE_NAME", "myTest.txt");
+		result1.put("ROW_NUMBER", "1");
 		//When
 		testInstance.doValuePopulation(resultMap, cls, counter, result1);
 		//Then
 		assertThat(resultMap.size(), is(equalTo(1)));
 		List<Map<String, Object>> retrievedDataList = resultMap.get("SL4_myTest.txt_D1");
 		Map<String, Object> dataMap = retrievedDataList.get(0);
-		assertThat(dataMap.size(), is(equalTo(5)));
+		assertThat(dataMap.size(), is(equalTo(6)));
 	}
 	
 	@Test

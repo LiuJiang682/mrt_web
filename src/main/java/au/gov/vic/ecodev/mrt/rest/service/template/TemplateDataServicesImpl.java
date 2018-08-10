@@ -104,26 +104,6 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 				dataList.addAll(correctTitleMap.values());
 			});
 			groupedMap.put(k, templateFiles);
-//			List<Map<String, Object>> dataList = new ArrayList<>();
-//			Map<String, Object> headers = new HashMap<>();
-//			TreeMap<String, Map<String, Object>> dataMap = new TreeMap<>();
-//			TreeMap<String, Map<String, Object>> headersMap = new TreeMap<>();
-//			v.forEach((vk, vv) -> {
-//				if (Strings.HEADERS.equalsIgnoreCase(vk)) {
-//					headers.putAll(vv);
-//				} else if (DATA_RECORD_HEADER_PATTERN.matcher(vk).matches()) {
-//					dataMap.put(vk, vv);
-//				} else {
-//					headersMap.put(vk, vv);
-//				}
-//			});
-//			
-//			TreeMap<String, Map<String, Object>> correctTitleMap = doDataMapHeaderMatching(k, headers, dataMap);
-//			// LOGGER.info(dataMap);
-//			dataList.add(headers);
-//			dataList.addAll(headersMap.values());
-//			dataList.addAll(correctTitleMap.values());
-//			groupedMap.put(k, dataList);
 		});
 	}
 
@@ -209,6 +189,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 					files.put(fileName, rows);
 				}
 				rows.put(rowLabel, v.get(Numeral.ZERO));
+				LOGGER.warn(rows);
 			}
 		});
 	}

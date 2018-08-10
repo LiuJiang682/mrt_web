@@ -58,11 +58,14 @@ public class TemplateMandatoryFieldsExtractionHelper {
 	protected final void doValuePopulation(Map<String, List<Map<String, Object>>> resultMap, String cls,
 			AtomicInteger counter, Map<String, Object> result) {
 		String fileName = (String) result.get("FILE_NAME");
+		String rowNumber = (String) result.get("ROW_NUMBER");
 		String currentKey = new StringBuilder(cls)
 				.append(Strings.UNDER_LINE)
 				.append(fileName)
 				.append(Strings.UNDER_LINE_DATA_KEY)
-				.append(counter.incrementAndGet()).toString();
+//				.append(counter.incrementAndGet()).toString();
+				.append(rowNumber)
+				.toString();
 		List<Map<String, Object>> dataRecord = resultMap.get(currentKey);
 		if (null == dataRecord) {
 			dataRecord = new ArrayList<>();
