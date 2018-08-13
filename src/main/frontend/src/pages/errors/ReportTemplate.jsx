@@ -5,7 +5,6 @@ import TemplateDataRecordList from './TemplateDataRecordList';
 export default class ReportTemplate extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props.recordList);
         this.state = {
             templateName: this.props.templateName,
             recordList: this.props.recordList,
@@ -27,7 +26,7 @@ export default class ReportTemplate extends Component {
             rows.push(headerRow);
             const length = this.state.recordList.length;
             for (var index = 1; index < length; index++) {
-                console.log(this.state.recordList[index]);
+                // console.log(this.state.recordList[index]);
                 rows.push(<TemplateDataRecordList key={index} currentIndex={index} headers={headersUC} recordList={this.state.recordList[index]} />);
             }
         }

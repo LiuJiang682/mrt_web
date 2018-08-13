@@ -123,8 +123,10 @@ export default class Map extends Component {
             format: new ol.format.GML2(),
             projection: 'epsg:3857',
             loader: function () {
-                var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-                var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27' + tenement[1] + '%27';
+                var tenements = tenement[1].split(",");
+                for(const tno of tenements) {
+                    var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27' + tno + '%27';
                 // var url = 'http://geology.data.vic.gov.au/nvcl/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=mt:MineralTenement&cql_filter=mt:name=%27EL006759%27';
                 var xml;
                 fetch(proxyUrl + url, {
@@ -166,6 +168,7 @@ export default class Map extends Component {
                             vectorSource.addFeature(wfsF);
                         }
                     });
+                }
             }
         });
 

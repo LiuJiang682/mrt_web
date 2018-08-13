@@ -20,16 +20,13 @@ export default class Errors extends Component {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('data', data);
+                // console.log('data', data);
                 let records = Object.keys(data).map(function(keyName, keyIndex) {
-                    console.log('key: ' + keyName, 'value: ' + data[keyName]);
+                    // console.log('key: ' + keyName, 'value: ' + data[keyName]);
                     var value = data[keyName];
                     let details = Object.keys(value).map(function(newkeyName, newkeyIndex) {
-                        console.log('newkey: ' + newkeyName, 'newvalue: ' + value[newkeyName]);
+                        // console.log('newkey: ' + newkeyName, 'newvalue: ' + value[newkeyName]);
                         var myValue = value[newkeyName];
-                        for(var index = 0; index < myValue.length; index++) {
-                            console.log(myValue[index]);
-                        }
                         return (
                             <div key={newkeyIndex}>
                                 <ReportTemplate templateName={keyName} fileName={newkeyName} recordList={value[newkeyName]} />
@@ -37,11 +34,6 @@ export default class Errors extends Component {
                         );
                     });
                     return details;
-                    // return (
-                    //     <div key={keyIndex}>
-                    //         <ReportTemplate templateName={keyName} recordList={data[keyName]} />
-                    //     </div>
-                    // );
                 });
                 this.setState({
                     records: records
