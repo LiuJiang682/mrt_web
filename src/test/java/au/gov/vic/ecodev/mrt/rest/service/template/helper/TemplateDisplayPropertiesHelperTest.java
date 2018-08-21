@@ -37,6 +37,17 @@ public class TemplateDisplayPropertiesHelperTest {
 	}
 	
 	@Test
+	public void shouldReturnMrtHeaderMap() throws Exception {
+		//Given
+		String template = "MRT";
+		//When
+		Map<String, Object> results = testInstance.getTemplateHeaders(template);
+		//Then
+		assertThat(results, is(notNullValue()));
+		assertThat(results.size(), is(equalTo(1)));
+	}
+	
+	@Test
 	public void shouldReturnInstance() {
 		//Given
 		//When

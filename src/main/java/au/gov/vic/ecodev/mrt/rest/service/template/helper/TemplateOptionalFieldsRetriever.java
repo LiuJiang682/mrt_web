@@ -1,10 +1,12 @@
 package au.gov.vic.ecodev.mrt.rest.service.template.helper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import au.gov.vic.ecodev.mrt.common.Constants.Numeral;
@@ -12,6 +14,8 @@ import au.gov.vic.ecodev.mrt.common.Constants.Strings;
 
 public class TemplateOptionalFieldsRetriever {
 
+	private static final Logger LOGGER = Logger.getLogger(TemplateOptionalFieldsRetriever.class);
+	
 	private static final String HEADER_PREFIX = "H";
 	private static final String FIELD_VALUE = "FIELD_VALUE";
 	private static final String TEMPLATE_HEADER = "TEMPLATE_HEADER";
@@ -26,21 +30,40 @@ public class TemplateOptionalFieldsRetriever {
 	}
 
 	public void extractOptionalFields(Map<String, List<Map<String, Object>>> resultMap, 
-			long batchId, String template) {
-		List<Map<String, Object>> optionalFields = new TemplateOptionalFieldsJdbcTemplateRetriever(jdbcTemplate)
-				.getList(template, batchId);
+			Map<String, Object> templateHeadersMap, long batchId, String template) {
+		Map<String, Boolean> headers = extractHeaderList(templateHeadersMap, template);
+		int headerLen = headers.size();
+		doHeaderDataExtraction(resultMap, batchId, template, headers);
+		List<Map<String, Object>> optionalFields = 
+				new TemplateOptionalFieldsJdbcTemplateRetriever(jdbcTemplate)
+				.getList(template, batchId, headerLen);
+		
 		optionalFields.stream()
 			.forEach(optionalField -> {
+				LOGGER.info(optionalField);
 				String rowNumber = (String) optionalField.get(ROW_NUMBER);
-				if (!Strings.KEY_H1000.equalsIgnoreCase(rowNumber)) {
+				if (!Strings.ZERO.equalsIgnoreCase(rowNumber)) {
+					int row = Integer.parseInt(rowNumber);
+					if (headerLen < row) {
+						row -= headerLen;
+						rowNumber = String.valueOf(row);
+					}
 					String header = (String) optionalField.get(TEMPLATE_HEADER);
+//					if (headers.containsKey(header)) {
+//						if (headers.get(header)) {
+//							rowNumber = header;
+//						} else {
+//							return;
+//						}
+//					}
 					String value = (String) optionalField.get(FIELD_VALUE);
 					String fileName = (String) optionalField.get(Strings.FILE_NAME);
 					String key = new StringBuilder(template)
 							.append(Strings.UNDER_LINE)
 							.append(fileName)
-							.append((rowNumber.startsWith(HEADER_PREFIX)) 
-									? Strings.UNDER_LINE : Strings.UNDER_LINE_DATA_KEY)
+							.append(Strings.UNDER_LINE_DATA_KEY)
+//							.append((rowNumber.startsWith(HEADER_PREFIX)) 
+//									? Strings.UNDER_LINE : Strings.UNDER_LINE_DATA_KEY)
 							.append(rowNumber)
 							.toString();
 					List<Map<String, Object>> dataRecord = resultMap.get(key);
@@ -57,6 +80,72 @@ public class TemplateOptionalFieldsRetriever {
 				}
 			});
 		
+	}
+
+	protected final void doHeaderDataExtraction(
+			Map<String, List<Map<String, Object>>> resultMap, 
+			final long batchId, final String template,
+			Map<String, Boolean> headerMap) {
+		int headerLen = headerMap.size();
+		List<Map<String, Object>> optionalFields = 
+				new TemplateOptionalFieldsJdbcTemplateRetriever(jdbcTemplate)
+					.getHeaderData(template, batchId, headerLen);
+		optionalFields.stream()
+			.forEach(headerField -> {
+				String header = (String) headerField.get(TEMPLATE_HEADER);
+				String fileName = (String) headerField.get(Strings.FILE_NAME);
+				String value = (String) headerField.get(FIELD_VALUE);
+				BigDecimal columnNumber = (BigDecimal) headerField.get("COLUMN_NUMBER");
+				if (headerMap.get(header)) {
+					String key = new StringBuilder(template)
+							.append(Strings.UNDER_LINE)
+							.append(fileName)
+							.append(Strings.UNDER_LINE)
+							.append(header)
+							.toString();
+					List<Map<String, Object>> dataRecord = resultMap.get(key);
+					if (null == dataRecord) {
+						dataRecord = new ArrayList<>();
+						Map<String, Object> dataMap = new HashMap<>();
+						String headerTitle = getHeaderTitle(resultMap, template, fileName, columnNumber.toString());
+						dataMap.put(headerTitle, value);
+						dataRecord.add(dataMap);
+					} else {
+						Map<String, Object> dataMap = dataRecord.get(Numeral.ZERO);
+						String headerTitle = getHeaderTitle(resultMap, template, fileName, columnNumber.toString());
+						dataMap.put(headerTitle, value);
+					}
+					resultMap.put(key, dataRecord);
+				}
+			});
+		
+	}
+
+	private String getHeaderTitle(Map<String, List<Map<String, Object>>> resultMap, final String template,
+			String fileName, String columnNumber) {
+		String headerKey = new StringBuilder(template)
+				.append(Strings.UNDER_LINE)
+				.append(fileName)
+				.append(Strings.HEADERS_SUFFIX)
+				.toString();
+		List<Map<String, Object>> headerList = resultMap.get(headerKey);
+		Map<String, Object> headers = headerList.get(Numeral.ZERO);
+		String headerTitle = (String) headers.get(columnNumber);
+		return headerTitle;
+	}
+
+	protected final Map<String, Boolean> extractHeaderList(final Map<String, Object> templateHeadersMap,
+			final String templateName) {
+		Object object = templateHeadersMap.get(templateName);
+		String headerString = (String) object;
+		String[] headers = headerString.split(Strings.COMMA);
+		Map<String, Boolean> headerConfigMap = new HashMap<>();
+		for (String header : headers) {
+			String[] headerConfig = header.split(Strings.HYPEN);
+			headerConfigMap.put(headerConfig[Numeral.ZERO], 
+					Boolean.valueOf(headerConfig[Numeral.ONE]));
+		}
+		return headerConfigMap;
 	}
 
 }

@@ -224,10 +224,13 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 			for(String template : templateList) {
 				Map<String, Object> templateFieldMap = templateDisplayPropertiesHelper
 						.getTemplateDisplayProperties(template);
+				Map<String, Object> templateHeaderMap = templateDisplayPropertiesHelper
+						.getTemplateHeaders(template);
 				List<String> classesList = templateClassesListHelper
 						.getTemplateClassesList(template);
 				templateDisplayPropertiesPopulator
-					.doPopulation(resultMap, classesList, templateFieldMap, Long.parseLong(batchId));
+					.doPopulation(resultMap, classesList, templateFieldMap, 
+							templateHeaderMap, Long.parseLong(batchId));
 			}
 		}
 		return resultMap;

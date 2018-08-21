@@ -37,8 +37,10 @@ public class TemplateOptionalFieldsRetrieverTest {
 		Map<String, List<Map<String, Object>>> resultMap = new HashMap<>();
 		long batchId = 1l;
 		String template = "SL4";
+		Map<String, Object> headerMap = new HashMap<>();
+		headerMap.put("SL4", "H1000-false,H1001-true,H1004-true");
 		//When
-		testInstance.extractOptionalFields(resultMap, batchId, template);
+		testInstance.extractOptionalFields(resultMap, headerMap, batchId, template);
 		//Then
 		assertThat(MapUtils.isNotEmpty(resultMap), is(true));
 		assertThat(resultMap.size(), is(equalTo(1)));

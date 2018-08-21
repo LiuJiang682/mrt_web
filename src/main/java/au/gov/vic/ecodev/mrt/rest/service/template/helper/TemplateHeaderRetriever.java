@@ -12,7 +12,6 @@ import au.gov.vic.ecodev.mrt.common.Constants.Strings;
 
 public class TemplateHeaderRetriever {
 
-	private static final String HEADERS_SUFFIX = "_Headers";
 	private static final String FIELD_VALUE = "FIELD_VALUE";
 	
 	private final JdbcTemplate jdbcTemplate;
@@ -45,7 +44,7 @@ public class TemplateHeaderRetriever {
 				String resultKey = new StringBuilder(template)
 						.append(Strings.UNDER_LINE)
 						.append(fileName)
-						.append(HEADERS_SUFFIX)
+						.append(Strings.HEADERS_SUFFIX)
 						.toString();
 				resultMap.put(resultKey, list);
 			});

@@ -12,6 +12,9 @@ public interface Constants {
 		static final String UNDER_LINE_DATA_KEY = "_D";
 		static final String HEADERS = "Headers";
 		static final String FILE_NAME = "FILE_NAME";
+		static final String ZERO = "0";
+		static final String HYPEN = "-";
+		static final String HEADERS_SUFFIX = "_Headers";
 	}
 	
 	interface Numeral {

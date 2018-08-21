@@ -25,24 +25,30 @@ public class TemplateDisplayPropertiesPopulator {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public void doPopulation(Map<String, List<Map<String, Object>>> resultMap, List<String> classesList,
-			Map<String, Object> templateFieldMap, long batchId) {
+	public void doPopulation(Map<String, List<Map<String, Object>>> resultMap, 
+			List<String> classesList, Map<String, Object> templateFieldMap, 
+			Map<String, Object> templateHeadersMap, long batchId) {
 		if ((!CollectionUtils.isEmpty(classesList)) && (MapUtils.isNotEmpty(templateFieldMap))) {
 			classesList.stream().forEach(cls -> {
-				doSingleTemplatePopulation(resultMap, templateFieldMap, cls, batchId);
+				doSingleTemplatePopulation(resultMap, templateFieldMap, templateHeadersMap,
+						cls, batchId);
 			});
 		}
 
 	}
 
-	protected final void doSingleTemplatePopulation(Map<String, List<Map<String, Object>>> resultMap,
-			Map<String, Object> templateFieldMap, final String templateName, final long batchId) {
+	protected final void doSingleTemplatePopulation(Map<String, 
+			List<Map<String, Object>>> resultMap, Map<String, Object> templateFieldMap, 
+			Map<String, Object> templateHeadersMap,
+			final String templateName, final long batchId) {
 		try {
 			new TemplateHeaderRetriever(jdbcTemplate)
 				.extractTemplateHeaders(resultMap, batchId, templateName);
 			new TemplateMandatoryFieldsExtractionHelper(jdbcTemplate)
 				.extractMandatoryFields(resultMap, templateFieldMap, batchId, templateName);
-			new TemplateOptionalFieldsRetriever(jdbcTemplate).extractOptionalFields(resultMap, batchId, templateName);
+			new TemplateOptionalFieldsRetriever(jdbcTemplate).extractOptionalFields(resultMap, 
+					templateHeadersMap,
+					batchId, templateName);
 		}
 		catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);

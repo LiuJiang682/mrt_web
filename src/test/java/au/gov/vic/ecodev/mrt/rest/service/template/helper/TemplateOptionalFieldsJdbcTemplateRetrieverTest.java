@@ -35,7 +35,19 @@ public class TemplateOptionalFieldsJdbcTemplateRetrieverTest {
 		String template = "SL4";
 		long batchId = 1l;
 		//When
-		List<Map<String, Object>> optionalFields = testInstance.getList(template, batchId);
+		List<Map<String, Object>> optionalFields = testInstance.getList(template, batchId, 3);
+		//Then
+		assertThat(CollectionUtils.isEmpty(optionalFields), is(false));
+	}
+	
+	@Test
+	public void shouldReturnListOfHeaderDataFields() {
+		//Given
+		givenTestInstance();
+		String template = "SL4";
+		long batchId = 1l;
+		//When
+		List<Map<String, Object>> optionalFields = testInstance.getHeaderData(template, batchId, 3);
 		//Then
 		assertThat(CollectionUtils.isEmpty(optionalFields), is(false));
 	}
