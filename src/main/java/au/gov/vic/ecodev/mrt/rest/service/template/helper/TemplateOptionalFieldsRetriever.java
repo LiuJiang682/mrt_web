@@ -40,13 +40,12 @@ public class TemplateOptionalFieldsRetriever {
 		
 		optionalFields.stream()
 			.forEach(optionalField -> {
-				LOGGER.info(optionalField);
-				String rowNumber = (String) optionalField.get(ROW_NUMBER);
-				if (!Strings.ZERO.equalsIgnoreCase(rowNumber)) {
-					int row = Integer.parseInt(rowNumber);
+				// LOGGER.info(optionalField);
+				BigDecimal rowNumber = (BigDecimal) optionalField.get(ROW_NUMBER);
+				int row  = rowNumber.intValue();
+				if (Numeral.ZERO != row) {
 					if (headerLen < row) {
 						row -= headerLen;
-						rowNumber = String.valueOf(row);
 					}
 					String header = (String) optionalField.get(TEMPLATE_HEADER);
 					String value = (String) optionalField.get(FIELD_VALUE);
@@ -55,7 +54,7 @@ public class TemplateOptionalFieldsRetriever {
 							.append(Strings.UNDER_LINE)
 							.append(fileName)
 							.append(Strings.UNDER_LINE_DATA_KEY)
-							.append(rowNumber)
+							.append(row)
 							.toString();
 					List<Map<String, Object>> dataRecord = resultMap.get(key);
 					if (null == dataRecord) {
