@@ -44,10 +44,15 @@ public class TemplateDisplayPropertiesPopulator {
 		try {
 			new TemplateHeaderRetriever(jdbcTemplate)
 				.extractTemplateHeaders(resultMap, batchId, templateName);
+			new TemplateMandatoryHeaderFieldsExtractionHelper(jdbcTemplate)
+				.extractTemplateHeaderFields(resultMap, batchId, templateName);
+			int mandatoryColumnCount = new TemplateMandatoryHeaderColumnCounter(resultMap, templateName)
+					.getColumnCount();
 			new TemplateMandatoryFieldsExtractionHelper(jdbcTemplate)
 				.extractMandatoryFields(resultMap, templateFieldMap, batchId, templateName);
+			
 			new TemplateOptionalFieldsRetriever(jdbcTemplate).extractOptionalFields(resultMap, 
-					templateHeadersMap,
+					templateHeadersMap, mandatoryColumnCount,
 					batchId, templateName);
 		}
 		catch (Exception e) {

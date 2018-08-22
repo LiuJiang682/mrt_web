@@ -44,7 +44,7 @@ public class TemplateDisplayPropertiesHelperTest {
 		Map<String, Object> results = testInstance.getTemplateHeaders(template);
 		//Then
 		assertThat(results, is(notNullValue()));
-		assertThat(results.size(), is(equalTo(1)));
+		assertThat(results.size(), is(equalTo(5)));
 	}
 	
 	@Test
