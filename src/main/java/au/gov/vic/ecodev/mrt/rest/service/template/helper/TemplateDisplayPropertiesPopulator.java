@@ -10,28 +10,41 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import au.gov.vic.ecodev.mrt.common.Constants.Strings;
+import au.gov.vic.ecodev.mrt.rest.service.template.retriever.TemplateDataRetriever;
+
 @Component
 public class TemplateDisplayPropertiesPopulator {
 
 	private static final Logger LOGGER = Logger.getLogger(TemplateDisplayPropertiesPopulator.class);
 	
 	private final JdbcTemplate jdbcTemplate;
+	private final Map<String, String> dataRetrieverClassMap;
 
 	@Autowired
-	public TemplateDisplayPropertiesPopulator(JdbcTemplate jdbcTemplate) {
+	public TemplateDisplayPropertiesPopulator(final JdbcTemplate jdbcTemplate, 
+			final Map<String, String> dataRetrieverClassMap) {
 		if (null == jdbcTemplate) {
 			throw new IllegalArgumentException("TemplateDisplayPropertiesPopulator:jdbcTemplate cannot be null!");
 		}
 		this.jdbcTemplate = jdbcTemplate;
+		this.dataRetrieverClassMap = dataRetrieverClassMap;
 	}
 
-	public void doPopulation(Map<String, List<Map<String, Object>>> resultMap, 
-			List<String> classesList, Map<String, Object> templateFieldMap, 
+	public void doPopulation(String parentTemplate,
+			Map<String, List<Map<String, Object>>> resultMap, 
+			List<String> classesList, Map<String, Object> templateFieldMap,  
 			Map<String, Object> templateHeadersMap, long batchId) {
 		if ((!CollectionUtils.isEmpty(classesList)) && (MapUtils.isNotEmpty(templateFieldMap))) {
 			classesList.stream().forEach(cls -> {
-				doSingleTemplatePopulation(resultMap, templateFieldMap, templateHeadersMap,
-						cls, batchId);
+				try {
+					doSingleTemplatePopulation(resultMap, templateFieldMap, 
+							templateHeadersMap,
+							parentTemplate, cls, batchId);
+				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
+					throw new RuntimeException(e.getMessage(), e);
+				}
 			});
 		}
 
@@ -39,25 +52,31 @@ public class TemplateDisplayPropertiesPopulator {
 
 	protected final void doSingleTemplatePopulation(Map<String, 
 			List<Map<String, Object>>> resultMap, Map<String, Object> templateFieldMap, 
-			Map<String, Object> templateHeadersMap,
-			final String templateName, final long batchId) {
-		try {
-			new TemplateHeaderRetriever(jdbcTemplate)
-				.extractTemplateHeaders(resultMap, batchId, templateName);
-			new TemplateMandatoryHeaderFieldsExtractionHelper(jdbcTemplate)
-				.extractTemplateHeaderFields(resultMap, batchId, templateName);
-			int mandatoryColumnCount = new TemplateMandatoryHeaderColumnCounter(resultMap, templateName)
-					.getColumnCount();
-			new TemplateMandatoryFieldsExtractionHelper(jdbcTemplate)
-				.extractMandatoryFields(resultMap, templateFieldMap, batchId, templateName);
-			
-			new TemplateOptionalFieldsRetriever(jdbcTemplate).extractOptionalFields(resultMap, 
-					templateHeadersMap, mandatoryColumnCount,
-					batchId, templateName);
-		}
-		catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			resultMap.put(templateName, null);
-		}
+			Map<String, Object> templateHeadersMap, final String parentTemplate,
+			final String templateName, final long batchId) throws Exception {
+		TemplateDataRetriever templateDataRetriever =
+				getTemplateDataRetriever(parentTemplate, templateName, dataRetrieverClassMap);
+		templateDataRetriever.setJdbcTemplate(jdbcTemplate);
+		templateDataRetriever.setResultMap(resultMap);
+		templateDataRetriever.setTemplateFieldMap(templateFieldMap);
+		templateDataRetriever.setTemplateHeaderMap(templateHeadersMap);
+		templateDataRetriever.setTemplateName(templateName);
+		templateDataRetriever.setSessionId(batchId);
+		templateDataRetriever.doDataRetrieve();
+		
 	}
+
+	protected final TemplateDataRetriever getTemplateDataRetriever(final String parentTemplate,
+			final String templateName, 
+			Map<String, String> dataRetrieverClassMap) throws Exception {
+		String key = new StringBuilder(parentTemplate)
+				.append(Strings.HYPEN)
+				.append(templateName)
+				.toString();
+		// LOGGER.info(key);
+		String dataRetrieverClass = dataRetrieverClassMap.get(key.toUpperCase());
+		Class<?> clazz = Class.forName(dataRetrieverClass);
+		return (TemplateDataRetriever) clazz.newInstance();
+	}
+	
 }

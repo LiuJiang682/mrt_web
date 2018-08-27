@@ -1,5 +1,8 @@
 package au.gov.vic.ecodev.mrt;
 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,11 +12,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import au.gov.vic.ecodev.mrt.config.TemplateWebPropertiesConfig;
+import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDataRetrieverHelper;
+import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropertiesPopulator;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.HeaderMappingHelper;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.PropertyHeaderMappingHelper;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.InvalidSessionIdFilter;
-import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XFrameOptionsFilter;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XContentTypeOptionFilter;
+import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XFrameOptionsFilter;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XssProtectionHeaderFilter;
 
 @SpringBootApplication
@@ -21,9 +26,24 @@ import au.gov.vic.ecodev.mrt.web.repository.rest.filter.XssProtectionHeaderFilte
 @ComponentScan(basePackages = {"au.gov.vic.ecodev"})
 public class AppConfig {
 	
+	@Autowired
+	private DatabaseConfig databaseConfig;
+	
+	@Autowired
+	private TemplateDataRetrieverHelper templateDataRetrieverHelper;
+	
 	@Bean
 	public TemplateWebPropertiesConfig templateWebPropertiesConfig() {
 		return new TemplateWebPropertiesConfig();
+	}
+	
+	@Bean
+	public TemplateDisplayPropertiesPopulator templateDisplayPropertiesPopulator() {
+		Map<String, String> dataRetrieverMap = templateDataRetrieverHelper.getDataRetrieverClassMap();
+		TemplateDisplayPropertiesPopulator templateDisplayPropertiesPopulator = 
+				new TemplateDisplayPropertiesPopulator(databaseConfig.getJdbcTemplate(),
+						dataRetrieverMap);
+		return templateDisplayPropertiesPopulator;
 	}
 	
 	@Bean

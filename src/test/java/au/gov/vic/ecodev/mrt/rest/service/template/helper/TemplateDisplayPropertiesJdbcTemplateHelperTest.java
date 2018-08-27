@@ -69,6 +69,21 @@ public class TemplateDisplayPropertiesJdbcTemplateHelperTest {
 	}
 	
 	@Test
+	public void shouldReturnMrtTemplateRetrieverClasses() {
+		//Given
+		TemplateDisplayPropertiesJdbcTemplateHelper testInstance = new TemplateDisplayPropertiesJdbcTemplateHelper(jdbcTemplate);
+		//When
+		List<Map<String, Object>> result = testInstance.getTemplateRetrieverClasses();
+		//Then
+		assertThat(result, is(notNullValue()));
+		assertThat(result.size(), is(equalTo(2)));
+		Map<String, Object> map = result.get(0);
+		assertThat(map.size(), is(equalTo(2)));
+		assertThat(map.get("TEMPLATE"), is(equalTo("MRT")));
+		assertThat(map.get("TEMPLATE_RETRIEVER"), is(equalTo("{\"SL4\":\"au.gov.vic.ecodev.mrt.rest.service.template.retriever.mrt.MrtTemplateDataRetriever\",\"DS4\":\"au.gov.vic.ecodev.mrt.rest.service.template.retriever.mrt.MrtTemplateDataRetriever\",\"DL4\":\"au.gov.vic.ecodev.mrt.rest.service.template.retriever.mrt.MrtTemplateDataRetriever\",\"DG4\":\"au.gov.vic.ecodev.mrt.rest.service.template.retriever.mrt.MrtTemplateDataRetriever\",\"SG4\":\"au.gov.vic.ecodev.mrt.rest.service.template.retriever.mrt.MrtTemplateDataRetriever\"}")));
+	}
+	
+	@Test
 	public void shouldReturnInstance() {
 		//Given
 		//When

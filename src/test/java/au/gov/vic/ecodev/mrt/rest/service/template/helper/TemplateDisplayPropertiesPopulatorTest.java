@@ -46,7 +46,7 @@ public class TemplateDisplayPropertiesPopulatorTest {
 		Map<String, Object> classFieldMap = getClassFieldMap();
 		Map<String, Object> headerMap = getHeaderMap();
 		//When
-		testInstance.doPopulation(resultMap, classesList, classFieldMap, headerMap, 1l);
+		testInstance.doPopulation("MRT", resultMap, classesList, classFieldMap, headerMap, 1l);
 		//Then
 		assertThat(resultMap.isEmpty(), is(false));
 		assertThat(resultMap.size(), is(equalTo(2)));
@@ -61,7 +61,7 @@ public class TemplateDisplayPropertiesPopulatorTest {
 		Map<String, Object> classFieldMap = getClassFieldMap();
 		Map<String, Object> headerMap = getHeaderMap();
 		//When
-		testInstance.doPopulation(resultMap, classesList, classFieldMap, headerMap, 12l);
+		testInstance.doPopulation("MRT", resultMap, classesList, classFieldMap, headerMap, 12l);
 		//Then
 		assertThat(resultMap.isEmpty(), is(false));
 		assertThat(resultMap.size(), is(equalTo(3)));
@@ -78,7 +78,7 @@ public class TemplateDisplayPropertiesPopulatorTest {
 		Map<String, Object> classFieldMap = getClassFieldMap();
 		Map<String, Object> headerMap = getHeaderMap();
 		//When
-		testInstance.doPopulation(resultMap, classesList, classFieldMap, headerMap, 1l);
+		testInstance.doPopulation("mrt", resultMap, classesList, classFieldMap, headerMap, 1l);
 		//Then
 		assertThat(resultMap.isEmpty(), is(false));
 		assertThat(resultMap.size(), is(equalTo(4)));
@@ -101,7 +101,7 @@ public class TemplateDisplayPropertiesPopulatorTest {
 		//Given
 		JdbcTemplate jdbcTemplate = null;
 		//When
-		new TemplateDisplayPropertiesPopulator(jdbcTemplate);
+		new TemplateDisplayPropertiesPopulator(jdbcTemplate, null);
 		fail("Program reached unexpected point!");
 	}
 	

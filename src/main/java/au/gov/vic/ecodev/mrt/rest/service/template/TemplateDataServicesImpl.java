@@ -229,7 +229,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 				List<String> classesList = templateClassesListHelper
 						.getTemplateClassesList(template);
 				templateDisplayPropertiesPopulator
-					.doPopulation(resultMap, classesList, templateFieldMap, 
+					.doPopulation(template, resultMap, classesList, templateFieldMap, 
 							templateHeaderMap, Long.parseLong(batchId));
 			}
 		}

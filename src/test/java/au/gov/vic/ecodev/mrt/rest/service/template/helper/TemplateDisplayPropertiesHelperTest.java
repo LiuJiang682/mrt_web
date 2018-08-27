@@ -48,6 +48,17 @@ public class TemplateDisplayPropertiesHelperTest {
 	}
 	
 	@Test
+	public void shouldReturnVgpHydroHeaderMap() throws Exception {
+		//Given
+		String template = "VGPHYDRO";
+		//When
+		Map<String, Object> results = testInstance.getTemplateHeaders(template);
+		//Then
+		assertThat(results, is(notNullValue()));
+		assertThat(results.size(), is(equalTo(0)));
+	}
+	
+	@Test
 	public void shouldReturnInstance() {
 		//Given
 		//When

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import au.gov.vic.ecodev.mrt.common.Constants.Numeral;
@@ -14,7 +13,7 @@ import au.gov.vic.ecodev.mrt.common.Constants.Strings;
 
 public class TemplateOptionalFieldsRetriever {
 
-	private static final Logger LOGGER = Logger.getLogger(TemplateOptionalFieldsRetriever.class);
+	// private static final Logger LOGGER = Logger.getLogger(TemplateOptionalFieldsRetriever.class);
 	
 	private static final String FIELD_VALUE = "FIELD_VALUE";
 	private static final String TEMPLATE_HEADER = "TEMPLATE_HEADER";
@@ -31,7 +30,8 @@ public class TemplateOptionalFieldsRetriever {
 	public void extractOptionalFields(final Map<String, List<Map<String, Object>>> resultMap, 
 			final Map<String, Object> templateHeadersMap, final int mandatoryColumnCount,
 			final long batchId, final String template) {
-		Map<String, Boolean> headers = extractHeaderList(templateHeadersMap, template);
+		Map<String, Boolean> headers = new TemplateHeaderConfigMapHelper(templateHeadersMap, 
+				template).getHeaderConfig();
 		int headerLen = headers.size();
 		doHeaderDataExtraction(resultMap, mandatoryColumnCount, batchId, template, headers);
 		List<Map<String, Object>> optionalFields = 
@@ -125,20 +125,6 @@ public class TemplateOptionalFieldsRetriever {
 		Map<String, Object> headers = headerList.get(Numeral.ZERO);
 		String headerTitle = (String) headers.get(columnNumber);
 		return headerTitle;
-	}
-
-	protected final Map<String, Boolean> extractHeaderList(final Map<String, Object> templateHeadersMap,
-			final String templateName) {
-		Object object = templateHeadersMap.get(templateName);
-		String headerString = (String) object;
-		String[] headers = headerString.split(Strings.COMMA);
-		Map<String, Boolean> headerConfigMap = new HashMap<>();
-		for (String header : headers) {
-			String[] headerConfig = header.split(Strings.HYPEN);
-			headerConfigMap.put(headerConfig[Numeral.ZERO], 
-					Boolean.valueOf(headerConfig[Numeral.ONE]));
-		}
-		return headerConfigMap;
 	}
 
 }
