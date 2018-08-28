@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public class TemplateDisplayPropertiesJdbcTemplateHelper {
 
+	private static final String SELECT_HEADERS_SQL = "SELECT TEMPLATE, HEADER_FIELDS FROM TEMPLATE_DISPLAY_PROPERTIES";
 	private static final String SELECT_TEMPLATE_RETRIEVER_SQL = "SELECT TEMPLATE, TEMPLATE_RETRIEVER FROM TEMPLATE_DISPLAY_PROPERTIES";
 	private static final String SQL_WHERE_CAUSE = " WHERE LOADER_ID = ?";
 	private static final String SQL_FROM = " FROM ";
@@ -44,5 +45,9 @@ public class TemplateDisplayPropertiesJdbcTemplateHelper {
 	
 	public List<Map<String, Object>> getTemplateRetrieverClasses() {
 		return jdbcTemplate.queryForList(SELECT_TEMPLATE_RETRIEVER_SQL);
+	}
+	
+	public List<Map<String, Object>> getTemplateHeaders() {
+		return jdbcTemplate.queryForList(SELECT_HEADERS_SQL);
 	}
 }

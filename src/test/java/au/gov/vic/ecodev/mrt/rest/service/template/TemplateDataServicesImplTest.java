@@ -30,7 +30,7 @@ public class TemplateDataServicesImplTest {
 	@Test
 	public void shouldReturnAllTemplateData() throws Exception {
 		//Given
-		String batchId = "100";
+		long batchId = 100l;
 		//When
 		Map<String, Map<String, List<Map<String, Object>>>> results = testInstance.getAllTemplateData(batchId);
 		//Then
@@ -53,7 +53,7 @@ public class TemplateDataServicesImplTest {
 	@Test
 	public void shouldGroupDataByTemplate() throws Exception {
 		//Given
-		Map<String, List<Map<String, Object>>> results = testInstance.retrieveDisplayData("100");
+		Map<String, List<Map<String, Object>>> results = testInstance.retrieveDisplayData(100l);
 		//When
 		Map<String, Map<String, List<Map<String, Object>>>> groupedMap = testInstance.groupRecordsByTemplate(results);
 		//Then

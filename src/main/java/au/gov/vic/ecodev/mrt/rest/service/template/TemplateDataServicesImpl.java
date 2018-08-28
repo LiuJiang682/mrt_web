@@ -46,7 +46,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	private HeaderMappingHelper headerMappingHeader;
 			
 	@Override
-	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(String batchId) throws Exception {
+	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(long batchId) throws Exception {
 		LOGGER.info("TemplateDataServicesImpl.getAllTemplateData -- batchId: " + batchId);
 		Map<String, List<Map<String, Object>>> resultMap = this.retrieveDisplayData(batchId);
 		return groupRecordsByTemplate(resultMap);
@@ -214,9 +214,9 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 		return templateAndRows;
 	}
 
-	protected final Map<String, List<Map<String, Object>>> retrieveDisplayData(String batchId) throws Exception {
+	protected final Map<String, List<Map<String, Object>>> retrieveDisplayData(long batchId) throws Exception {
 		SessionHeader sessionHeader = (SessionHeader) sessionHeaderDao
-				.get(Long.parseLong(batchId));
+				.get(batchId);
 		Map<String, List<Map<String, Object>>> resultMap = new HashMap<>();
 		if (null != sessionHeader) {
 			String templates = sessionHeader.getTemplate().toUpperCase();
@@ -224,13 +224,11 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 			for(String template : templateList) {
 				Map<String, Object> templateFieldMap = templateDisplayPropertiesHelper
 						.getTemplateDisplayProperties(template);
-				Map<String, Object> templateHeaderMap = templateDisplayPropertiesHelper
-						.getTemplateHeaders(template);
 				List<String> classesList = templateClassesListHelper
 						.getTemplateClassesList(template);
 				templateDisplayPropertiesPopulator
 					.doPopulation(template, resultMap, classesList, templateFieldMap, 
-							templateHeaderMap, Long.parseLong(batchId));
+							batchId);
 			}
 		}
 		return resultMap;

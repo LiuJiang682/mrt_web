@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface TemplateDataServices {
 
-	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(final String batchId) throws Exception;
+	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(final long batchId) throws Exception;
 
 	public List<String> getSingleTemplateData(final String templateName, final String batchId);
 }

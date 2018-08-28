@@ -11,7 +11,7 @@ public interface TemplateDataRetriever {
 	
 	void setResultMap(final Map<String, List<Map<String, Object>>> resultMap);
 	void setTemplateFieldMap(final Map<String, Object> templateFieldMap);
-	void setTemplateHeaderMap(final Map<String, Object> templateHeadersMap);
+	void setTemplateHeaderMap(final Map<String, Boolean> templateHeadersMap);
 	void setTemplateName(final String templateName);
 	void setSessionId(final long sessionId);
 	void setJdbcTemplate(final JdbcTemplate jdbcTemplate);

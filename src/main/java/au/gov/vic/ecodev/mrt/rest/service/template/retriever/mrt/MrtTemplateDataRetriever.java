@@ -20,7 +20,7 @@ public class MrtTemplateDataRetriever implements TemplateDataRetriever {
 	private JdbcTemplate jdbcTemplate;
 	private Map<String, List<Map<String, Object>>> resultMap;
 	private Map<String, Object> templateFieldMap;
-	private Map<String, Object> templateHeadersMap;
+	private Map<String, Boolean> templateHeadersMap;
 	private String templateName;
 	private long sessionId;
 
@@ -58,7 +58,7 @@ public class MrtTemplateDataRetriever implements TemplateDataRetriever {
 	}
 
 	@Override
-	public void setTemplateHeaderMap(Map<String, Object> templateHeadersMap) {
+	public void setTemplateHeaderMap(Map<String, Boolean> templateHeadersMap) {
 		this.templateHeadersMap = templateHeadersMap;
 	}
 

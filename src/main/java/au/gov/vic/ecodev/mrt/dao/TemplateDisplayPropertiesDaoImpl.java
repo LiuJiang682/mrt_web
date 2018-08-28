@@ -24,9 +24,7 @@ public class TemplateDisplayPropertiesDaoImpl implements TemplateDisplayProperti
 	@Override
 	public String getTemplateHeaders(String template) {
 		String headers = jdbcTemplate.queryForObject(SELECT_HEADER_SQL, 
-				String.class, new Object[] {template});
+				String.class, new Object[] {template.toUpperCase()});
 		return headers;
 	}
-
-	
 }

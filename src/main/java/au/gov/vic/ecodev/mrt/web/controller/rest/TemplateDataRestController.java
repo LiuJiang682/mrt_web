@@ -23,7 +23,7 @@ public class TemplateDataRestController {
 	
 	@CrossOrigin(origins = "http://localhost:8090")
 	@RequestMapping("/template/{batchId}")
-	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(@PathVariable String batchId) throws Exception {
+	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(@PathVariable long batchId) throws Exception {
 		LOGGER.info("TemplateDataRestController.getAllTemplateData -- batchId: " + batchId);
 		return templateDataServices.getAllTemplateData(batchId);
 	}

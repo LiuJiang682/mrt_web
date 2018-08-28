@@ -28,12 +28,10 @@ public class TemplateOptionalFieldsRetriever {
 	}
 
 	public void extractOptionalFields(final Map<String, List<Map<String, Object>>> resultMap, 
-			final Map<String, Object> templateHeadersMap, final int mandatoryColumnCount,
+			final Map<String, Boolean> templateHeadersMap, final int mandatoryColumnCount,
 			final long batchId, final String template) {
-		Map<String, Boolean> headers = new TemplateHeaderConfigMapHelper(templateHeadersMap, 
-				template).getHeaderConfig();
-		int headerLen = headers.size();
-		doHeaderDataExtraction(resultMap, mandatoryColumnCount, batchId, template, headers);
+		int headerLen = templateHeadersMap.size();
+		doHeaderDataExtraction(resultMap, mandatoryColumnCount, batchId, template, templateHeadersMap);
 		List<Map<String, Object>> optionalFields = 
 				new TemplateOptionalFieldsJdbcTemplateRetriever(jdbcTemplate)
 				.getList(template, batchId, headerLen);
