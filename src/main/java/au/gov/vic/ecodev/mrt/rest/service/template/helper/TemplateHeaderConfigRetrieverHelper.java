@@ -20,6 +20,8 @@ public class TemplateHeaderConfigRetrieverHelper {
 
 	private static final Logger LOGGER = Logger.getLogger(TemplateHeaderConfigRetrieverHelper.class);
 	
+	private static final String HEADER_FIELDS = "HEADER_FIELDS";
+
 	private final JdbcTemplate jdbcTemplate;
 	
 	@Autowired
@@ -39,8 +41,8 @@ public class TemplateHeaderConfigRetrieverHelper {
 				new HashMap<>();
 		configList.stream()
 			.forEach(map -> {
-				String template = (String) map.get("TEMPLATE");
-				String headerConfig = (String) map.get("HEADER_FIELDS");
+				String template = (String) map.get(Strings.TEMPLATE);
+				String headerConfig = (String) map.get(HEADER_FIELDS);
 				try {
 					@SuppressWarnings("unchecked")
 					Map<String, Object> resultMap = new ObjectMapper().readValue(headerConfig, 

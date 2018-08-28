@@ -15,6 +15,7 @@ public interface Constants {
 		static final String ZERO = "0";
 		static final String HYPEN = "-";
 		static final String HEADERS_SUFFIX = "_Headers";
+		static final String TEMPLATE = "TEMPLATE";
 	}
 	
 	interface Numeral {

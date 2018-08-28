@@ -13,7 +13,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 import au.gov.vic.ecodev.mrt.config.TemplateWebPropertiesConfig;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDataRetrieverHelper;
+import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropertiesHelper;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropertiesPopulator;
+import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateHeaderConfigRetrieverHelper;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.HeaderMappingHelper;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.PropertyHeaderMappingHelper;
 import au.gov.vic.ecodev.mrt.web.repository.rest.filter.InvalidSessionIdFilter;
@@ -32,6 +34,12 @@ public class AppConfig {
 	@Autowired
 	private TemplateDataRetrieverHelper templateDataRetrieverHelper;
 	
+	@Autowired
+	private TemplateDisplayPropertiesHelper templateDisplayPropertiesHelper;
+	
+	@Autowired
+	private TemplateHeaderConfigRetrieverHelper templateHeaderConfigRetrieverHelper;
+	
 	@Bean
 	public TemplateWebPropertiesConfig templateWebPropertiesConfig() {
 		return new TemplateWebPropertiesConfig();
@@ -40,9 +48,13 @@ public class AppConfig {
 	@Bean
 	public TemplateDisplayPropertiesPopulator templateDisplayPropertiesPopulator() {
 		Map<String, String> dataRetrieverMap = templateDataRetrieverHelper.getDataRetrieverClassMap();
+		Map<String, Map<String, Map<String, Boolean>>> templateHeaderConfigMap = 
+				templateHeaderConfigRetrieverHelper.getTemplateHeaderConfigMap();
 		TemplateDisplayPropertiesPopulator templateDisplayPropertiesPopulator = 
 				new TemplateDisplayPropertiesPopulator(databaseConfig.getJdbcTemplate(),
-						dataRetrieverMap);
+						dataRetrieverMap,
+						templateHeaderConfigMap,
+						templateDisplayPropertiesHelper);
 		return templateDisplayPropertiesPopulator;
 	}
 	

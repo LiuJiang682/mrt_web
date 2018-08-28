@@ -19,8 +19,6 @@ public class TemplateDataRetrieverHelper {
 	
 	private static final Logger LOGGER = Logger.getLogger(TemplateDataRetrieverHelper.class);
 
-	private static final String TEMPLATE = "TEMPLATE";
-
 	private static final String TEMPLATE_RETRIEVER = "TEMPLATE_RETRIEVER";
 
 	private final JdbcTemplate jdbcTemplate;
@@ -40,7 +38,7 @@ public class TemplateDataRetrieverHelper {
 				templateDisplayPropertiesJdbcTemplateHelper.getTemplateRetrieverClasses();
 		Map<String, String> dataRetrieverClassMap = new HashMap<>();
 		templateRetrieverList.forEach(map -> {
-			String template = (String) map.get(TEMPLATE);
+			String template = (String) map.get(Strings.TEMPLATE);
 			String classList = (String) map.get(TEMPLATE_RETRIEVER);
 			try {
 				@SuppressWarnings("unchecked")
