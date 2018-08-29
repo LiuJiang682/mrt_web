@@ -51,4 +51,8 @@ public class PropertyHeaderMappingHelper implements HeaderMappingHelper {
 		return dataMap;
 	}
 
+	public String getPropertyString() {
+		return propertyString;
+	}
+
 }

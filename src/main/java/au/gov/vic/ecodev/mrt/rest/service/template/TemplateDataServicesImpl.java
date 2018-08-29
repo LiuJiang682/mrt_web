@@ -48,7 +48,7 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 	@Override
 	public Map<String, Map<String, List<Map<String, Object>>>> getAllTemplateData(long batchId) throws Exception {
 		LOGGER.info("TemplateDataServicesImpl.getAllTemplateData -- batchId: " + batchId);
-		Map<String, List<Map<String, Object>>> resultMap = this.retrieveDisplayData(batchId);
+		Map<String, List<Map<String, Object>>> resultMap = retrieveDisplayData(batchId);
 		return groupRecordsByTemplate(resultMap);
 	}
 
@@ -148,7 +148,6 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 			displayMap.put(dataKey, correctTitleMap);
 		};
 		dataMap.forEach(titleConsumer);
-
 		return displayMap;
 	}
 

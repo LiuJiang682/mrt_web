@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,30 +26,6 @@ public class TemplateOptionalFieldsJdbcTemplateRetrieverTest {
 	private JdbcTemplate jdbcTemplate;
 	
 	private TemplateOptionalFieldsJdbcTemplateRetriever testInstance;
-	
-	@Test
-	public void shouldReturnListOfOptionalFields() {
-		//Given
-		givenTestInstance();
-		String template = "SL4";
-		long batchId = 1l;
-		//When
-		List<Map<String, Object>> optionalFields = testInstance.getList(template, batchId, 3);
-		//Then
-		assertThat(CollectionUtils.isEmpty(optionalFields), is(false));
-	}
-	
-	@Test
-	public void shouldReturnListOfHeaderDataFields() {
-		//Given
-		givenTestInstance();
-		String template = "SL4";
-		long batchId = 1l;
-		//When
-		List<Map<String, Object>> optionalFields = testInstance.getHeaderData(template, batchId, 3);
-		//Then
-		assertThat(CollectionUtils.isEmpty(optionalFields), is(false));
-	}
 	
 	@Test
 	public void shouldReturnListOfHeaders() {

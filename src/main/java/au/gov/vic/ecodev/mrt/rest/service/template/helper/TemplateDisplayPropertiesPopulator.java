@@ -68,7 +68,6 @@ public class TemplateDisplayPropertiesPopulator {
 		templateDataRetriever.setTemplateName(templateName);
 		templateDataRetriever.setSessionId(batchId);
 		templateDataRetriever.doDataRetrieve();
-		
 	}
 
 	protected final TemplateDataRetriever getTemplateDataRetriever(final String parentTemplate,

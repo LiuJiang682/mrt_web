@@ -44,7 +44,6 @@ public class MrtTemplateDataRetriever implements TemplateDataRetriever {
 			LOGGER.error(e.getMessage(), e);
 			resultMap.put(templateName, null);
 		}
-
 	}
 
 	@Override
