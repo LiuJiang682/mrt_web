@@ -3,7 +3,7 @@ const merge = require('webpack-merge');
 const webpack = require('webpack');
 
 const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || 8090;
+const PORT = process.env.PORT || 8095;
 
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
