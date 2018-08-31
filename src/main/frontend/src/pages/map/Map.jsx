@@ -24,8 +24,8 @@ export default class Map extends Component {
             <div>
                 <h2>Map for Batch: <Link to={"/logs/" + linkId}>{this.state.batchId}</Link>&ensp;Tenement: {this.state.tenement}</h2>
                 <div id='map'>{this.state.map}</div>
-                <div id="popup" class="ol-popup">
-                	<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup" className="ol-popup">
+                	<a href="#" id="popup-closer" className="ol-popup-closer"></a>
                 	<div id="popup-content"></div>
               </div>
             </div>

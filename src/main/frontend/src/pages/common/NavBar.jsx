@@ -10,7 +10,7 @@ export default class NavBar extends Component {
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
                             {/* TODO: fix the activeClassName not working */}
-                            <li><Link to="/" activeClassName="active">Session Summary</Link></li>
+                            <li><Link to="/" className="active">Session Summary</Link></li>
                             {/* <li><Link to="/logs" activeClassName="active">Logs</Link></li> */}
                             {/* <li><Link to="errors" activeClassName="active">Errors</Link></li> */}
                         </ul>
