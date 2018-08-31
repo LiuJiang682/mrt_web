@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -51,14 +50,13 @@ public class TemplateMandatoryFieldsExtractionHelper {
 				new TemplateDisplayPropertiesJdbcTemplateHelper(jdbcTemplate); 
 		List<Map<String, Object>> results = templateDisplayPropertiesJdbcTemplateHelper
 				.getList(element.getKey(), fieldString, batchId);
-		AtomicInteger counter = new AtomicInteger();
 		results.stream().forEach(result -> {
-			doValuePopulation(resultMap, cls, counter, result);
+			doValuePopulation(resultMap, cls, result);
 		});
 	}
 
 	protected final void doValuePopulation(Map<String, List<Map<String, Object>>> resultMap, String cls,
-			AtomicInteger counter, Map<String, Object> result) {
+			Map<String, Object> result) {
 		String fileName = (String) result.get(Strings.FILE_NAME);
 		String rowNumber = (String) result.get(COLUMN_ROW_NUMBER);
 		String currentKey = new StringBuilder(cls)

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections4.MapUtils;
 import org.junit.Test;
@@ -86,14 +85,13 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		Map<String, List<Map<String, Object>>> resultMap = new HashMap<>();
 		assertThat(resultMap.size(), is(equalTo(0)));
 		String cls = "SL4";
-		AtomicInteger counter = new AtomicInteger();
 		Map<String, Object> result = new HashMap<>();
 		result.put("LOADER_ID", "123456");
 		result.put("SITE_ID", "ARD001");
 		result.put("FILE_NAME", "myTest.txt");
 		result.put("ROW_NUMBER", "1");
 		//When
-		testInstance.doValuePopulation(resultMap, cls, counter, result);
+		testInstance.doValuePopulation(resultMap, cls, result);
 		//Then
 		assertThat(resultMap.size(), is(equalTo(1)));
 		List<Map<String, Object>> dataList = resultMap.get("SL4_myTest.txt_D1");
@@ -108,7 +106,6 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		Map<String, List<Map<String, Object>>> resultMap = new HashMap<>();
 		assertThat(resultMap.size(), is(equalTo(0)));
 		String cls = "SL4";
-		AtomicInteger counter = new AtomicInteger();
 		Map<String, Object> result = new HashMap<>();
 		result.put("LOADER_ID", "123456");
 		result.put("SITE_ID", "ARD001");
@@ -122,7 +119,7 @@ public class TemplateMandatoryFieldsExtractionHelperTest {
 		result1.put("FILE_NAME", "myTest.txt");
 		result1.put("ROW_NUMBER", "1");
 		//When
-		testInstance.doValuePopulation(resultMap, cls, counter, result1);
+		testInstance.doValuePopulation(resultMap, cls, result1);
 		//Then
 		assertThat(resultMap.size(), is(equalTo(1)));
 		List<Map<String, Object>> retrievedDataList = resultMap.get("SL4_myTest.txt_D1");
