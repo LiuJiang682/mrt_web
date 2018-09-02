@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ReportTemplate from './ReportTemplate';
 
 import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
+import { error } from "util";
 
 export default class Errors extends Component {
     constructor(props) {
@@ -38,7 +39,8 @@ export default class Errors extends Component {
                 this.setState({
                     records: records
                 });
-            });
+            })
+            .catch(error => alert(error));
     }
     render() {
         return (

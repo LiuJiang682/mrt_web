@@ -4,6 +4,7 @@ import SearchBar from '../common/SearchBar'
 import SessionTable from './SessionTable'
 
 import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants'
+import { error } from 'util';
 
 // import serverUrl from 'Config'
 
@@ -68,7 +69,8 @@ export default class SessionSummary extends Component {
                     sessions: newSessions,
                     disableButton: true,
                 });
-            });
+            })
+            .catch(error => alert(error));
     }
 
     handleSearchTextChange(searchText) {
@@ -184,7 +186,8 @@ export default class SessionSummary extends Component {
                                         totalItemsCount: data.page.totalElements,
                                         currentPage: ++data.page.number,
                                     });
-                                });
+                                })
+                                .catch(error => alert(error));
          
                              this.setState({
                                 sessions: newSessions,
@@ -224,7 +227,8 @@ export default class SessionSummary extends Component {
                     currentPage: pageNo,
                     disableButton: false,
                 });
-            });
+            })
+            .catch(error => alert(error));
          
         this.setState({
             searchText: '',
@@ -276,6 +280,9 @@ export default class SessionSummary extends Component {
                     totalItemsCount: data.page.totalElements,
                     currentPage: ++data.page.number,
                 });
+            })
+            .catch(error => {
+                alert(error);
             });
          
          this.setState({

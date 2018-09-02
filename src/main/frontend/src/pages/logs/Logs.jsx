@@ -60,7 +60,8 @@ class Logs extends Component {
                     const errorMessage = response.status + ' ' + response.statusText + ' ' + response.body;
                     throw new Error(errorMessage);
                 } 
-            });
+            })
+            .catch(error => alert(error));
     }
 
     componentWillMount() {
@@ -110,10 +111,8 @@ class Logs extends Component {
                 } else {
                     console.log('No fileLogs!');
                 }
-            }).catch(function(error) {
-                console.log(error);
-            });
-            
+            })
+            .catch(error => alert(error));            
     }
 
     render() {

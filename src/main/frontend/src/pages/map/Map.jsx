@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ol from "openlayers";
 import Proj4 from "proj4";
 import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
+import { error } from "util";
 
 export default class Map extends Component {
     constructor(props) {
@@ -167,7 +168,8 @@ export default class Map extends Component {
                             });
                             vectorSource.addFeature(wfsF);
                         }
-                    });
+                    })
+                    .catch(error => alert(error));
                 }
             }
         });
@@ -201,7 +203,8 @@ export default class Map extends Component {
                     iconFeature.setStyle(boreHoleMarkerStyle);
                     markerSource.addFeature(iconFeature);
                 }    
-            });
+            })
+            .catch(error => alert(error));
 
         const samples = [];
         const sampleUrl = 'http://' + this.state.host + ':' + this.state.port + '/surfaceGeochemistry/search/get?sessionId=' + tenement[0];    
@@ -230,7 +233,8 @@ export default class Map extends Component {
                     sampleIconFeature.setStyle(sampleMarkerStyle);
                     markerSource.addFeature(sampleIconFeature);
                 }
-            });
+            })
+            .catch(error => alert(error));
 
         var tenementVector = new ol.layer.Vector({
             name: 'tenement',

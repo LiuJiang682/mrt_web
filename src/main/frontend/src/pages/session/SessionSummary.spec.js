@@ -11,7 +11,15 @@ import { Session } from 'inspector';
 
 Enzyme.configure({ adapter: new ReactSixteenAdapter() });
 
+
 describe('SessionSummary', () => {
+    let alertStub;
+    beforeEach(() => {
+        alertStub = sinon.stub(global, 'alert');
+    });
+    afterEach(() => {
+        alertStub.restore();
+    });
     describe('render', () => {
         it('should render searchBar', () => {
             const wrapper = shallow(<SessionSummary />);
@@ -112,7 +120,7 @@ describe('SessionSummary', () => {
     describe('handleButtonClicked', () => {
         it('should alert user unknown command', () => {
             const wrapper = shallow(<SessionSummary />);
-            const alertStub = sinon.stub(global, 'alert');
+            // const alertStub = sinon.stub(global, 'alert');
             alertStub.returns(true);
             wrapper.instance().handleButtonClicked('abc');
             expect(alertStub.calledOnce).to.equal(true);
@@ -120,7 +128,7 @@ describe('SessionSummary', () => {
         });
         it('should alert user no selected file with approve command', () => {
             const wrapper = shallow(<SessionSummary />);
-            const alertStub = sinon.stub(global, 'alert');
+            // const alertStub = sinon.stub(global, 'alert');
             alertStub.returns(true);
             wrapper.instance().handleButtonClicked('approve');
             expect(alertStub.calledOnce).to.equal(true);
@@ -128,7 +136,7 @@ describe('SessionSummary', () => {
         });
         it('should alert user no selected file with approve command', () => {
             const wrapper = shallow(<SessionSummary />);
-            const alertStub = sinon.stub(global, 'alert');
+            // const alertStub = sinon.stub(global, 'alert');
             alertStub.returns(true);
             wrapper.instance().handleButtonClicked('reject');
             expect(alertStub.calledOnce).to.equal(true);
