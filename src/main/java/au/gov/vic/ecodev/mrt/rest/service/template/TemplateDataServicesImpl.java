@@ -22,6 +22,7 @@ import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateClassesListHel
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropertiesHelper;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.TemplateDisplayPropertiesPopulator;
 import au.gov.vic.ecodev.mrt.rest.service.template.helper.headers.HeaderMappingHelper;
+import au.gov.vic.ecodev.utils.strings.StringToUniqueListHelper;
 
 @Service
 public class TemplateDataServicesImpl implements TemplateDataServices {
@@ -219,7 +220,8 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 		Map<String, List<Map<String, Object>>> resultMap = new HashMap<>();
 		if (null != sessionHeader) {
 			String templates = sessionHeader.getTemplate().toUpperCase();
-			List<String> templateList = extractUniqueTemplate(templates);
+			List<String> templateList = StringToUniqueListHelper
+					.extractUniqueTemplate(templates);
 			for(String template : templateList) {
 				Map<String, Object> templateFieldMap = templateDisplayPropertiesHelper
 						.getTemplateDisplayProperties(template);
@@ -231,17 +233,6 @@ public class TemplateDataServicesImpl implements TemplateDataServices {
 			}
 		}
 		return resultMap;
-	}
-
-	protected final List<String> extractUniqueTemplate(String templates) {
-		if (StringUtils.isEmpty(templates)) {
-			throw new IllegalArgumentException("TemplateDataServicesImpl.extractUniqueTemplate -- templates parameter cannot be null!");
-		}
-		String[] templateArray = templates.split(Strings.COMMA);
-		String[] distinctTemplates = Arrays.stream(templateArray)
-				.distinct()
-				.toArray(String[]::new);
-		return Arrays.asList(distinctTemplates);
 	}
 
 	@Override

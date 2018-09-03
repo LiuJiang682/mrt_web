@@ -4,7 +4,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.Map;
@@ -36,18 +35,6 @@ public class TemplateDataServicesImplTest {
 		//Then
 		assertThat(results, is(notNullValue()));
 		assertThat(results.isEmpty(), is(false));
-	}
-	
-	@Test
-	public void shouldExtractUniqueTemplate() {
-		//Given
-		String templates = "MRT,MRT";
-		//When
-		List<String> templateList = testInstance.extractUniqueTemplate(templates);
-		//Then
-		assertThat(templateList, is(notNullValue()));
-		assertThat(templateList.size(), is(equalTo(1)));
-		assertThat(templateList.get(0), is(equalTo("MRT")));
 	}
 	
 	@Test
@@ -86,15 +73,6 @@ public class TemplateDataServicesImplTest {
 		assertThat(templateAndRow[0], is(equalTo("SL4")));
 		assertThat(templateAndRow[1], is(equalTo("EL5478_201702_0c_Collar.txt")));
 		assertThat(templateAndRow[2], is(equalTo("D1")));
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldRaiseExceptionWhenCalledExtractUniqueTemplateWithNullTemplates() {
-		//Given
-		String templates = null;
-		//When
-		testInstance.extractUniqueTemplate(templates);
-		fail("Program reached unexpected point!");
 	}
 	
 	@Test
