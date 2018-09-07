@@ -7,3 +7,4 @@ export const CORS_HEADERS = new Headers({
 
 export const SERVER_HOST = process.env.host;
 export const SERVER_PORT = process.env.port;
+export const CONTEXT_PATH = process.env.CONTEXT_PATH || 'tloader';

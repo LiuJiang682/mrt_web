@@ -7,6 +7,7 @@ import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoC
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -43,6 +44,13 @@ public class AppConfig {
 	@Bean
 	public TemplateWebPropertiesConfig templateWebPropertiesConfig() {
 		return new TemplateWebPropertiesConfig();
+	}
+	
+	@Bean
+	public EmbeddedServletContainerCustomizer
+	  embeddedServletContainerCustomizer() {
+		String contextPath = templateWebPropertiesConfig().getContextPath();
+	    return container -> container.setContextPath(contextPath);
 	}
 	
 	@Bean

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import { CONTEXT_PATH } from '../common/Constants'
 
 export default class SessionRow extends Component {
     constructor(props) {
@@ -35,11 +36,11 @@ export default class SessionRow extends Component {
             } else {
                 fileName = session.fileName;
             }   
-        let linkId = session.batchId + ':' + session.tenement;    
+        let linkId = "/" + CONTEXT_PATH + "/map/" + session.batchId + ':' + session.tenement;    
         return (
             <tr className="tr_height">
                 <td className="pos_center">{checkBox}</td>
-                <td className="pos_left_middle"><Link to={"/map/" + linkId}>{session.batchId}</Link></td>
+                <td className="pos_left_middle"><Link to={linkId}>{session.batchId}</Link></td>
                 <td className="pos_left_middle">{fileName}</td>
                 <td className="pos_left_middle">{status}</td>
                 <td className="pos_left_middle">{session.dateRun}</td>

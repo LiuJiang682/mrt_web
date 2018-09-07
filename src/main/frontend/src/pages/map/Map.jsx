@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import ol from "openlayers";
 import Proj4 from "proj4";
-import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS, CONTEXT_PATH} from '../common/Constants';
 import { error } from "util";
 
 export default class Map extends Component {
@@ -15,15 +15,16 @@ export default class Map extends Component {
             center: null,
             host: null,
             port: -1,
+            contextPath: null,
             headers: null,
         }
     }
     render() {
         // console.log(this.props.match.params.id);
-        let linkId = this.state.batchId;
+        let linkId = "/" + this.state.contextPath + "/logs/" + this.state.batchId;
         return (
             <div>
-                <h2>Map for Batch: <Link to={"/logs/" + linkId}>{this.state.batchId}</Link>&ensp;Tenement: {this.state.tenement}</h2>
+                <h2>Map for Batch: <Link to={linkId}>{this.state.batchId}</Link>&ensp;Tenement: {this.state.tenement}</h2>
                 <div id='map'>{this.state.map}</div>
                 <div id="popup" className="ol-popup">
                 	<a href="#" id="popup-closer" className="ol-popup-closer"></a>
@@ -60,6 +61,7 @@ export default class Map extends Component {
             tenement: tenement[1],
             host: SERVER_HOST,
             port: SERVER_PORT,
+            contextPath: CONTEXT_PATH,
             headers: CORS_HEADERS,
         });
         
@@ -176,7 +178,7 @@ export default class Map extends Component {
 
         const markerSource = new ol.source.Vector();
         const boreHoles = [];
-        const siteUrl = 'http://' + this.state.host + ':' + this.state.port + '/site/search/get?sessionId=' + tenement[0];
+        const siteUrl = 'http://' + this.state.host + "/" + this.state.contextPath + '/site/search/get?sessionId=' + tenement[0];
         fetch(siteUrl, {
             headers: this.state.headers
         })
@@ -207,7 +209,7 @@ export default class Map extends Component {
             .catch(error => alert(error));
 
         const samples = [];
-        const sampleUrl = 'http://' + this.state.host + ':' + this.state.port + '/surfaceGeochemistry/search/get?sessionId=' + tenement[0];    
+        const sampleUrl = 'http://' + this.state.host + "/" + this.state.contextPath + '/surfaceGeochemistry/search/get?sessionId=' + tenement[0];    
         fetch(sampleUrl, {
             headers: this.state.headers
         })

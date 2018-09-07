@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import SearchBar from '../common/SearchBar'
 import SessionTable from './SessionTable'
 
-import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants'
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS, CONTEXT_PATH} from '../common/Constants'
 import { error } from 'util';
 
 // import serverUrl from 'Config'
@@ -21,6 +21,7 @@ export default class SessionSummary extends Component {
             disableButton: false,
             host: '',
             port: -1,
+            contextPath: '',
             headers: null,
         };
 
@@ -41,7 +42,7 @@ export default class SessionSummary extends Component {
         }
 
         // const url = "http://localhost:8090/sessionHeader/" + searchText;
-        const url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/" + searchText;
+        const url = "http://" + this.state.host + "/" + this.state.contextPath +  "/sessionHeader/" + searchText;
         const newSessions =[];
         fetch(url, {
 			headers: this.state.headers
@@ -158,7 +159,7 @@ export default class SessionSummary extends Component {
             alert("Please select at least one file before you " + commandString);
         } else {
             // var url = "http://localhost:8090/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
-            const url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
+            const url = "http://" + this.state.host + "/" + this.state.contextPath + "/sessionHeader/search/" + commandString + "?sessionId=" + this.state.selectedBatch.join(",");
             console.log(url);
             fetch(url)
                 .then(
@@ -167,7 +168,7 @@ export default class SessionSummary extends Component {
                             // console.log("Updated");
                             const newSessions =[];
                             // const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
-                            const refreshUrl = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
+                            const refreshUrl = "http://" + this.state.host + "/" + this.state.contextPath + "/sessionHeader/search/display?page=" + this.state.currentPage + "&size=20";
                             fetch(refreshUrl, {
                                 headers: this.state.headers
                             })
@@ -207,7 +208,7 @@ export default class SessionSummary extends Component {
         // console.log(pageNo);
         const newSessions =[];
         // const refreshUrl = "http://localhost:8090/sessionHeader/search/display?page=" + pageNo + "&size=20";
-        const refreshUrl = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/display?page=" + pageNo + "&size=20";
+        const refreshUrl = "http://" + this.state.host + "/" + this.state.contextPath + "/sessionHeader/search/display?page=" + pageNo + "&size=20";
         fetch(refreshUrl, {
 			headers: this.state.headers
 		})
@@ -257,11 +258,12 @@ export default class SessionSummary extends Component {
         this.setState({
             host: SERVER_HOST,
             port: SERVER_PORT,
+            contextPath: CONTEXT_PATH,
             headers: CORS_HEADERS,
         });
 
         // const url = "http://localhost:8090/sessionHeader/search/display?page=0&size=20";
-        const url = "http://" + SERVER_HOST + ":" + SERVER_PORT + "/sessionHeader/search/display?page=0&size=20";
+        const url = "http://" + SERVER_HOST + "/" + CONTEXT_PATH + "/sessionHeader/search/display?page=0&size=20";
         fetch(url, {
 			headers: CORS_HEADERS
 		})

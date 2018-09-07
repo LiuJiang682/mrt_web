@@ -21,11 +21,11 @@ const App = () =>
       <Banner />    
       
       {/* <Route path="/map" component={Map} /> */}
-      <Route path="/map/:id" component={Map} />
+      <Route path="/tloader/map/:id" component={Map} />
       
-      <Route path="/logs/:id" component={Logs} />
-      <Route path="/errors/:id" component={Errors} />
-      <Route exact path="/" component={SessionSummary}/>
+      <Route path="/tloader/logs/:id" component={Logs} />
+      <Route path="/tloader/errors/:id" component={Errors} />
+      <Route exact path="/tloader" component={SessionSummary}/>
     </div>
   </Router>
 

@@ -1,9 +1,12 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 let hostParam;
 let portParam;
+let contextPathParam;
+
 for(const arg of process.argv) {
     if (/^process.env.HOST/.test(arg)) {
         const envHostArray = arg.split("=");
@@ -11,11 +14,15 @@ for(const arg of process.argv) {
     } else if (/^process.env.PORT/.test(arg)) {
         const envPortArray = arg.split("=");
         portParam = envPortArray[1];
+    } else if(/^process.env.CONTEXT_PATH/.test(arg)) {
+    	const envCPArray = arg.split("=");
+    	contextPathParam = envCPArray[1];
     }
 }
 
 const HOST = process.env.HOST || hostParam || 'WDAUD7210FGY.internal.vic.gov.au';
 const PORT = process.env.PORT || portParam || 8090;
+const CONTEXT_PATH = process.env.CONTEXT_PATH || contextPathParam || 'tloader';
 
 const TARGET = process.env.npm_lifecycle_event;
 const PATHS = {
@@ -55,8 +62,18 @@ const common = {
           new webpack.EnvironmentPlugin({
             NODE_ENV: 'production',
             host: HOST,
-            port: PORT
-          })             
+            port: PORT,
+            CONTEXT_PATH: CONTEXT_PATH
+          }),
+          new HtmlWebpackPlugin({
+              template: 'pages/index.html',
+              templateParameters: {
+                  'contextPath': CONTEXT_PATH
+              },
+        	  hash: false,
+              filename: 'index.html',
+              inject: 'body'
+        }),
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.css']

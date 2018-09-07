@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 
 import LogButtonPanel from './LogButtonPanel';
 
-import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS, CONTEXT_PATH} from '../common/Constants';
 
 class Logs extends Component {
     constructor(props) {
@@ -17,6 +17,7 @@ class Logs extends Component {
             fileInfoLogDTOs: [],
             host: null,
             port: -1,
+            contextPath: null,
             headers: null,
         }
         this.handleApprove = this.handleApprove.bind(this);
@@ -26,20 +27,20 @@ class Logs extends Component {
 
     handleApprove() {
         // console.log('handle approve');
-        var url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/approve?sessionId=" + this.state.batchId;
+        var url = "http://" + this.state.host + "/" + this.state.contextPath + "/sessionHeader/search/approve?sessionId=" + this.state.batchId;
         this.updateSession(url);
     }
 
     handleDisplay() {
         // console.log('handle display');
         //Redirect to display error page
-        var url = "/errors/" + this.state.batchId;
+        var url = "/" + this.state.contextPath + "/errors/" + this.state.batchId;
         this.props.history.push(url);
     }
 
     handelReject() {
         // console.log('handle reject');
-        var url = "http://" + this.state.host + ":" + this.state.port + "/sessionHeader/search/reject?sessionId=" + this.state.batchId;
+        var url = "http://" + this.state.host + "/" + this.state.contextPath + "/sessionHeader/search/reject?sessionId=" + this.state.batchId;
         this.updateSession(url);
     }
 
@@ -69,12 +70,14 @@ class Logs extends Component {
         this.setState({
             host: SERVER_HOST,
             port: SERVER_PORT,
+            contextPath: CONTEXT_PATH,
             headers: CORS_HEADERS,
         });
         const fileErrorLogDTOs = [];
         const fileWarningLogDTOs = [];
         const fileInfoLogDTOs = [];
-        const url = "http://" + SERVER_HOST + ":" + SERVER_PORT + "/fileLogs/search/get?sessionId=" + this.state.batchId;
+        // const url = "http://" + SERVER_HOST + ":" + SERVER_PORT + "/fileLogs/search/get?sessionId=" + this.state.batchId;
+        const url = "http://" + SERVER_HOST + "/" + CONTEXT_PATH + "/fileLogs/search/get?sessionId=" + this.state.batchId;
         fetch(url, {
             headers: CORS_HEADERS
         })

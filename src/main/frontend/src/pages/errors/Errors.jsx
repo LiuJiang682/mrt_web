@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import ReportTemplate from './ReportTemplate';
 
-import {SERVER_HOST, SERVER_PORT, CORS_HEADERS} from '../common/Constants';
+import {SERVER_HOST, SERVER_PORT, CORS_HEADERS , CONTEXT_PATH} from '../common/Constants';
 import { error } from "util";
 
 export default class Errors extends Component {
@@ -15,7 +15,8 @@ export default class Errors extends Component {
     }
 
     componentWillMount() {
-        var url = 'http://' + SERVER_HOST + ':' + SERVER_PORT + '/template/' + this.state.batchId;
+        // var url = 'http://' + SERVER_HOST + ':' + SERVER_PORT + '/template/' + this.state.batchId;
+        var url = 'http://' + SERVER_HOST + "/" + CONTEXT_PATH + '/template/' + this.state.batchId;
         fetch(url, {
             headers: CORS_HEADERS
         })

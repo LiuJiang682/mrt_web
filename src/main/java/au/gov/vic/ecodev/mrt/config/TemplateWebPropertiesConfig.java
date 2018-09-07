@@ -14,6 +14,9 @@ public class TemplateWebPropertiesConfig implements TemplateProperties {
 	
 	@Value("${template.header.mapping}")
 	private String templateHeaderMappingString;
+	
+	@Value("${server.servlet.context-path}")
+	private String contextPath;
 
 	public String getTemplateHeaderMappingString() {
 		return templateHeaderMappingString;
@@ -21,5 +24,9 @@ public class TemplateWebPropertiesConfig implements TemplateProperties {
 
 	public String[] getSessionIdFilterUrls() {
 		return sessionIDFilterUrls.split(Strings.COMMA);
+	}
+	
+	public String getContextPath() {
+		return contextPath;
 	}
 }

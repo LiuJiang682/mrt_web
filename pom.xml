@@ -30,8 +30,9 @@
 		<frontend-plugin.version>0.0.27</frontend-plugin.version>
 		<node.version>v8.11.1</node.version>
 		<npm.version>6.1.0</npm.version> 
-		<env.HOST>WDAUD7210FGY.internal.vic.gov.au</env.HOST>
-		<env.PORT>8090</env.PORT>
+		 <env.HOST>WDAUD7210FGY.internal.vic.gov.au:8095</env.HOST>
+		 <env.CONTEXT_PATH>tloader</env.CONTEXT_PATH> 
+		<!--  <env.HOST>52.65.91.200</env.HOST> -->
 		<powermock.version>1.7.3</powermock.version>
 	</properties>
 
@@ -213,7 +214,7 @@
 							<goal>webpack</goal>
 						</goals>
 						<configuration>
-							<arguments>-p --define process.env.HOST=${env.HOST} --define process.env.PORT=${env.PORT} --config webpack.config.production.js</arguments>
+							<arguments>-p --define process.env.HOST=${env.HOST} --define process.env.PORT=${env.PORT} --define process.env.CONTEXT_PATH=${env.CONTEXT_PATH} --config webpack.config.production.js</arguments>
 						</configuration>
 					</execution>
 				</executions>
